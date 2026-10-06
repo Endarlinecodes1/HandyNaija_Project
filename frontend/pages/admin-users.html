@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage HandyNaija customers and service providers. Verify artisan credentials, suspend accounts, and view records.">
+  <title>User Management — HandyNaija Admin</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body style="background: #F8FAFC;">
+
+  <!-- Accessible Skip Link -->
+  <a href="#adminUsersContent" class="skip-link">Skip to user management</a>
+
+  <!-- =========================================================================
+       ADMIN HEADER
+       ========================================================================= -->
+  <header class="admin-header" role="banner">
+    <div class="container admin-header-container">
+      <div style="display: flex; align-items: center; gap: var(--space-3);">
+        <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+          <img src="../images/logo/logo.svg" alt="HandyNaija" width="150" height="36" style="filter: brightness(0) invert(1);">
+        </a>
+        <span style="font-size: 0.65rem; background: #334155; color: #38BDF8; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-xs); text-transform: uppercase;">Admin Ops</span>
+      </div>
+
+      <nav class="header-nav-actions" aria-label="Admin Navigation" style="gap: var(--space-1);">
+        <a href="admin-dashboard.html" class="admin-nav-link">Dashboard</a>
+        <a href="admin-users.html?role=customer" class="admin-nav-link" id="navCustomersLink">Customers</a>
+        <a href="admin-users.html?role=provider" class="admin-nav-link" id="navProvidersLink">Providers</a>
+        <a href="admin-categories.html" class="admin-nav-link">Categories</a>
+        <a href="admin-requests.html" class="admin-nav-link">Requests</a>
+        <a href="admin-reports.html" class="admin-nav-link">
+          Reviews/Reports
+          <span style="background: var(--color-danger); color: #FFF; font-size: 0.65rem; padding: 1px 5px; border-radius: var(--radius-full); margin-left: 4px;">3</span>
+        </a>
+        <button type="button" class="admin-nav-link" id="openSettingsBtn" style="background: none; border: none; cursor: pointer; color: inherit; font: inherit;">Settings</button>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: var(--space-2);">
+        <div class="provider-avatar" style="width: 32px; height: 32px; border: 1px solid #475569;">
+          <img src="../images/providers/provider-2.svg" alt="Admin Avatar">
+        </div>
+        <span style="font-size: var(--font-size-caption); color: #E2E8F0; font-weight: 700;">Admin User</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: A02 USER MANAGEMENT
+       ========================================================================= -->
+  <main class="main-content section" id="adminUsersContent" style="padding-top: var(--space-6);">
+    <div class="container">
+
+      <!-- Breadcrumb & Title -->
+      <div style="margin-bottom: var(--space-6);">
+        <a href="admin-dashboard.html" class="profile-back-link">
+          ← Back to Admin Dashboard
+        </a>
+        <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+          User & Artisan Management
+        </h1>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+          Verify artisan credentials, inspect user profiles, and manage account statuses.
+        </p>
+      </div>
+
+      <!-- Quick Role Switcher Tabs -->
+      <div style="display: flex; gap: var(--space-2); margin-bottom: var(--space-4); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-2); overflow-x: auto;">
+        <button type="button" class="btn btn-sm btn-primary" id="tabAllUsers" style="border-radius: var(--radius-full);">All Records</button>
+        <button type="button" class="btn btn-sm btn-outline" id="tabPending" style="border-radius: var(--radius-full); border-color: var(--color-warning-border); color: var(--color-warning-text);">
+          ⏳ Pending ID Reviews <span id="pendingCountBadge" style="background: var(--color-warning); color: #000; font-size: 0.65rem; padding: 1px 6px; border-radius: 99px; margin-left: 4px; font-weight: 800;">1</span>
+        </button>
+        <button type="button" class="btn btn-sm btn-outline" id="tabProviders" style="border-radius: var(--radius-full);">Artisans & Pros</button>
+        <button type="button" class="btn btn-sm btn-outline" id="tabCustomers" style="border-radius: var(--radius-full);">Customers</button>
+      </div>
+
+      <!-- Controls Filter Toolbar -->
+      <div class="dashboard-card" style="margin-bottom: var(--space-6); padding: var(--space-4);">
+        <div class="admin-toolbar-grid">
+          
+          <!-- Search Input -->
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="form-control" id="userSearchInput" placeholder="Search by name, email, phone, or NIN...">
+          </div>
+
+          <!-- Role Filter -->
+          <select class="form-control" id="roleFilterSelect">
+            <option value="all">All Roles (All Users)</option>
+            <option value="provider">Artisans & Providers</option>
+            <option value="customer">Customers</option>
+          </select>
+
+          <!-- Status Filter -->
+          <select class="form-control" id="statusFilterSelect">
+            <option value="all">All Statuses</option>
+            <option value="pending">⏳ Pending ID Review</option>
+            <option value="verified">✓ Verified Only</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+          </select>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="resetUserFiltersBtn">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Users Data Table Container -->
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User / Business</th>
+              <th>Role</th>
+              <th>Category / Trade</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       MODAL: USER DETAILS INSPECTION
+       ========================================================================= -->
+  <div class="modal-backdrop" id="viewUserModal" role="dialog" aria-modal="true" aria-labelledby="viewUserModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="viewUserModalTitle">User Profile Inspection</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="viewUserModalBody">
+        <!-- Injected via JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+        <button type="button" class="btn btn-primary btn-sm" id="modalVerifyBtn">Toggle Verification</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: SUSPEND / REACTIVATE CONFIRMATION
+       ========================================================================= -->
+  <div class="modal-backdrop" id="suspendUserModal" role="dialog" aria-modal="true" aria-labelledby="suspendModalHeading">
+    <div class="modal-dialog modal-confirm-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="suspendModalHeading">Account Moderation</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-confirm-icon danger">⚠️</div>
+        <h4 style="font-size: var(--font-size-h3); margin-bottom: var(--space-2);" id="suspendModalPrompt">Toggle account status?</h4>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary);">
+          Suspended accounts will not be able to accept customer bookings or list services.
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-destructive" id="confirmSuspendActionBtn">Confirm Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: ADMIN SETTINGS
+       ========================================================================= -->
+  <div class="modal-backdrop" id="adminSettingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="settingsModalTitle">⚙️ Platform Operations Settings</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="toggle-switch-wrapper">
+          <div>
+            <div class="toggle-switch-label">Live Platform Operations</div>
+            <div class="toggle-switch-desc">Accept new customer service bookings across all states.</div>
+          </div>
+          <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-primary);">
+        </div>
+        <div class="toggle-switch-wrapper">
+          <div>
+            <div class="toggle-switch-label">Strict Artisan NIN / ID Verification</div>
+            <div class="toggle-switch-desc">Require manual document inspection before displaying the verified badge.</div>
+          </div>
+          <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-primary);">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveAdminSettingsBtn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Reusable Footer -->
+  <footer class="footer" role="contentinfo" style="background: #0F172A; margin-top: var(--space-12);">
+    <div class="container" style="text-align: center; color: #94A3B8; font-size: var(--font-size-caption);">
+      <div>&copy; 2026 HandyNaija Marketplace Ltd. Internal Administration Console. Local Mock Data Only.</div>
+    </div>
+  </footer>
+
+  <!-- Mock Data Layer & Users Script -->
+  <script src="../js/auth.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      let baseMockUsers = [
+        { 
+          id: 'prov-001', 
+          name: 'John Plumbing Services', 
+          role: 'provider', 
+          category: 'Plumbing & Pipe Fitting', 
+          location: 'Awka, Anambra', 
+          status: 'verified', 
+          email: 'john.plumber@handynaija.ng', 
+          phone: '+234 803 123 4567', 
+          joined: 'Jan 2025', 
+          rating: 4.8, 
+          jobsCompleted: 34,
+          idType: 'NIN',
+          ninNumber: '28471928374',
+          idPhotoFront: 'john_plumbing_nin_front.jpg',
+          idPhotoBack: 'john_plumbing_nin_back.jpg',
+          profilePhoto: '../images/providers/provider-1.svg',
+          cacDocument: 'CAC_RC_982341_JohnPlumbing.pdf',
+          guarantorName: 'Chief Emeka Okoye',
+          guarantorPhone: '+234 803 999 8877',
+          bio: 'Licensed master plumber with over 8 years experience handling commercial and residential water piping, borehole pumps, and bathroom fittings.'
+        },
+        { 
+          id: 'usr-2', 
+          name: 'Chris Okonkwo', 
+          role: 'customer', 
+          category: 'Household Customer', 
+          location: 'Awka, Anambra', 
+          status: 'active', 
+          email: 'chris.okonkwo@example.com', 
+          phone: '+234 803 123 4567', 
+          joined: 'Feb 2025', 
+          rating: null, 
+          jobsCompleted: 3 
+        },
+        { 
+          id: 'prov-002', 
+          name: 'Chidi Solar & Electricals', 
+          role: 'provider', 
+          category: 'Electrical & Solar', 
+          location: 'Ikeja, Lagos', 
+          status: 'verified', 
+          email: 'chidi.solar@handynaija.ng', 
+          phone: '+234 802 987 6543', 
+          joined: 'Nov 2024', 
+          rating: 4.9, 
+          jobsCompleted: 58,
+          idType: 'NIN',
+          ninNumber: '59281726481',
+          idPhotoFront: 'chidi_nin_front.jpg',
+          idPhotoBack: 'chidi_nin_back.jpg',
+          profilePhoto: '../images/providers/provider-2.svg',
+          cacDocument: 'Chidi_Engineering_CAC.pdf',
+          guarantorName: 'Engr. Tunde Bakare',
+          guarantorPhone: '+234 802 111 2233',
+          bio: 'Certified solar engineer and domestic electrician with deep experience in inverter sizing, lithium battery banks, and building conduit wiring.'
+        },
+        { 
+          id: 'usr-4', 
+          name: 'Fatima Spotless Cleaning Pros', 
+          role: 'provider', 
+          category: 'Cleaning & Fumigation', 
+          location: 'Abuja Municipal, Abuja', 
+          status: 'verified', 
+          email: 'fatima.clean@handynaija.ng', 
+          phone: '+234 814 555 8899', 
+          joined: 'Dec 2024', 
+          rating: 4.9, 
+          jobsCompleted: 42,
+          idType: 'DriversLicense',
+          ninNumber: 'ABJ-891234-DL',
+          idPhotoFront: 'fatima_license_front.jpg',
+          idPhotoBack: 'fatima_license_back.jpg',
+          profilePhoto: '../images/providers/provider-3.svg',
+          cacDocument: 'Fatima_Spotless_Enterprise.pdf',
+          guarantorName: 'Hajiya Amina Bello',
+          guarantorPhone: '+234 814 222 3344',
+          bio: 'Professional residential and commercial fumigation specialist with eco-friendly sanitization solutions.'
+        },
+        { 
+          id: 'usr-9', 
+          name: 'Segun Deluxe Painting & POP', 
+          role: 'provider', 
+          category: 'Painting & POP Design', 
+          location: 'Ibadan, Oyo', 
+          status: 'pending', 
+          email: 'segun.paint@handynaija.ng', 
+          phone: '+234 812 666 5544', 
+          joined: 'Oct 2026', 
+          rating: null, 
+          jobsCompleted: 0,
+          idType: 'NIN',
+          ninNumber: '73928174920',
+          idPhotoFront: 'segun_nin_front.jpg',
+          idPhotoBack: 'segun_nin_back.jpg',
+          profilePhoto: '../images/providers/provider-4.svg',
+          cacDocument: '',
+          guarantorName: 'Pastor Samuel Adeyemi',
+          guarantorPhone: '+234 812 333 4455',
+          bio: 'Experienced interior decorator, wall screeding artisan, and 3D POP ceiling installer with 6 years experience across South-West Nigeria.'
+        },
+        { 
+          id: 'usr-10', 
+          name: 'Amara Okafor', 
+          role: 'customer', 
+          category: 'Household Customer', 
+          location: 'Ifite, Awka', 
+          status: 'active', 
+          email: 'amara.o@example.com', 
+          phone: '+234 813 444 9900', 
+          joined: 'Apr 2025', 
+          rating: null, 
+          jobsCompleted: 1 
+        }
+      ];
+
+      // Load newly registered pending providers from localStorage
+      let dynamicPending = [];
+      try {
+        dynamicPending = JSON.parse(localStorage.getItem('handynaija_pending_providers') || '[]');
+      } catch (e) {
+        dynamicPending = [];
+      }
+
+      // Merge mock users
+      let mockUsers = [...dynamicPending.map(p => ({
+        id: p.id,
+        name: p.name,
+        role: 'provider',
+        category: Array.isArray(p.categories) ? p.categories.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ') : 'General Artisan',
+        location: `${p.city || 'Awka'}, ${p.state || 'Anambra'}`,
+        status: p.verificationStatus || 'pending',
+        email: p.email || 'artisan@handynaija.ng',
+        phone: p.phone,
+        joined: 'Today',
+        rating: null,
+        jobsCompleted: 0,
+        idType: p.idType || 'NIN',
+        ninNumber: p.ninNumber || '12345678901',
+        idPhotoFront: p.idPhotoFront || 'nin_front_document.jpg',
+        idPhotoBack: p.idPhotoBack || 'nin_back_document.jpg',
+        profilePhoto: p.profilePhoto || '../images/providers/provider-1.svg',
+        cacDocument: p.cacDocument || '',
+        guarantorName: p.guarantorName || '',
+        guarantorPhone: p.guarantorPhone || '',
+        bio: p.bio || 'Verified registered service provider.'
+      })), ...baseMockUsers];
+
+      let targetUserId = null;
+
+      const tbody = document.getElementById('usersTableBody');
+      const searchInput = document.getElementById('userSearchInput');
+      const roleSelect = document.getElementById('roleFilterSelect');
+      const statusSelect = document.getElementById('statusFilterSelect');
+      const resetBtn = document.getElementById('resetUserFiltersBtn');
+      const tabAll = document.getElementById('tabAllUsers');
+      const tabPending = document.getElementById('tabPending');
+      const tabProv = document.getElementById('tabProviders');
+      const tabCust = document.getElementById('tabCustomers');
+      const pendingBadge = document.getElementById('pendingCountBadge');
+
+      function updatePendingCount() {
+        const pendingCount = mockUsers.filter(u => u.status === 'pending').length;
+        if (pendingBadge) pendingBadge.textContent = pendingCount;
+      }
+
+      function showToast(message, type = 'info') {
+        const c = document.getElementById('toastContainer');
+        if (!c) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        c.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function openModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('open');
+      }
+
+      function closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('open');
+      }
+
+      document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', (e) => { if (e.target === b) closeModal(b.id); });
+        b.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => closeModal(b.id));
+        });
+      });
+
+      function updateTabsUI(selectedRole, selectedStatus) {
+        if (!tabAll || !tabPending || !tabProv || !tabCust) return;
+        tabAll.className = (selectedRole === 'all' && selectedStatus === 'all') ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        tabPending.className = selectedStatus === 'pending' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        tabProv.className = (selectedRole === 'provider' && selectedStatus !== 'pending') ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+        tabCust.className = selectedRole === 'customer' ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline';
+      }
+
+      function renderUsersTable() {
+        if (!tbody) return;
+
+        const q = searchInput.value.toLowerCase().trim();
+        const role = roleSelect.value;
+        const status = statusSelect.value;
+        updateTabsUI(role, status);
+        updatePendingCount();
+
+        const filtered = mockUsers.filter(u => {
+          if (role !== 'all' && u.role !== role) return false;
+          if (status !== 'all') {
+            if (status === 'pending' && u.status !== 'pending') return false;
+            if (status === 'verified' && u.status !== 'verified') return false;
+            if (status === 'active' && u.status !== 'active') return false;
+            if (status === 'suspended' && u.status !== 'suspended') return false;
+          }
+          if (q) {
+            const matchName = (u.name || '').toLowerCase().includes(q);
+            const matchEmail = (u.email || '').toLowerCase().includes(q);
+            const matchPhone = (u.phone || '').toLowerCase().includes(q);
+            const matchLoc = (u.location || '').toLowerCase().includes(q);
+            const matchNin = (u.ninNumber || '').toLowerCase().includes(q);
+            if (!matchName && !matchEmail && !matchPhone && !matchLoc && !matchNin) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; padding: var(--space-8);">
+                <p style="color: var(--color-text-muted); margin: 0;">No users found matching current filters.</p>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(u => {
+          const isProvider = u.role === 'provider';
+          const isVerified = u.status === 'verified';
+          const isPending = u.status === 'pending';
+          const isSuspended = u.status === 'suspended';
+
+          let statusBadge = `<span class="status-badge accepted">Active</span>`;
+          if (isVerified) statusBadge = `<span class="verified-badge">✓ Verified</span>`;
+          if (isPending) statusBadge = `<span class="status-badge pending" style="animation: pulse 2s infinite;">⏳ Pending ID Review</span>`;
+          if (isSuspended) statusBadge = `<span class="status-badge cancelled">Suspended</span>`;
+
+          return `
+            <tr style="${isPending ? 'background-color: #FEFCE8;' : ''}">
+              <td>
+                <div style="font-weight: 700; color: var(--color-text-primary);">${u.name}</div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-muted);">${u.email} • ${u.phone}</div>
+                ${u.ninNumber ? `<div style="font-size: 0.7rem; color: var(--color-primary); font-weight: 700; margin-top: 2px;">🪪 ${u.idType || 'NIN'}: ${u.ninNumber}</div>` : ''}
+              </td>
+              <td>
+                <span class="service-chip" style="font-size: 0.75rem; text-transform: capitalize;">${u.role}</span>
+              </td>
+              <td style="font-size: var(--font-size-caption); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${u.category}</td>
+              <td style="font-size: var(--font-size-caption);">📍 ${u.location}</td>
+              <td>${statusBadge}</td>
+              <td>
+                <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="viewUser('${u.id}')">
+                    ${isPending ? '🔍 Inspect ID' : 'View Profile'}
+                  </button>
+                  ${isProvider && isPending ? `
+                    <button type="button" class="btn btn-primary btn-sm" onclick="approveUser('${u.id}')" style="background: var(--color-success); border-color: var(--color-success);">
+                      ✓ Approve
+                    </button>
+                  ` : (isProvider && !isVerified ? `
+                    <button type="button" class="btn btn-outline btn-sm" onclick="approveUser('${u.id}')">Verify</button>
+                  ` : '')}
+                  <button type="button" class="btn btn-ghost btn-sm" style="color: ${isSuspended ? 'var(--color-success)' : 'var(--color-danger)'};" onclick="triggerSuspendModal('${u.id}')">
+                    ${isSuspended ? 'Reactivate' : 'Suspend'}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      window.viewUser = function (userId) {
+        targetUserId = userId;
+        const u = mockUsers.find(item => item.id === userId);
+        if (!u) return;
+
+        const body = document.getElementById('viewUserModalBody');
+        const isProvider = u.role === 'provider';
+        const isPending = u.status === 'pending';
+
+        body.innerHTML = `
+          <div style="display: flex; gap: var(--space-4); align-items: center; margin-bottom: var(--space-4);">
+            <div class="provider-avatar" style="width: 60px; height: 60px; border: 2px solid ${isPending ? 'var(--color-warning)' : 'var(--color-primary)'};">
+              <img src="${u.profilePhoto || '../images/providers/provider-1.svg'}" alt="${u.name}">
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="font-size: var(--font-size-h3); font-weight: 800; color: var(--color-text-primary);">${u.name}</div>
+                ${u.status === 'verified' ? '<span class="verified-badge">✓ Verified</span>' : (isPending ? '<span class="status-badge pending">Pending 24h Review</span>' : '')}
+              </div>
+              <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">${u.category} • Member since ${u.joined}</div>
+            </div>
+          </div>
+
+          <!-- Basic Contact Grid -->
+          <div style="background: var(--color-surface-muted); padding: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-bottom: var(--space-4); display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); font-size: var(--font-size-caption);">
+            <div><strong>Email:</strong> ${u.email}</div>
+            <div><strong>Phone:</strong> ${u.phone}</div>
+            <div><strong>Location:</strong> ${u.location}</div>
+            <div><strong>Status:</strong> <span style="text-transform: capitalize; font-weight: 700;">${u.status}</span></div>
+            <div><strong>Bio:</strong> <span style="color: var(--color-text-secondary);">${u.bio || 'None'}</span></div>
+            <div><strong>Account ID:</strong> <code>${u.id}</code></div>
+          </div>
+
+          ${isProvider ? `
+            <!-- Artisan NIN & ID Document Inspection Section -->
+            <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4); background: #FFFFFF; margin-bottom: var(--space-3);">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: var(--space-2); margin-bottom: var(--space-3);">
+                <div style="font-weight: 800; color: var(--color-text-primary); display: flex; align-items: center; gap: 6px;">
+                  <span>🪪</span> Artisan ID & Identity Credentials
+                </div>
+                <span class="service-chip" style="font-size: 0.7rem; font-weight: 700;">${u.idType || 'NIN'} Verified Format</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3); font-size: var(--font-size-caption);">
+                <div style="background: #F8FAFC; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                  <div style="font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700;">ID TYPE & NUMBER:</div>
+                  <div style="font-size: var(--font-size-label); font-weight: 800; color: var(--color-primary);">${u.idType || 'NIN'}: ${u.ninNumber || 'N/A'}</div>
+                </div>
+
+                <div style="background: #F8FAFC; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                  <div style="font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700;">GUARANTOR DETAILS:</div>
+                  <div style="font-size: var(--font-size-caption); font-weight: 700; color: var(--color-text-primary);">${u.guarantorName ? `${u.guarantorName} (${u.guarantorPhone})` : 'Not provided'}</div>
+                </div>
+              </div>
+
+              <!-- Uploaded Documents Preview Grid -->
+              <div class="admin-doc-preview-grid">
+                <div class="admin-doc-card">
+                  <div class="admin-doc-card-title">📄 ID Card (Front)</div>
+                  <div class="admin-doc-card-content">
+                    <strong>${u.idPhotoFront || 'nin_front.jpg'}</strong>
+                    <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 2px;">Image / PDF Document • Valid</div>
+                  </div>
+                </div>
+
+                <div class="admin-doc-card">
+                  <div class="admin-doc-card-title">📄 ID Card (Back)</div>
+                  <div class="admin-doc-card-content">
+                    <strong>${u.idPhotoBack || 'nin_back.jpg'}</strong>
+                    <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 2px;">Image / PDF Document • Valid</div>
+                  </div>
+                </div>
+
+                ${u.cacDocument ? `
+                  <div class="admin-doc-card" style="grid-column: span 2;">
+                    <div class="admin-doc-card-title">🏢 CAC Business Certificate</div>
+                    <div class="admin-doc-card-content">
+                      <strong>${u.cacDocument}</strong>
+                      <div style="font-size: 0.7rem; color: var(--color-success); margin-top: 2px;">✓ Verified Corporate Affairs Commission Record</div>
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+
+              <div style="margin-top: var(--space-3); font-size: 0.75rem; color: var(--color-success); font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                <span>✅</span> Artisan confirmed background verification & truthfulness declaration.
+              </div>
+            </div>
+          ` : ''}
+        `;
+
+        const verifyBtn = document.getElementById('modalVerifyBtn');
+        if (verifyBtn) {
+          verifyBtn.style.display = isProvider ? 'inline-flex' : 'none';
+          if (isPending) {
+            verifyBtn.textContent = '✓ Approve & Mark Verified';
+            verifyBtn.className = 'btn btn-primary btn-sm';
+            verifyBtn.style.background = 'var(--color-success)';
+            verifyBtn.style.borderColor = 'var(--color-success)';
+          } else if (u.status === 'verified') {
+            verifyBtn.textContent = 'Revoke Verification';
+            verifyBtn.className = 'btn btn-secondary btn-sm';
+            verifyBtn.style.background = '';
+            verifyBtn.style.borderColor = '';
+          } else {
+            verifyBtn.textContent = 'Verify Credentials';
+            verifyBtn.className = 'btn btn-primary btn-sm';
+            verifyBtn.style.background = '';
+            verifyBtn.style.borderColor = '';
+          }
+        }
+
+        openModal('viewUserModal');
+      };
+
+      window.approveUser = function (userId) {
+        const u = mockUsers.find(item => item.id === userId);
+        if (u) {
+          u.status = 'verified';
+          if (window.HandyAuth && window.HandyAuth.approveProviderVerification) {
+            window.HandyAuth.approveProviderVerification(userId);
+          }
+          renderUsersTable();
+          showToast(`✓ ${u.name} has been approved and marked as a Verified Artisan!`, 'success');
+        }
+      };
+
+      const modalVerifyBtn = document.getElementById('modalVerifyBtn');
+      if (modalVerifyBtn) {
+        modalVerifyBtn.addEventListener('click', () => {
+          const u = mockUsers.find(item => item.id === targetUserId);
+          if (u) {
+            u.status = u.status === 'verified' ? 'pending' : 'verified';
+            if (u.status === 'verified' && window.HandyAuth && window.HandyAuth.approveProviderVerification) {
+              window.HandyAuth.approveProviderVerification(targetUserId);
+            }
+            closeModal('viewUserModal');
+            renderUsersTable();
+            showToast(`${u.name} verification status updated to: ${u.status}`, 'info');
+          }
+        });
+      }
+
+      window.verifyUser = function (userId) {
+        window.approveUser(userId);
+      };
+
+      window.triggerSuspendModal = function (userId) {
+        targetUserId = userId;
+        const u = mockUsers.find(item => item.id === userId);
+        if (u) {
+          const isSuspended = u.status === 'suspended';
+          document.getElementById('suspendModalPrompt').textContent = `${isSuspended ? 'Reactivate' : 'Suspend'} account for ${u.name}?`;
+        }
+        openModal('suspendUserModal');
+      };
+
+      const confirmSuspendBtn = document.getElementById('confirmSuspendActionBtn');
+      if (confirmSuspendBtn) {
+        confirmSuspendBtn.addEventListener('click', () => {
+          const u = mockUsers.find(item => item.id === targetUserId);
+          if (u) {
+            u.status = u.status === 'suspended' ? (u.role === 'provider' ? 'verified' : 'active') : 'suspended';
+            closeModal('suspendUserModal');
+            renderUsersTable();
+            showToast(`Account status updated for ${u.name}`, 'info');
+          }
+        });
+      }
+
+      // Read URL search params (e.g. ?role=customer or ?status=pending)
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlRole = urlParams.get('role');
+      const urlStatus = urlParams.get('status');
+      if (urlRole && ['customer', 'provider'].includes(urlRole.toLowerCase())) {
+        roleSelect.value = urlRole.toLowerCase();
+      }
+      if (urlStatus && ['pending', 'verified', 'active', 'suspended'].includes(urlStatus.toLowerCase())) {
+        statusSelect.value = urlStatus.toLowerCase();
+      }
+
+      // Tab Switchers
+      if (tabAll) tabAll.addEventListener('click', () => { roleSelect.value = 'all'; statusSelect.value = 'all'; renderUsersTable(); });
+      if (tabPending) tabPending.addEventListener('click', () => { roleSelect.value = 'all'; statusSelect.value = 'pending'; renderUsersTable(); });
+      if (tabProv) tabProv.addEventListener('click', () => { roleSelect.value = 'provider'; statusSelect.value = 'all'; renderUsersTable(); });
+      if (tabCust) tabCust.addEventListener('click', () => { roleSelect.value = 'customer'; statusSelect.value = 'all'; renderUsersTable(); });
+
+      // Event Listeners
+      if (searchInput) searchInput.addEventListener('input', renderUsersTable);
+      if (roleSelect) roleSelect.addEventListener('change', renderUsersTable);
+      if (statusSelect) statusSelect.addEventListener('change', renderUsersTable);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          roleSelect.value = 'all';
+          statusSelect.value = 'all';
+          renderUsersTable();
+        });
+      }
+
+      const settingsBtn = document.getElementById('openSettingsBtn');
+      if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => openModal('adminSettingsModal'));
+      }
+      const saveSettingsBtn = document.getElementById('saveAdminSettingsBtn');
+      if (saveSettingsBtn) {
+        saveSettingsBtn.addEventListener('click', () => {
+          closeModal('adminSettingsModal');
+          showToast('Platform settings saved successfully!', 'success');
+        });
+      }
+
+      // Initial Render
+      renderUsersTable();
+
+    })();
+  </script>
+</body>
+</html>
+

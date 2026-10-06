@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Customer ratings and verified service reviews for John Plumbing Services on HandyNaija.">
+  <title>Customer Reviews — HandyNaija Provider</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#reviewsMainContent" class="skip-link">Skip to reviews content</a>
+
+  <!-- =========================================================================
+       PROVIDER HEADER
+       ========================================================================= -->
+  <header class="provider-header" role="banner">
+    <div class="container provider-header-container">
+      
+      <!-- Brand Logo -->
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+
+      <!-- Provider Nav Actions -->
+      <nav class="header-nav-actions" aria-label="Provider Navigation">
+        <a href="provider-dashboard.html" class="header-nav-link">Dashboard</a>
+        <a href="provider-requests.html" class="header-nav-link">Jobs</a>
+        <a href="provider-services.html" class="header-nav-link">My Services</a>
+        <a href="provider-availability.html" class="header-nav-link">Availability</a>
+        
+        <a href="messages.html" class="header-nav-link" aria-label="Messages">
+          <span class="icon-badge-wrapper">
+            💬
+            <span class="icon-badge">2</span>
+          </span>
+        </a>
+
+        <a href="provider-profile-setup.html" style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2); text-decoration: none;">
+          <div class="provider-avatar" style="width: 36px; height: 36px; border: 2px solid var(--color-primary);">
+            <img src="../images/providers/provider-1.svg" alt="John Plumbing Services">
+          </div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.2;">
+            <span style="font-size: var(--font-size-caption); font-weight: 700; color: var(--color-text-primary);">John Plumbing</span>
+            <span style="font-size: 0.65rem; color: var(--color-primary); font-weight: 600;">Customer Reviews</span>
+          </div>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: PROVIDER REVIEWS SCREEN
+       ========================================================================= -->
+  <main class="main-content section" id="reviewsMainContent" style="padding-top: var(--space-6);">
+    <div class="container" style="max-width: 900px;">
+
+      <!-- Back Navigation & Title -->
+      <div style="margin-bottom: var(--space-6);">
+        <a href="provider-dashboard.html" class="profile-back-link">
+          ← Back to Dashboard
+        </a>
+        <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+          Customer Ratings & Feedback
+        </h1>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+          Read authentic reviews submitted by customers after completed repair appointments.
+        </p>
+      </div>
+
+      <!-- Rating Summary & Star Distribution Grid -->
+      <div class="dashboard-card" style="box-shadow: var(--shadow-sm); margin-bottom: var(--space-6);">
+        <div class="rating-overview-grid">
+          
+          <!-- Overall Rating Summary Score -->
+          <div class="rating-overview-score-box">
+            <div id="overallRatingScore" style="font-size: 3.5rem; font-weight: 800; color: var(--color-text-primary); line-height: 1;">
+              4.8
+            </div>
+            <div id="overallRatingStars" style="color: var(--color-accent); font-size: 1.25rem; margin: var(--space-2) 0;">
+              ★★★★★
+            </div>
+            <div id="overallRatingCount" style="font-size: var(--font-size-label); color: var(--color-text-secondary); font-weight: 600;">
+              Based on 34 Verified Reviews
+            </div>
+            <div style="margin-top: var(--space-2);">
+              <span class="status-badge accepted" style="font-size: 0.7rem;">
+                ✓ 100% Verified Jobs
+              </span>
+            </div>
+          </div>
+
+          <!-- Star Distribution Breakdown -->
+          <div>
+            <div class="star-distribution-row">
+              <span class="star-dist-label">5 ★</span>
+              <div class="star-dist-track"><div class="star-dist-fill" style="width: 82%;"></div></div>
+              <span class="star-dist-count">28</span>
+            </div>
+            <div class="star-distribution-row">
+              <span class="star-dist-label">4 ★</span>
+              <div class="star-dist-track"><div class="star-dist-fill" style="width: 15%;"></div></div>
+              <span class="star-dist-count">5</span>
+            </div>
+            <div class="star-distribution-row">
+              <span class="star-dist-label">3 ★</span>
+              <div class="star-dist-track"><div class="star-dist-fill" style="width: 3%;"></div></div>
+              <span class="star-dist-count">1</span>
+            </div>
+            <div class="star-distribution-row">
+              <span class="star-dist-label">2 ★</span>
+              <div class="star-dist-track"><div class="star-dist-fill" style="width: 0%;"></div></div>
+              <span class="star-dist-count">0</span>
+            </div>
+            <div class="star-distribution-row">
+              <span class="star-dist-label">1 ★</span>
+              <div class="star-dist-track"><div class="star-dist-fill" style="width: 0%;"></div></div>
+              <span class="star-dist-count">0</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Reviews Feed List -->
+      <div class="dashboard-card" style="box-shadow: var(--shadow-sm);">
+        <div class="dashboard-card-header">
+          <h2 style="font-size: var(--font-size-h3); margin: 0;">Verified Job Reviews</h2>
+          <span class="service-chip" style="font-weight: 700; background: var(--color-primary-light); color: var(--color-primary);">Read-Only Feed</span>
+        </div>
+
+        <div id="reviewsFeedContainer" class="reviews-list">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Mock Data Layer & Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const providerId = urlParams.get('id') || 'prov-001';
+
+      if (window.HandyAPI) {
+        const provider = window.HandyAPI.getProviderById(providerId);
+        if (provider) {
+          const scoreEl = document.getElementById('overallRatingScore');
+          const countEl = document.getElementById('overallRatingCount');
+          if (scoreEl) scoreEl.textContent = provider.rating.toFixed(1);
+          if (countEl) countEl.textContent = `Based on ${provider.reviewCount} Verified Reviews`;
+        }
+      }
+
+      const container = document.getElementById('reviewsFeedContainer');
+      const reviews = window.HandyAPI ? window.HandyAPI.getReviewsByProviderId(providerId) : [];
+
+      if (container) {
+        if (!reviews || reviews.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state" style="padding: var(--space-8) var(--space-4);">
+              <div class="empty-state-icon">⭐</div>
+              <h3 style="font-size: var(--font-size-h3); color: var(--color-text-primary); margin-bottom: var(--space-2);">No Customer Reviews Yet</h3>
+              <p style="color: var(--color-text-secondary); font-size: var(--font-size-label); max-width: 420px; margin: 0 auto;">
+                Reviews will appear here once customers complete bookings and leave feedback for services performed.
+              </p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = reviews.map(r => `
+            <article class="review-card">
+              <div class="review-header">
+                <div>
+                  <span class="reviewer-name">${r.customerName}</span>
+                  <span style="font-size: var(--font-size-caption); color: var(--color-text-secondary);"> • ${r.location}</span>
+                  ${r.verifiedJob ? `<span style="font-size: 0.68rem; color: var(--color-success); font-weight: 700; margin-left: var(--space-2);">✓ Verified Job</span>` : ''}
+                </div>
+                <span class="review-date">${r.date}</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-1); margin-bottom: var(--space-2);">
+                <span style="color: var(--color-warning); font-size: 0.95rem;">${'★'.repeat(Math.min(5, Math.floor(r.rating)))}</span>
+                <span style="font-size: var(--font-size-caption); font-weight: 700;">${r.rating}.0</span>
+                <span style="font-size: var(--font-size-caption); color: var(--color-text-muted);">(${r.serviceType})</span>
+              </div>
+              <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); line-height: 1.6; margin: 0;">
+                "${r.comment}"
+              </p>
+            </article>
+          `).join('');
+        }
+      }
+
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HandyNaija is Nigeria's trusted marketplace to find verified local service providers: plumbers, electricians, mechanics, cleaners, tutors, and technicians across Lagos, Abuja, Awka, Port Harcourt, and more.">
+  <meta name="keywords" content="HandyNaija, electrician, plumber, mechanic, cleaner, tutor, technician, artisan, local services Nigeria, Awka, Lagos, Abuja, Port Harcourt">
+  <meta name="author" content="HandyNaija Engineering Team">
+  <title>HandyNaija — Find a Trusted Local Professional</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+
+  <!-- =========================================================================
+       1. GLOBAL PUBLIC HEADER & NAVIGATION (Sticky, Clean, Responsive)
+       ========================================================================= -->
+  <header class="header" role="banner">
+    <div class="container header-container">
+      
+      <!-- Left: Brand Logo -->
+      <a href="index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="images/logo/logo.svg" alt="HandyNaija Logo" width="170" height="40">
+      </a>
+
+      <!-- Center: Desktop Navigation Links -->
+      <nav class="nav-links desktop-nav-links" id="mainDesktopNav" aria-label="Main Navigation">
+        <a href="#heroSection" class="nav-link active">Home</a>
+        <a href="pages/services.html" class="nav-link">Services</a>
+        <a href="pages/search-results.html" class="nav-link">Find Providers</a>
+        <a href="#howItWorksSection" class="nav-link">How It Works</a>
+        <a href="#aboutSection" class="nav-link">About</a>
+        <a href="#contactSection" class="nav-link">Contact</a>
+      </nav>
+
+      <!-- Right: Header Actions (Always visible Login & Register for Guests) -->
+      <div class="header-actions">
+        
+        <!-- Search Icon Quick Button -->
+        <a href="#heroSearchForm" class="header-search-icon-btn" id="headerSearchIconBtn" aria-label="Search for services" title="Search for services">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </a>
+
+        <!-- Dynamic Auth Buttons Container (Login / Register / User Profile) -->
+        <div id="headerAuthArea">
+          <div class="public-auth-group">
+            <button type="button" class="btn btn-outline btn-sm" id="headerLoginBtn" onclick="HandyMain.openLoginModal()">Login</button>
+            <button type="button" class="btn btn-primary btn-sm" id="headerRegisterBtn" onclick="HandyMain.openRegisterModal()">Register</button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileNavDrawer" aria-label="Toggle navigation menu">
+          <div class="mobile-menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       KEYBOARD-ACCESSIBLE MOBILE NAVIGATION DRAWER & BACKDROP
+       ========================================================================= -->
+  <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" tabindex="-1" aria-hidden="true"></div>
+
+  <div class="mobile-nav-drawer" id="mobileNavDrawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu" aria-hidden="true">
+    
+    <!-- Drawer Header -->
+    <div class="mobile-drawer-header">
+      <img src="images/logo/logo.svg" alt="HandyNaija" width="140" height="34">
+      <button type="button" class="mobile-drawer-close" id="mobileDrawerCloseBtn" aria-label="Close navigation menu">&times;</button>
+    </div>
+
+    <!-- Drawer Navigation Links -->
+    <nav class="mobile-drawer-links" aria-label="Mobile Navigation Links">
+      <a href="#heroSection" class="mobile-drawer-link">
+        <span>Home</span>
+        <span>→</span>
+      </a>
+      <a href="pages/services.html" class="mobile-drawer-link">
+        <span>Services</span>
+        <span>→</span>
+      </a>
+      <a href="pages/search-results.html" class="mobile-drawer-link">
+        <span>Find Providers</span>
+        <span>→</span>
+      </a>
+      <a href="#howItWorksSection" class="mobile-drawer-link">
+        <span>How It Works</span>
+        <span>→</span>
+      </a>
+      <a href="#aboutSection" class="mobile-drawer-link">
+        <span>About HandyNaija</span>
+        <span>→</span>
+      </a>
+      <a href="#contactSection" class="mobile-drawer-link">
+        <span>Contact Us</span>
+        <span>→</span>
+      </a>
+    </nav>
+
+    <!-- Drawer Actions & Auth -->
+    <div class="mobile-drawer-actions">
+      <div id="mobileDrawerAuthArea" style="display: flex; flex-direction: column; gap: var(--space-2);">
+        <button type="button" class="btn btn-outline btn-full" onclick="HandyMain.openLoginModal()">Login</button>
+        <button type="button" class="btn btn-primary btn-full" onclick="HandyMain.openRegisterModal()">Register</button>
+      </div>
+
+      <div style="font-size: 0.75rem; color: var(--color-text-muted); text-align: center; margin-top: var(--space-2);">
+        📍 Awka • Lagos • Abuja • Port Harcourt • Ibadan • Enugu
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =========================================================================
+       MAIN CONTENT
+       ========================================================================= -->
+  <main class="main-content" id="mainContent">
+
+    <!-- 1. HERO SECTION (2-Column Responsive Layout) -->
+    <section class="hero" id="heroSection">
+      <div class="container">
+        
+        <div class="hero-2col-layout">
+          
+          <!-- Left Column: Content & Search Card -->
+          <div class="hero-left-col">
+            <!-- Marketplace Badge -->
+            <div class="hero-badge">
+              <span>🇳🇬</span> Nigeria's Premier Local Artisan Marketplace
+            </div>
+
+            <!-- Main Heading & Subtitle -->
+            <h1 class="hero-title" style="margin-bottom: var(--space-3); line-height: 1.15;">
+              Find a Trusted Local Professional for Any Job
+            </h1>
+            <p class="hero-subtitle" style="margin-bottom: var(--space-6); font-size: 1.05rem;">
+              Connect with background-verified plumbers, electricians, tailors, and technicians in your neighborhood.
+            </p>
+
+            <!-- Search Card in a Clean White Rounded Card -->
+            <div class="hero-search-card">
+              <form class="hero-search-2col-form" id="heroSearchForm">
+                
+                <!-- 1. What service do you need? -->
+                <div class="hero-search-input-field">
+                  <label for="heroSearchQuery">What service do you need?</label>
+                  <div class="input-with-icon">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" class="form-control" id="heroSearchQuery" name="searchQuery" placeholder="e.g. Plumber, Electrician, Tailor, AC Repair...">
+                  </div>
+                </div>
+
+                <!-- 2. Where (State) & Category Split Row -->
+                <div class="hero-search-row-split">
+                  <!-- Where? (State) -->
+                  <div class="hero-search-input-field">
+                    <label for="heroStateSelect">Where? (State)</label>
+                    <div class="input-with-icon">
+                      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                      <select class="form-control" id="heroStateSelect" name="state" data-populate="states">
+                        <option value="all">All States (Nigeria)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Category -->
+                  <div class="hero-search-input-field">
+                    <label for="heroServiceCategory">Category</label>
+                    <div class="input-with-icon">
+                      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+                      </svg>
+                      <select class="form-control" id="heroServiceCategory" name="serviceCategory" data-populate="services" data-include-all="true">
+                        <option value="all">All Categories</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3. Primary Search Button -->
+                <button type="submit" class="btn btn-primary btn-full btn-lg" id="heroQuickSearchBtn" style="margin-top: 4px; height: 48px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px;">
+                    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <span>Search</span>
+                </button>
+
+              </form>
+            </div>
+
+            <!-- Popular Service Quick Shortcuts -->
+            <div class="hero-popular-searches" style="margin-top: var(--space-4); justify-content: flex-start;" aria-label="Popular Service Shortcuts">
+              <span class="popular-label">Popular:</span>
+              <button type="button" class="popular-service-btn" onclick="HandyProviders.filterByCategory('electrical')">
+                <img src="images/icons/electrical.svg" alt="" width="18" height="18"> Electrician
+              </button>
+              <button type="button" class="popular-service-btn" onclick="HandyProviders.filterByCategory('plumbing')">
+                <img src="images/icons/plumbing.svg" alt="" width="18" height="18"> Plumber
+              </button>
+              <button type="button" class="popular-service-btn" onclick="HandyProviders.filterByCategory('mechanic')">
+                <img src="images/icons/mechanic.svg" alt="" width="18" height="18"> Mechanic
+              </button>
+              <button type="button" class="popular-service-btn" onclick="HandyProviders.filterByCategory('cleaning')">
+                <img src="images/icons/cleaning.svg" alt="" width="18" height="18"> Cleaning
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Image Carousel / Slider (Auto-rotates every 4s: Electrician, Tailor, Plumber) -->
+          <div class="hero-right-col">
+            <div class="hero-carousel-wrapper" id="heroArtisanCarousel" aria-label="Verified Nigerian Artisans Showcase" role="region">
+              
+              <!-- Slide 1: Electrician -->
+              <div class="hero-carousel-slide active" data-index="0">
+                <img src="images/hero/electrician.jpg" alt="Certified Electrician in Nigeria" class="hero-carousel-img" loading="eager">
+                <div class="hero-carousel-badge">
+                  <span>⚡</span> Certified Electrical & Solar Specialist
+                </div>
+              </div>
+
+              <!-- Slide 2: Tailor -->
+              <div class="hero-carousel-slide" data-index="1">
+                <img src="images/hero/tailor.jpg" alt="Professional Tailor and Fashion Designer" class="hero-carousel-img" loading="lazy">
+                <div class="hero-carousel-badge">
+                  <span>🧵</span> Expert Custom Tailoring & Fashion
+                </div>
+              </div>
+
+              <!-- Slide 3: Plumber -->
+              <div class="hero-carousel-slide" data-index="2">
+                <img src="images/hero/plumber.jpg" alt="Master Plumber and Pipe Fitting Expert" class="hero-carousel-img" loading="lazy">
+                <div class="hero-carousel-badge">
+                  <span>💧</span> Verified Master Plumber & Installations
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Carousel Navigation Dots -->
+            <div class="hero-carousel-dots" id="heroCarouselDots" role="tablist" aria-label="Artisan Carousel Navigation">
+              <button type="button" class="hero-carousel-dot active" data-slide="0" aria-label="Show Electrician" role="tab" aria-selected="true"></button>
+              <button type="button" class="hero-carousel-dot" data-slide="1" aria-label="Show Tailor" role="tab" aria-selected="false"></button>
+              <button type="button" class="hero-carousel-dot" data-slide="2" aria-label="Show Plumber" role="tab" aria-selected="false"></button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Trust Strip Markers -->
+        <div class="trust-strip" style="justify-content: center; margin-top: var(--space-8);">
+          <div class="trust-item">
+            <svg class="trust-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Verified Artisan Identity & Trade</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. POPULAR SERVICES SECTION -->
+    <section class="section" id="popularServicesSection">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Popular Services</div>
+          <h2 class="section-title">Explore Top Service Categories</h2>
+          <p class="section-desc">Quickly find skilled local artisans for home repairs, maintenance, installations, and diagnostics.</p>
+        </div>
+
+        <!-- Full Categories Grid (Populated dynamically by services.js) -->
+        <div class="categories-grid" id="categoriesGrid">
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HOW IT WORKS SECTION (3 Steps) -->
+    <section class="section section-muted" id="howItWorksSection">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">How It Works</div>
+          <h2 class="section-title">Get Any Job Done in 3 Simple Steps</h2>
+          <p class="section-desc">HandyNaija connects you with verified local artisans quickly, transparently, and securely.</p>
+        </div>
+
+        <div class="steps-grid">
+          
+          <!-- Step 1: Search & Compare -->
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Search & Compare</h3>
+            <p class="step-desc">Select your trade, filter by State, City, and Area, and review authentic ratings from past jobs.</p>
+          </div>
+
+          <!-- Step 2: Book & Connect -->
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Book & Connect</h3>
+            <p class="step-desc">Describe what you need, set your preferred schedule, and message directly with vetted local pros.</p>
+          </div>
+
+          <!-- Step 3: Get It Done & Review -->
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Get It Done & Review</h3>
+            <p class="step-desc">Inspect completed repairs, enjoy quality workmanship, and leave a verified review to help others.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. VERIFIED PROFESSIONALS -->
+    <section class="section" id="providersSection">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Verified Professionals</div>
+          <h2 class="section-title">Available Service Providers</h2>
+          <p class="section-desc" id="activeFilterDisplay">Showing all verified providers across Nigeria</p>
+        </div>
+
+        <!-- Providers Grid (Populated dynamically by providers.js) -->
+        <div class="providers-grid" id="providersGrid">
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. TRUST & TRANSPARENCY -->
+    <section class="section section-muted" id="trustSection">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Trust & Transparency</div>
+          <h2 class="section-title">Built on Accountability and Local Context</h2>
+          <p class="section-desc">Practical trust measures designed to give customers and providers complete peace of mind.</p>
+        </div>
+
+        <div class="trust-grid">
+          
+          <div class="trust-feature-card">
+            <div class="trust-icon-box">🛡️</div>
+            <h3 style="font-size: var(--font-size-body);">Provider Verification</h3>
+            <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin: 0;">
+              Artisans display verified badges when national identity, trade experience, and references have been vetted.
+            </p>
+          </div>
+
+          <div class="trust-feature-card">
+            <div class="trust-icon-box">⭐</div>
+            <h3 style="font-size: var(--font-size-body);">Authentic Reviews</h3>
+            <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin: 0;">
+              Customer ratings and reviews are strictly tied to completed service requests, guaranteeing authentic feedback.
+            </p>
+          </div>
+
+          <div class="trust-feature-card">
+            <div class="trust-icon-box">📍</div>
+            <h3 style="font-size: var(--font-size-body);">Local Neighborhood Focus</h3>
+            <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin: 0;">
+              Search by familiar Nigerian State, City, and Area fields to find nearby providers and eliminate travel delays.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ABOUT HANDYNAIJA SECTION -->
+    <section class="section" id="aboutSection">
+      <div class="container">
+        <div class="about-grid">
+          <div>
+            <div class="section-eyebrow">About HandyNaija</div>
+            <h2 class="section-title">Bridging Trust Between Nigerian Homes & Verified Artisans</h2>
+            <p class="text-body">
+              Finding reliable, skilled, and honest service providers in Nigeria has historically been difficult and stressful. HandyNaija was established to build Nigeria's most trusted artisan infrastructure.
+            </p>
+            <p class="text-body">
+              Whether you are dealing with emergency plumbing leaks in Awka, installing solar inverters in Lagos, or renovating an office in Abuja, HandyNaija connects you with local vetted professionals in minutes.
+            </p>
+
+            <div class="about-features-list">
+              <div class="about-feature-item">
+                <div class="about-feature-icon">✓</div>
+                <div>
+                  <strong>Mandatory National ID & Proof of Trade:</strong>
+                  <div class="text-caption text-secondary">Every artisan must verify their valid ID and demonstrate previous job quality before receiving the verified badge.</div>
+                </div>
+              </div>
+              <div class="about-feature-item">
+                <div class="about-feature-icon">✓</div>
+                <div>
+                  <strong>Transparent Direct Communication:</strong>
+                  <div class="text-caption text-secondary">Chat directly via in-app messaging, clarify pricing upfront, and track job progress in real-time.</div>
+                </div>
+              </div>
+              <div class="about-feature-item">
+                <div class="about-feature-icon">✓</div>
+                <div>
+                  <strong>Hyper-Local Neighborhood Matching:</strong>
+                  <div class="text-caption text-secondary">Find certified technicians within your exact district and area to cut travel delays.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card card-elevated" style="padding: var(--space-8); background: #FFFFFF; border: 1px solid var(--color-border); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
+              <h3 style="font-size: var(--font-size-h3); margin-bottom: var(--space-4);">Platform Overview</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5);">
+                <div class="metric-card" style="background: var(--color-primary-subtle); border-color: var(--color-primary-border);">
+                  <span class="metric-card-label" style="color: var(--color-primary);">Active Artisans</span>
+                  <span class="metric-card-value" style="color: var(--color-primary);">380+</span>
+                </div>
+                <div class="metric-card" style="background: var(--color-secondary-light); border-color: var(--color-secondary-border);">
+                  <span class="metric-card-label" style="color: var(--color-secondary);">States Covered</span>
+                  <span class="metric-card-value" style="color: var(--color-secondary);">36 + FCT</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-card-label">Jobs Completed</span>
+                  <span class="metric-card-value">2,450+</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-card-label">Avg Rating</span>
+                  <span class="metric-card-value" style="color: var(--color-accent);">4.8 ★</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. GET IN TOUCH / CONTACT US -->
+    <section class="section section-muted" id="contactSection">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Get in Touch</div>
+          <h2 class="section-title">We're Here to Support You Across Nigeria</h2>
+          <p class="section-desc">Have questions about booking a service, becoming a verified provider, or reporting an issue? Reach out to our customer experience team.</p>
+        </div>
+
+        <div class="contact-grid">
+          <!-- Contact Info -->
+          <div class="contact-info-card">
+            <h3 style="font-size: var(--font-size-h3);">Contact Information</h3>
+            
+            <div class="contact-item">
+              <span class="contact-icon">📍</span>
+              <div>
+                <strong>Awka Operations Hub</strong>
+                <div class="text-caption text-secondary">Zik Avenue, Aroma Junction Area, Awka, Anambra State</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-icon">📍</span>
+              <div>
+                <strong>Lagos Regional Office</strong>
+                <div class="text-caption text-secondary">Allen Avenue, Ikeja, Lagos State</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-icon">📞</span>
+              <div>
+                <strong>Direct Phone & WhatsApp Support</strong>
+                <div class="text-caption text-secondary">+234 (0) 800-HANDY-NAIJA / +234 803 123 4567</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-icon">✉️</span>
+              <div>
+                <strong>Email Address</strong>
+                <div class="text-caption text-secondary">support@handynaija.ng / hello@handynaija.ng</div>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-icon">🕒</span>
+              <div>
+                <strong>Operating Support Hours</strong>
+                <div class="text-caption text-secondary">Monday – Saturday: 7:30 AM – 7:00 PM</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Public Contact Form -->
+          <div class="card card-elevated" style="padding: var(--space-8); background: #FFFFFF; border: 1px solid var(--color-border); border-radius: var(--radius-xl);">
+            <h3 style="font-size: var(--font-size-h3); margin-bottom: var(--space-2);">Send Us a Message</h3>
+            <p class="text-caption text-muted" style="margin-bottom: var(--space-6);">Fill out this form and our support desk will respond within 2 business hours.</p>
+
+            <form id="publicContactForm">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+                <div class="form-group" style="margin: 0;">
+                  <label class="form-label" for="contactName">Your Full Name <span class="required-mark">*</span></label>
+                  <input type="text" class="form-control" id="contactName" placeholder="E.g. Emeka Okafor" required>
+                </div>
+                <div class="form-group" style="margin: 0;">
+                  <label class="form-label" for="contactPhone">Phone / WhatsApp <span class="required-mark">*</span></label>
+                  <input type="tel" class="form-control" id="contactPhone" placeholder="080 1234 5678" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contactEmail">Email Address</label>
+                <input type="email" class="form-control" id="contactEmail" placeholder="you@example.com">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contactSubject">Inquiry Category</label>
+                <select class="form-control" id="contactSubject">
+                  <option value="general">General Marketplace Inquiry</option>
+                  <option value="provider_onboarding">Become a Verified Provider / Artisan</option>
+                  <option value="service_support">Support with a Service Request</option>
+                  <option value="partnership">Corporate Partnership / B2B Services</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contactMessage">How can we help you? <span class="required-mark">*</span></label>
+                <textarea class="form-control" id="contactMessage" rows="4" placeholder="Type your message or inquiry here..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full btn-lg">Send Message to Support</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       8. REUSABLE PUBLIC FOOTER
+       ========================================================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- Column 1: Brand & Mission -->
+        <div class="footer-brand">
+          <a href="index.html" aria-label="HandyNaija Home">
+            <img src="images/logo/logo.svg" alt="HandyNaija" width="160" height="38" style="filter: brightness(0) invert(1);">
+          </a>
+          <p>
+            HandyNaija is Nigeria's trusted local service marketplace connecting homeowners and businesses with background-verified artisans across 36 states and the FCT.
+          </p>
+          <div style="display: flex; gap: var(--space-3); margin-top: var(--space-4);">
+            <span class="verified-badge" style="background: rgba(13, 122, 95, 0.25); color: #34D399; border-color: rgba(52, 211, 153, 0.3);">✓ 100% ID Verified Artisans</span>
+          </div>
+        </div>
+
+        <!-- Column 2: Popular Services -->
+        <div>
+          <h4 class="footer-title">Top Services</h4>
+          <nav class="footer-links" aria-label="Top Services Links">
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('plumbing')">Plumbing & Leak Repairs</a>
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('electrical')">Electrical & Solar Inverters</a>
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('cleaning')">Deep Cleaning & Fumigation</a>
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('mechanic')">Auto Mechanics & Diagnostics</a>
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('technician')">AC & Refrigeration Tech</a>
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('carpenter')">Carpentry & Cabinetry</a>
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('tutor')">Home Tutoring & Lessons</a>
+            <a href="#popularServicesSection" class="footer-link" onclick="HandyProviders.filterByCategory('painter')">Painting & POP Finishing</a>
+          </nav>
+        </div>
+
+        <!-- Column 3: Public Navigation & Company -->
+        <div>
+          <h4 class="footer-title">Navigation</h4>
+          <nav class="footer-links" aria-label="Public Company Links">
+            <a href="#heroSection" class="footer-link">Home</a>
+            <a href="pages/services.html" class="footer-link">Services Directory</a>
+            <a href="pages/search-results.html" class="footer-link">Find Providers</a>
+            <a href="#howItWorksSection" class="footer-link">How It Works</a>
+            <a href="#aboutSection" class="footer-link">About HandyNaija</a>
+            <a href="#contactSection" class="footer-link">Contact Support</a>
+            <a href="javascript:void(0)" class="footer-link" onclick="HandyMain.openRegisterModal()">Join as a Service Provider</a>
+          </nav>
+        </div>
+
+        <!-- Column 4: Coverage Hubs & Legal -->
+        <div>
+          <h4 class="footer-title">Locations & Help</h4>
+          <nav class="footer-links" aria-label="Coverage and Safety Links">
+            <span class="footer-link">📍 Awka & Onitsha, Anambra</span>
+            <span class="footer-link">📍 Ikeja, Lekki & Yaba, Lagos</span>
+            <span class="footer-link">📍 Maitama & Wuse, Abuja FCT</span>
+            <span class="footer-link">📍 Port Harcourt, Rivers</span>
+            <span class="footer-link">📍 Ibadan, Oyo</span>
+            <span class="footer-link">📍 Enugu City, Enugu</span>
+            <a href="#aboutSection" class="footer-link" style="margin-top: var(--space-2); color: #38BDF8;">Safety & Trust Guidelines</a>
+            <a href="#contactSection" class="footer-link" style="color: #38BDF8;">Report Problematic Activity</a>
+          </nav>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div>&copy; 2026 HandyNaija Marketplace Ltd. All rights reserved. Built for Nigeria.</div>
+        <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
+          <a href="#aboutSection" class="footer-link">Privacy Policy</a>
+          <a href="#aboutSection" class="footer-link">Terms of Service</a>
+          <a href="#aboutSection" class="footer-link">Community Standards</a>
+          <a href="#aboutSection" class="footer-link">Cookie Preferences</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       MODAL DIALOGS
+       ========================================================================= -->
+
+  <!-- 1. CREATE SERVICE REQUEST MODAL -->
+  <div class="modal-backdrop" id="createRequestModal" role="dialog" aria-modal="true" aria-labelledby="requestModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="requestModalTitle">Request a Service</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="createServiceRequestForm">
+        <div class="modal-body">
+          <!-- Dynamic Banner if requested from a specific provider -->
+          <div id="requestModalProviderBanner" style="display: none; align-items: center; gap: var(--space-3); background: var(--color-primary-light); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-4); border: 1px solid var(--color-primary-border);">
+          </div>
+
+          <!-- Service Selection -->
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label" for="requestServiceCategory">Service Required <span class="required-mark">*</span></label>
+            <select class="form-control" id="requestServiceCategory" data-populate="services" data-include-all="false" required>
+            </select>
+          </div>
+
+          <!-- Problem Description -->
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label" for="requestDescription">Describe what you need help with <span class="required-mark">*</span></label>
+            <textarea class="form-control" id="requestDescription" rows="3" placeholder="E.g. Kitchen sink is leaking underneath the cabinet. Need someone to fix the pipe today." required></textarea>
+          </div>
+
+          <!-- Location (State / City / Area) -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-4);">
+            <div class="form-group">
+              <label class="form-label" for="requestState">State <span class="required-mark">*</span></label>
+              <select class="form-control" id="requestState" data-populate="states" required>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="requestCity">City <span class="required-mark">*</span></label>
+              <input type="text" class="form-control" id="requestCity" placeholder="E.g. Awka" value="Awka" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label" for="requestArea">Specific Area / Landmark <span class="required-mark">*</span></label>
+            <input type="text" class="form-control" id="requestArea" placeholder="E.g. Ifite Road near Aroma" value="Ifite Road" required>
+          </div>
+
+          <!-- Preferred Date / Time -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-4);">
+            <div class="form-group">
+              <label class="form-label" for="requestDate">Preferred Day</label>
+              <input type="text" class="form-control" id="requestDate" placeholder="E.g. Saturday" value="Saturday">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="requestTime">Preferred Time</label>
+              <input type="text" class="form-control" id="requestTime" placeholder="E.g. 10:00 AM" value="10:00 AM">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. PROVIDER PROFILE DETAILS MODAL -->
+  <div class="modal-backdrop" id="providerDetailsModal" role="dialog" aria-modal="true" aria-labelledby="providerModalHeading">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="providerModalHeading">Provider Profile</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="providerModalBody">
+        <!-- Populated dynamically by providers.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+        <button type="button" class="btn btn-primary" id="providerModalRequestBtn">Request Service</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. REQUEST DETAILS MODAL -->
+  <div class="modal-backdrop" id="requestDetailsModal" role="dialog" aria-modal="true" aria-labelledby="requestDetailsModalTitle">
+    <div class="modal-dialog" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="requestDetailsModalTitle">Service Request Summary</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="requestDetailsBody">
+        <!-- Populated dynamically by requests.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SEPARATE LOGIN MODAL -->
+  <div class="modal-backdrop" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+    <div class="modal-dialog auth-modal-dialog" style="max-width: 440px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="loginModalTitle">Log In to HandyNaija</h3>
+          <p class="text-caption text-muted" style="margin-top: 2px;">Access your service requests & artisan chats</p>
+        </div>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <form id="loginModalForm" novalidate>
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label" for="loginEmailInput">Email or Phone Number <span class="required-mark">*</span></label>
+            <div class="input-with-icon">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input type="text" class="form-control" id="loginEmailInput" placeholder="e.g. chris@example.com or 08031234567" required autocomplete="username">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label class="form-label" for="loginPasswordInput" style="margin-bottom: 0;">Password <span class="required-mark">*</span></label>
+              <a href="javascript:void(0)" onclick="HandyMain.showToast('Password reset instructions sent', 'info')" style="font-size: var(--font-size-caption); color: var(--color-primary); font-weight: 600;">Forgot Password?</a>
+            </div>
+            <div class="password-input-wrapper">
+              <input type="password" class="form-control" id="loginPasswordInput" placeholder="Enter your password" required autocomplete="current-password">
+              <button type="button" class="password-toggle-btn" onclick="HandyMain.togglePasswordVisibility('loginPasswordInput', this)" aria-label="Toggle password visibility">👁️</button>
+            </div>
+          </div>
+
+          <div class="form-check" style="margin-bottom: var(--space-5);">
+            <input type="checkbox" id="loginRememberMe" class="form-check-input" checked>
+            <label for="loginRememberMe" class="form-check-label">Remember me on this device</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full btn-lg" id="loginSubmitBtn">Log In</button>
+        </form>
+
+        <div style="margin-top: var(--space-5); text-align: center; font-size: var(--font-size-label); border-top: 1px solid var(--color-border); padding-top: var(--space-4);">
+          Don't have an account? 
+          <button type="button" onclick="HandyMain.switchToRegisterModal()" style="background: none; border: none; color: var(--color-primary); font-weight: 700; cursor: pointer; padding: 0; font-size: inherit; text-decoration: underline;">
+            Register here
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SEPARATE REGISTER MODAL (1-Step Customer, 2-Step Provider Verification) -->
+  <div class="modal-backdrop" id="registerModal" role="dialog" aria-modal="true" aria-labelledby="registerModalTitle">
+    <div class="modal-dialog auth-modal-dialog" style="max-width: 540px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="registerModalTitle">Create Your Account</h3>
+          <p class="text-caption text-muted" style="margin-top: 2px;">Join Nigeria's trusted network of verified artisans & clients</p>
+        </div>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      
+      <div class="modal-body" style="padding-top: var(--space-3);">
+        
+        <!-- Registration Success Review Screen (Shown upon Provider Submission) -->
+        <div id="regSuccessNoticeContainer" style="display: none;">
+          <div class="reg-success-box">
+            <div class="reg-success-icon">🛡️</div>
+            <h3 style="font-size: var(--font-size-h3); margin-bottom: var(--space-2); color: var(--color-text-primary);">
+              Application Submitted Successfully!
+            </h3>
+            
+            <div class="reg-review-banner">
+              <div style="font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <span>⏳</span> Verification SLA Notice
+              </div>
+              <p style="margin: 0; font-size: var(--font-size-caption); color: #1E3A8A;">
+                Your account will be reviewed and verified within 24 hours. You will be notified once approved.
+              </p>
+            </div>
+
+            <div style="background: var(--color-surface-hover); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-5); text-align: left; font-size: var(--font-size-caption); border: 1px solid var(--color-border);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span class="text-muted">Registered Name:</span>
+                <strong id="successProvName">Artisan</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span class="text-muted">Trade Categories:</span>
+                <strong id="successProvCategory">General Services</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span class="text-muted">ID Submitted:</span>
+                <strong id="successProvIdType">NIN (11 Digits)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span class="text-muted">Account Status:</span>
+                <span class="status-badge pending">Pending Admin Review</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-full btn-lg" onclick="HandyMain.closeRegisterSuccess()">
+              Got It & Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Flow Container (Role Select + Customer 1-Step or Provider 2-Step) -->
+        <div id="regFormsContainer">
+          
+          <!-- 2 Clear Options at Top: Register as Customer / Register as Provider -->
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Select Account Type: <span class="required-mark">*</span></label>
+            <div class="auth-role-segmented-control" role="radiogroup" aria-label="Account type">
+              <button type="button" class="auth-role-tab active" data-role="customer" id="regRoleCustomerTab" onclick="HandyMain.setRegisterRole('customer')">
+                <span style="font-size: 1.25rem;">🏠</span>
+                <div>
+                  <strong>Register as Customer</strong>
+                  <small>Hire local verified pros</small>
+                </div>
+              </button>
+              <button type="button" class="auth-role-tab" data-role="provider" id="regRoleProviderTab" onclick="HandyMain.setRegisterRole('provider')">
+                <span style="font-size: 1.25rem;">🛠️</span>
+                <div>
+                  <strong>Register as Provider</strong>
+                  <small>2-Step Verification</small>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- =================================================================
+               FLOW 1: CUSTOMER REGISTRATION (1 SIMPLE STEP)
+               ================================================================= -->
+          <div id="regCustomerFormWrap">
+            <form id="regCustomerModalForm" novalidate>
+              
+              <!-- 1. Full Name -->
+              <div class="form-group" style="margin-bottom: var(--space-3);">
+                <label class="form-label" for="regCustNameInput">Full Name <span class="required-mark">*</span></label>
+                <input type="text" class="form-control" id="regCustNameInput" placeholder="e.g. Emeka Okafor" required autocomplete="name">
+              </div>
+
+              <!-- 2. Email Address -->
+              <div class="form-group" style="margin-bottom: var(--space-3);">
+                <label class="form-label" for="regCustEmailInput">Email Address <span class="required-mark">*</span></label>
+                <input type="email" class="form-control" id="regCustEmailInput" placeholder="e.g. emeka@example.com" required autocomplete="email">
+              </div>
+
+              <!-- 3. Phone Number -->
+              <div class="form-group" style="margin-bottom: var(--space-3);">
+                <label class="form-label" for="regCustPhoneInput">Phone Number <span class="required-mark">*</span></label>
+                <input type="tel" class="form-control" id="regCustPhoneInput" placeholder="e.g. 0803 123 4567" required autocomplete="tel">
+              </div>
+
+              <!-- 4. Location (State) -->
+              <div class="form-group" style="margin-bottom: var(--space-3);">
+                <label class="form-label" for="regCustStateInput">Location (State) <span class="required-mark">*</span></label>
+                <select class="form-control" id="regCustStateInput" required>
+                  <option value="Lagos">Lagos State</option>
+                  <option value="Abuja (FCT)">Abuja (FCT)</option>
+                  <option value="Anambra" selected>Anambra State</option>
+                  <option value="Rivers">Rivers State</option>
+                  <option value="Oyo">Oyo State</option>
+                  <option value="Enugu">Enugu State</option>
+                  <option value="Kano">Kano State</option>
+                  <option value="Ogun">Ogun State</option>
+                  <option value="Delta">Delta State</option>
+                  <option value="Edo">Edo State</option>
+                  <option value="Kaduna">Kaduna State</option>
+                </select>
+              </div>
+
+              <!-- 5. Password -->
+              <div class="form-group" style="margin-bottom: var(--space-3);">
+                <label class="form-label" for="regCustPasswordInput">Password <span class="required-mark">*</span></label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-control" id="regCustPasswordInput" placeholder="At least 6 characters" required autocomplete="new-password">
+                  <button type="button" class="password-toggle-btn" onclick="HandyMain.togglePasswordVisibility('regCustPasswordInput', this)" aria-label="Toggle password visibility">👁️</button>
+                </div>
+              </div>
+
+              <!-- 6. Confirm Password -->
+              <div class="form-group" style="margin-bottom: var(--space-4);">
+                <label class="form-label" for="regCustConfirmPasswordInput">Confirm Password <span class="required-mark">*</span></label>
+                <div class="password-input-wrapper">
+                  <input type="password" class="form-control" id="regCustConfirmPasswordInput" placeholder="Re-enter password" required autocomplete="new-password">
+                  <button type="button" class="password-toggle-btn" onclick="HandyMain.togglePasswordVisibility('regCustConfirmPasswordInput', this)" aria-label="Toggle password visibility">👁️</button>
+                </div>
+                <div id="regCustPasswordMatchError" style="display: none; color: var(--color-danger); font-size: var(--font-size-caption); margin-top: 4px;">
+                  ⚠️ Passwords do not match.
+                </div>
+              </div>
+
+              <!-- 7. I agree terms checkbox -->
+              <div class="form-check" style="margin-bottom: var(--space-5);">
+                <input type="checkbox" id="regCustTermsCheck" class="form-check-input" required checked>
+                <label for="regCustTermsCheck" class="form-check-label">I agree to HandyNaija Terms of Service & Privacy Policy</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full btn-lg" id="regCustSubmitBtn">Create Customer Account</button>
+            </form>
+          </div>
+
+          <!-- =================================================================
+               FLOW 2: PROVIDER REGISTRATION (2-STEP WIZARD)
+               ================================================================= -->
+          <div id="regProviderFormWrap" style="display: none;">
+            
+            <!-- Wizard Stepper Indicator -->
+            <div class="provider-wizard-steps">
+              <div class="wizard-step-node active" id="provStep1Node">
+                <div class="wizard-step-circle" id="provStep1Circle">1</div>
+                <div class="wizard-step-info">
+                  <div class="wizard-step-title">Basic Info</div>
+                  <div class="wizard-step-subtitle">Contact & Location</div>
+                </div>
+              </div>
+              <div class="wizard-step-divider" id="provStepDivider"></div>
+              <div class="wizard-step-node" id="provStep2Node">
+                <div class="wizard-step-circle" id="provStep2Circle">2</div>
+                <div class="wizard-step-info">
+                  <div class="wizard-step-title">Verification & Skills</div>
+                  <div class="wizard-step-subtitle">ID & Documentation</div>
+                </div>
+              </div>
+            </div>
+
+            <form id="regProviderModalForm" novalidate>
+              
+              <!-- STEP 1: BASIC INFO -->
+              <div id="provStep1Content">
+                
+                <!-- Full Name -->
+                <div class="form-group" style="margin-bottom: var(--space-3);">
+                  <label class="form-label" for="regProvNameInput">Full Legal Name <span class="required-mark">*</span></label>
+                  <input type="text" class="form-control" id="regProvNameInput" placeholder="e.g. John Chinedu" required>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group" style="margin-bottom: var(--space-3);">
+                  <label class="form-label" for="regProvEmailInput">Email Address <span class="required-mark">*</span></label>
+                  <input type="email" class="form-control" id="regProvEmailInput" placeholder="e.g. john.chinedu@example.com" required>
+                </div>
+
+                <!-- Phone Number (Required +234 Validation) -->
+                <div class="form-group" style="margin-bottom: var(--space-3);">
+                  <label class="form-label" for="regProvPhoneInput">
+                    Phone Number (WhatsApp Active) <span class="required-mark">*</span>
+                  </label>
+                  <input type="tel" class="form-control" id="regProvPhoneInput" placeholder="e.g. 0803 123 4567 or +234 803 123 4567" required>
+                  <div class="form-feedback-error" id="regProvPhoneError" style="display: none; color: var(--color-danger); font-size: var(--font-size-caption); margin-top: 4px;">
+                    ⚠️ Please enter a valid Nigerian phone number (+234 or 11 digits).
+                  </div>
+                </div>
+
+                <!-- State & City -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3);">
+                  <div class="form-group">
+                    <label class="form-label" for="regProvStateSelect">State <span class="required-mark">*</span></label>
+                    <select class="form-control" id="regProvStateSelect" required>
+                      <option value="Anambra" selected>Anambra</option>
+                      <option value="Lagos">Lagos</option>
+                      <option value="Abuja (FCT)">Abuja (FCT)</option>
+                      <option value="Rivers">Rivers</option>
+                      <option value="Oyo">Oyo</option>
+                      <option value="Enugu">Enugu</option>
+                      <option value="Kano">Kano</option>
+                      <option value="Ogun">Ogun</option>
+                      <option value="Delta">Delta</option>
+                      <option value="Edo">Edo</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="regProvCityInput">City / Town <span class="required-mark">*</span></label>
+                    <input type="text" class="form-control" id="regProvCityInput" placeholder="e.g. Awka, Ikeja" value="Awka" required>
+                  </div>
+                </div>
+
+                <!-- Full Address / Workshop Location -->
+                <div class="form-group" style="margin-bottom: var(--space-3);">
+                  <label class="form-label" for="regProvAddressInput">Full Address / Workshop Location <span class="required-mark">*</span></label>
+                  <input type="text" class="form-control" id="regProvAddressInput" placeholder="e.g. Shop 14, Aroma Plaza, Zik Avenue, Awka" required>
+                </div>
+
+                <!-- Password & Confirm Password -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-4);">
+                  <div class="form-group">
+                    <label class="form-label" for="regProvPasswordInput">Password <span class="required-mark">*</span></label>
+                    <div class="password-input-wrapper">
+                      <input type="password" class="form-control" id="regProvPasswordInput" placeholder="Min. 6 chars" required autocomplete="new-password">
+                      <button type="button" class="password-toggle-btn" onclick="HandyMain.togglePasswordVisibility('regProvPasswordInput', this)" aria-label="Toggle password visibility">👁️</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="regProvConfirmPasswordInput">Confirm Password <span class="required-mark">*</span></label>
+                    <div class="password-input-wrapper">
+                      <input type="password" class="form-control" id="regProvConfirmPasswordInput" placeholder="Re-enter" required autocomplete="new-password">
+                      <button type="button" class="password-toggle-btn" onclick="HandyMain.togglePasswordVisibility('regProvConfirmPasswordInput', this)" aria-label="Toggle password visibility">👁️</button>
+                    </div>
+                  </div>
+                </div>
+                <div id="regProvPasswordMatchError" style="display: none; color: var(--color-danger); font-size: var(--font-size-caption); margin-bottom: var(--space-3);">
+                  ⚠️ Passwords do not match or are less than 6 characters.
+                </div>
+
+                <button type="button" class="btn btn-primary btn-full btn-lg" onclick="HandyMain.goToProviderStep2()">
+                  Next: Verification & Skills →
+                </button>
+              </div>
+
+              <!-- STEP 2: VERIFICATION & SKILLS (PROVIDER ONLY) -->
+              <div id="provStep2Content" style="display: none;">
+                
+                <!-- Service Category (Multi-select) -->
+                <div class="form-group" style="margin-bottom: var(--space-4);">
+                  <label class="form-label">
+                    Service Categories <span class="required-mark">*</span> 
+                    <small class="text-muted">(Click to select all trades you offer)</small>
+                  </label>
+                  <div class="category-chips-grid" id="provCategoryChips">
+                    <button type="button" class="category-chip-btn selected" data-cat="plumbing" onclick="HandyMain.toggleCategoryChip(this)">💧 Plumbing</button>
+                    <button type="button" class="category-chip-btn" data-cat="electrical" onclick="HandyMain.toggleCategoryChip(this)">⚡ Electrical & Solar</button>
+                    <button type="button" class="category-chip-btn" data-cat="carpentry" onclick="HandyMain.toggleCategoryChip(this)">🪚 Carpentry</button>
+                    <button type="button" class="category-chip-btn" data-cat="tailoring" onclick="HandyMain.toggleCategoryChip(this)">🧵 Tailoring</button>
+                    <button type="button" class="category-chip-btn" data-cat="cleaning" onclick="HandyMain.toggleCategoryChip(this)">🧹 Cleaning</button>
+                    <button type="button" class="category-chip-btn" data-cat="painting" onclick="HandyMain.toggleCategoryChip(this)">🎨 Painting & POP</button>
+                    <button type="button" class="category-chip-btn" data-cat="technician" onclick="HandyMain.toggleCategoryChip(this)">❄️ AC & Cooling</button>
+                    <button type="button" class="category-chip-btn" data-cat="mechanic" onclick="HandyMain.toggleCategoryChip(this)">🚗 Auto Mechanic</button>
+                    <button type="button" class="category-chip-btn" data-cat="tutor" onclick="HandyMain.toggleCategoryChip(this)">📚 Tutoring</button>
+                    <button type="button" class="category-chip-btn" data-cat="welding" onclick="HandyMain.toggleCategoryChip(this)">🔥 Welding</button>
+                    <button type="button" class="category-chip-btn" data-cat="tiling" onclick="HandyMain.toggleCategoryChip(this)">🧱 Masonry & Tiling</button>
+                  </div>
+                  <input type="hidden" id="regProvCategoriesInput" value="plumbing">
+                </div>
+
+                <!-- Years of Experience & Short Bio -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-3);">
+                  <div class="form-group">
+                    <label class="form-label" for="regProvExperienceSelect">Years of Experience <span class="required-mark">*</span></label>
+                    <select class="form-control" id="regProvExperienceSelect" required>
+                      <option value="1-2">1 – 2 Years</option>
+                      <option value="3-5" selected>3 – 5 Years</option>
+                      <option value="6-10">6 – 10 Years</option>
+                      <option value="10+">10+ Years (Master Artisan)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="regProvIdTypeSelect">Form of ID <span class="required-mark">*</span></label>
+                    <select class="form-control" id="regProvIdTypeSelect" onchange="HandyMain.onIdTypeChange(this.value)" required>
+                      <option value="NIN" selected>National Identity Number (NIN)</option>
+                      <option value="VotersCard">Voter's Card (PVC)</option>
+                      <option value="DriversLicense">Driver's License</option>
+                      <option value="Passport">International Passport</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- NIN Number Field (11 Digits Validation) -->
+                <div class="form-group" style="margin-bottom: var(--space-3);" id="provNinFieldWrap">
+                  <label class="form-label" for="regProvNinInput" id="regProvNinLabel">
+                    NIN Number (11 Digits) <span class="required-mark">*</span>
+                  </label>
+                  <input type="text" class="form-control" id="regProvNinInput" placeholder="e.g. 12345678901" maxlength="11" required>
+                  <div class="form-feedback-error" id="regProvNinError" style="display: none; color: var(--color-danger); font-size: var(--font-size-caption); margin-top: 4px;">
+                    ⚠️ NIN must be strictly 11 numerical digits.
+                  </div>
+                </div>
+
+                <!-- Short Bio / Description of Services -->
+                <div class="form-group" style="margin-bottom: var(--space-3);">
+                  <label class="form-label" for="regProvBioInput">Short Bio / Service Description <span class="required-mark">*</span></label>
+                  <textarea class="form-control" id="regProvBioInput" rows="2" placeholder="Tell customers about your skills, tools, and guarantees..." required></textarea>
+                </div>
+
+                <!-- ID Card Photo Upload (Front & Back) - Max 5MB -->
+                <div class="form-group" style="margin-bottom: var(--space-3);">
+                  <label class="form-label">
+                    Upload ID Photo (Front & Back) <span class="required-mark">*</span>
+                    <small class="text-muted">(Max 5MB each • Image or PDF)</small>
+                  </label>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);">
+                    <div class="file-upload-card" id="provIdFrontBox" onclick="document.getElementById('regProvIdFrontFile').click()">
+                      <div class="file-upload-icon">📄</div>
+                      <div class="file-upload-text">ID Card (Front)</div>
+                      <div class="file-upload-hint">Click to choose file</div>
+                      <div class="file-upload-filename" id="provIdFrontName"></div>
+                      <input type="file" id="regProvIdFrontFile" accept="image/*,application/pdf" style="display: none;" onchange="HandyMain.handleFileUpload(this, 'provIdFrontBox', 'provIdFrontName')">
+                    </div>
+
+                    <div class="file-upload-card" id="provIdBackBox" onclick="document.getElementById('regProvIdBackFile').click()">
+                      <div class="file-upload-icon">📄</div>
+                      <div class="file-upload-text">ID Card (Back)</div>
+                      <div class="file-upload-hint">Click to choose file</div>
+                      <div class="file-upload-filename" id="provIdBackName"></div>
+                      <input type="file" id="regProvIdBackFile" accept="image/*,application/pdf" style="display: none;" onchange="HandyMain.handleFileUpload(this, 'provIdBackBox', 'provIdBackName')">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Profile Photo & CAC Certificate (Optional) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); margin-bottom: var(--space-3);">
+                  <div class="file-upload-card" id="provAvatarBox" onclick="document.getElementById('regProvAvatarFile').click()">
+                    <div class="file-upload-icon">👤</div>
+                    <div class="file-upload-text">Profile Photo <span class="required-mark">*</span></div>
+                    <div class="file-upload-hint">Max 5MB Image</div>
+                    <div class="file-upload-filename" id="provAvatarName"></div>
+                    <input type="file" id="regProvAvatarFile" accept="image/*" style="display: none;" onchange="HandyMain.handleFileUpload(this, 'provAvatarBox', 'provAvatarName')">
+                  </div>
+
+                  <div class="file-upload-card" id="provCacBox" onclick="document.getElementById('regProvCacFile').click()">
+                    <div class="file-upload-icon">🏢</div>
+                    <div class="file-upload-text">CAC Certificate <small>(Optional)</small></div>
+                    <div class="file-upload-hint">If registered business</div>
+                    <div class="file-upload-filename" id="provCacName"></div>
+                    <input type="file" id="regProvCacFile" accept="image/*,application/pdf" style="display: none;" onchange="HandyMain.handleFileUpload(this, 'provCacBox', 'provCacName')">
+                  </div>
+                </div>
+
+                <!-- Guarantor Details (Optional but Recommended) -->
+                <div style="background: var(--color-surface-hover); border-radius: var(--radius-md); padding: var(--space-3); border: 1px solid var(--color-border); margin-bottom: var(--space-3);">
+                  <div style="font-weight: 700; font-size: var(--font-size-caption); color: var(--color-text-primary); margin-bottom: 6px;">
+                    🤝 Guarantor Information <small class="text-muted">(Optional but Speeds Up Approval)</small>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);">
+                    <input type="text" class="form-control" id="regProvGuarantorName" placeholder="Guarantor Full Name" style="font-size: var(--font-size-caption);">
+                    <input type="tel" class="form-control" id="regProvGuarantorPhone" placeholder="Guarantor Phone" style="font-size: var(--font-size-caption);">
+                  </div>
+                </div>
+
+                <!-- Background Verification Consent Checkbox -->
+                <div class="form-check" style="margin-bottom: var(--space-4);">
+                  <input type="checkbox" id="regProvConsentCheck" class="form-check-input" required checked>
+                  <label for="regProvConsentCheck" class="form-check-label" style="font-size: var(--font-size-caption);">
+                    I confirm my information is true and I agree to background verification. <span class="required-mark">*</span>
+                  </label>
+                </div>
+
+                <!-- Wizard Actions -->
+                <div style="display: flex; gap: var(--space-2);">
+                  <button type="button" class="btn btn-secondary" onclick="HandyMain.backToProviderStep1()" style="min-width: 100px;">
+                    ← Back
+                  </button>
+                  <button type="submit" class="btn btn-primary btn-lg" id="regProvSubmitBtn" style="flex: 1;">
+                    Submit Provider Application
+                  </button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Switch to Login Footer -->
+          <div style="margin-top: var(--space-4); text-align: center; font-size: var(--font-size-label); border-top: 1px solid var(--color-border); padding-top: var(--space-3);">
+            Already have an account? 
+            <button type="button" onclick="HandyMain.switchToLoginModal()" style="background: none; border: none; color: var(--color-primary); font-weight: 700; cursor: pointer; padding: 0; font-size: inherit; text-decoration: underline;">
+              Log in
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. REVIEW SERVICE MODAL -->
+  <div class="modal-backdrop" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="reviewModalTitle">Rate Completed Service</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <form id="submitReviewForm">
+        <div class="modal-body" style="text-align: center;">
+          <p style="font-size: var(--font-size-label); margin-bottom: var(--space-3);">How was your experience with the artisan?</p>
+          
+          <div class="star-picker" style="justify-content: center; margin-bottom: var(--space-4);">
+            <span data-rating="1" class="active">★</span>
+            <span data-rating="2" class="active">★</span>
+            <span data-rating="3" class="active">★</span>
+            <span data-rating="4" class="active">★</span>
+            <span data-rating="5" class="active">★</span>
+          </div>
+
+          <div class="form-group" style="text-align: left;">
+            <label class="form-label" for="reviewComment">Your Feedback & Review</label>
+            <textarea class="form-control" id="reviewComment" rows="3" placeholder="Describe the quality of work, punctuality, and professionalism..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       JAVASCRIPT SCRIPTS (Ordered Execution)
+       ========================================================================= -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/providers.js"></script>
+  <script src="js/requests.js"></script>
+  <script src="js/messages.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

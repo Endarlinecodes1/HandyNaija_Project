@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Direct in-app messages on HandyNaija. Chat securely with verified Nigerian artisans and service providers.">
+  <title>Messages — HandyNaija Service Marketplace</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body style="background: var(--color-bg); overflow-x: hidden;">
+
+  <!-- Accessible Skip Link -->
+  <a href="#messagesMainBox" class="skip-link">Skip to messages content</a>
+
+  <!-- =========================================================================
+       CUSTOMER HEADER
+       ========================================================================= -->
+  <header class="customer-header" role="banner">
+    <div class="container customer-header-container">
+      
+      <!-- Brand Logo -->
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+
+      <!-- Quick Nav Links -->
+      <nav class="header-nav-actions" aria-label="Customer Navigation">
+        <a href="dashboard.html" class="header-nav-link">Dashboard</a>
+        <a href="services.html" class="header-nav-link">Services</a>
+        <a href="search-results.html" class="header-nav-link">Find Pros</a>
+        
+        <a href="messages.html" class="header-nav-link active" aria-label="Messages">
+          <span class="icon-badge-wrapper">
+            💬
+            <span class="icon-badge" id="headerMsgBadge">2</span>
+          </span>
+        </a>
+
+        <!-- Customer Avatar -->
+        <div style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2);">
+          <div class="provider-avatar" style="width: 36px; height: 36px;">
+            <img src="../images/providers/provider-1.svg" alt="Chris Okonkwo">
+          </div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.2;">
+            <span style="font-size: var(--font-size-caption); font-weight: 700;">Chris O.</span>
+            <span style="font-size: 0.65rem; color: var(--color-primary); font-weight: 600;">Customer</span>
+          </div>
+        </div>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: C04 MESSAGES TWO-PANEL INTERFACE
+       ========================================================================= -->
+  <main class="container" style="padding-top: var(--space-4); padding-bottom: var(--space-4);" id="messagesMainBox">
+    
+    <div class="messages-chat-box" id="messagesChatBox">
+      
+      <!-- Left Panel: Conversation List -->
+      <aside class="chat-sidebar" id="chatSidebarPanel" aria-label="Conversations List">
+        
+        <div class="chat-sidebar-header">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+            <h2 style="font-size: var(--font-size-h3); margin: 0;">Messages</h2>
+            <span class="service-chip" style="font-size: 0.75rem; font-weight: 700;">Inbox</span>
+          </div>
+          
+          <!-- Search Conversations Filter -->
+          <div class="input-with-icon" style="margin-top: var(--space-2);">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="searchConvInput" 
+              placeholder="Search chats..." 
+              style="padding-top: 0.4rem; padding-bottom: 0.4rem; font-size: var(--font-size-caption);"
+              aria-label="Search conversation list"
+            >
+          </div>
+        </div>
+
+        <!-- Conversation Items Scrollable List -->
+        <div id="conversationItemsList" style="overflow-y: auto; flex: 1;">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+      </aside>
+
+      <!-- Right Panel: Active Chat Panel -->
+      <section class="chat-main-panel hide-mobile" id="chatMainPanel" aria-label="Active Conversation">
+        
+        <!-- Active Chat Header -->
+        <div class="chat-header" id="activeChatHeader">
+          <div style="display: flex; align-items: center; gap: var(--space-3);">
+            
+            <!-- Mobile Back Button -->
+            <button type="button" class="mobile-chat-back-btn" id="mobileChatBackBtn" aria-label="Back to conversations list">
+              ←
+            </button>
+
+            <div class="chat-conv-avatar" id="activeChatAvatar">
+              <img src="../images/providers/provider-1.svg" alt="Artisan Avatar" id="activeAvatarImg">
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <h3 style="font-size: var(--font-size-label); font-weight: 700; margin: 0;" id="activeChatName">
+                  John Plumbing Services
+                </h3>
+                <span class="verified-badge" style="font-size: 0.65rem; padding: 1px 4px;">✓ Verified</span>
+              </div>
+              <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);" id="activeChatSubtitle">
+                Plumbing & Pipe Fitting • Active Request #REQ-00124
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: var(--space-2);">
+            <a href="request-details.html?id=REQ-00124" class="btn btn-outline btn-sm" id="viewLinkedRequestBtn" style="font-size: var(--font-size-caption);">
+              View Job Details
+            </a>
+          </div>
+        </div>
+
+        <!-- Chat Messages Scroll Area -->
+        <div class="chat-messages-scroll" id="chatMessagesContainer" role="log" aria-live="polite">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Quick Reply Suggestions Bar -->
+        <div style="padding: var(--space-2) var(--space-4); background: var(--color-surface); border-top: 1px solid var(--color-border-subtle); display: flex; gap: var(--space-2); overflow-x: auto;" id="quickSuggestionsBar">
+          <button type="button" class="btn btn-ghost btn-sm quick-pill" onclick="sendQuickReply('Can you arrive at 10:00 AM on Saturday?')">📅 Arrival at 10 AM?</button>
+          <button type="button" class="btn btn-ghost btn-sm quick-pill" onclick="sendQuickReply('Please remember to bring replacement PVC pipe fittings.')">🛠️ Bring PVC fittings</button>
+          <button type="button" class="btn btn-ghost btn-sm quick-pill" onclick="sendQuickReply('Thank you! That works perfectly.')">👍 Thank you</button>
+        </div>
+
+        <!-- Message Composer Form -->
+        <form class="chat-composer-box" id="messageComposerForm">
+          <input 
+            type="text" 
+            class="form-control" 
+            id="chatComposerInput" 
+            placeholder="Type your message to the artisan here..." 
+            autocomplete="off"
+            required
+            aria-label="Message text"
+          >
+          <button type="submit" class="btn btn-primary" id="sendMessageSubmitBtn" style="flex-shrink: 0; padding: 0.625rem 1.25rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            Send
+          </button>
+        </form>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Mock Data Layer & Messages Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      let conversations = window.HandyAPI ? window.HandyAPI.getConversations() : [];
+      let activeConvId = conversations.length > 0 ? conversations[0].id : null;
+
+      const convListContainer = document.getElementById('conversationItemsList');
+      const messagesContainer = document.getElementById('chatMessagesContainer');
+      const composerForm = document.getElementById('messageComposerForm');
+      const composerInput = document.getElementById('chatComposerInput');
+      const searchInput = document.getElementById('searchConvInput');
+
+      const sidebarPanel = document.getElementById('chatSidebarPanel');
+      const mainPanel = document.getElementById('chatMainPanel');
+      const mobileBackBtn = document.getElementById('mobileChatBackBtn');
+
+      // Provider photo mappings
+      const PROVIDER_AVATARS = {
+        'prov-001': '../images/providers/provider-1.svg',
+        'prov-002': '../images/providers/provider-2.svg',
+        'prov-003': '../images/providers/provider-3.svg',
+        'prov-004': '../images/providers/provider-4.svg'
+      };
+
+      // Toast Notification Helper
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      // Render Conversation List
+      function renderConversationList(filterQuery = '') {
+        if (!convListContainer) return;
+
+        let list = conversations;
+        if (filterQuery) {
+          const q = filterQuery.toLowerCase().trim();
+          list = conversations.filter(c => 
+            c.providerName.toLowerCase().includes(q) || 
+            c.lastMessage.toLowerCase().includes(q)
+          );
+        }
+
+        if (list.length === 0) {
+          convListContainer.innerHTML = `
+            <div class="empty-state" style="padding: var(--space-6) var(--space-4);">
+              <p style="font-size: var(--font-size-caption);">No conversations found.</p>
+            </div>
+          `;
+          return;
+        }
+
+        convListContainer.innerHTML = list.map(c => {
+          const isActive = c.id === activeConvId;
+          const avatar = PROVIDER_AVATARS[c.providerId] || '../images/providers/provider-1.svg';
+
+          return `
+            <div 
+              class="chat-conversation-item ${isActive ? 'active' : ''}" 
+              onclick="selectConversation('${c.id}')"
+              role="button"
+              tabindex="0"
+              aria-selected="${isActive}"
+            >
+              <div class="chat-conv-avatar">
+                <img src="${avatar}" alt="${c.providerName}">
+              </div>
+              <div class="chat-conv-info">
+                <div class="chat-conv-name-row">
+                  <span class="chat-conv-name">${c.providerName}</span>
+                  <span class="chat-conv-time">${c.lastMessageTime || ''}</span>
+                </div>
+                <div class="chat-conv-snippet">${c.lastMessage || 'No messages yet'}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Select Conversation & Open Chat
+      window.selectConversation = function (convId) {
+        activeConvId = convId;
+        renderConversationList(searchInput ? searchInput.value : '');
+        renderActiveChat();
+
+        // On mobile, show chat main panel and hide sidebar
+        if (window.innerWidth <= 768) {
+          if (sidebarPanel) sidebarPanel.classList.add('hide-mobile');
+          if (mainPanel) mainPanel.classList.remove('hide-mobile');
+        }
+      };
+
+      // Mobile Back button action
+      if (mobileBackBtn) {
+        mobileBackBtn.addEventListener('click', () => {
+          if (sidebarPanel) sidebarPanel.classList.remove('hide-mobile');
+          if (mainPanel) mainPanel.classList.add('hide-mobile');
+        });
+      }
+
+      // Render Active Conversation Messages
+      function renderActiveChat() {
+        const conv = conversations.find(c => c.id === activeConvId);
+        if (!conv) {
+          if (messagesContainer) {
+            messagesContainer.innerHTML = `
+              <div class="empty-state" style="margin: auto;">
+                <div class="empty-state-icon">💬</div>
+                <h3>Select a Conversation</h3>
+                <p>Choose an artisan from the list to view your chat messages.</p>
+              </div>
+            `;
+          }
+          return;
+        }
+
+        // Update header details
+        document.getElementById('activeChatName').textContent = conv.providerName;
+        document.getElementById('activeAvatarImg').src = PROVIDER_AVATARS[conv.providerId] || '../images/providers/provider-1.svg';
+        document.getElementById('activeChatSubtitle').textContent = `Artisan Chat • ${conv.requestId ? 'Request #' + conv.requestId : 'Direct Inquiry'}`;
+        
+        const viewReqBtn = document.getElementById('viewLinkedRequestBtn');
+        if (viewReqBtn && conv.requestId) {
+          viewReqBtn.href = `request-details.html?id=${conv.requestId}`;
+          viewReqBtn.style.display = 'inline-flex';
+        } else if (viewReqBtn) {
+          viewReqBtn.style.display = 'none';
+        }
+
+        // Render message bubbles
+        if (messagesContainer) {
+          if (!conv.messages || conv.messages.length === 0) {
+            messagesContainer.innerHTML = `
+              <div class="empty-state" style="margin: auto;">
+                <p>No messages yet. Send a greeting to start chatting!</p>
+              </div>
+            `;
+            return;
+          }
+
+          messagesContainer.innerHTML = conv.messages.map(m => {
+            const isCustomer = m.sender === 'customer';
+            return `
+              <div class="chat-bubble ${isCustomer ? 'outgoing' : 'incoming'}">
+                <div>${m.text}</div>
+                <span class="chat-timestamp">${m.time}</span>
+              </div>
+            `;
+          }).join('');
+
+          // Auto-scroll to bottom
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+      }
+
+      // Send Message Handler
+      if (composerForm) {
+        composerForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const text = composerInput.value.trim();
+          if (!text || !activeConvId) return;
+
+          // Append locally
+          if (window.HandyAPI) {
+            window.HandyAPI.sendMessage(activeConvId, text, 'customer');
+            conversations = window.HandyAPI.getConversations();
+          }
+
+          composerInput.value = '';
+          renderActiveChat();
+          renderConversationList();
+
+          // Simulated artisan auto-reply after 1 second for engaging prototype
+          setTimeout(() => {
+            const replies = [
+              "Got it! I will arrive with the necessary equipment as discussed.",
+              "Thank you for confirming. See you at the scheduled time!",
+              "Understood. I am on standby.",
+              "Received! Let me know if you need any additional assistance."
+            ];
+            const randomReply = replies[Math.floor(Math.random() * replies.length)];
+            
+            if (window.HandyAPI) {
+              window.HandyAPI.sendMessage(activeConvId, randomReply, 'provider');
+              conversations = window.HandyAPI.getConversations();
+            }
+
+            renderActiveChat();
+            renderConversationList();
+            showToast('New message from artisan.', 'info');
+          }, 1200);
+        });
+      }
+
+      // Quick Reply Piller
+      window.sendQuickReply = function (text) {
+        if (composerInput) {
+          composerInput.value = text;
+          composerForm.dispatchEvent(new Event('submit'));
+        }
+      };
+
+      // Search filter
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          renderConversationList(e.target.value);
+        });
+      }
+
+      // Initial Execution
+      renderConversationList();
+      renderActiveChat();
+
+    })();
+  </script>
+</body>
+</html>

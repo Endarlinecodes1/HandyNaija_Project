@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200" fill="none">
+  <rect width="320" height="200" rx="16" fill="#F0FDF4"/>
+  <circle cx="160" cy="85" r="45" fill="#DCFCE7"/>
+  <path d="M140 100V75C140 66.7157 146.716 60 155 60H165C173.284 60 180 66.7157 180 75V100" stroke="#00875A" stroke-width="6" stroke-linecap="round"/>
+  <path d="M130 100H190" stroke="#00875A" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="160" cy="85" r="6" fill="#00875A"/>
+  <text x="160" y="160" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" font-weight="700" fill="#065F46" text-anchor="middle">Plumbing & Repairs</text>
+</svg>

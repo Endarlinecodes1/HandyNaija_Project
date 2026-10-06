@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HandyNaija Artisan Dashboard. Manage customer requests, accept service jobs, view earnings, and manage your trade profile.">
+  <title>Artisan Dashboard — HandyNaija Service Provider</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#providerDashboardMain" class="skip-link">Skip to dashboard content</a>
+
+  <!-- =========================================================================
+       PROVIDER HEADER (S01 Navigation)
+       Logo → Dashboard → Requests → Services → Availability → Messages → Profile
+       ========================================================================= -->
+  <header class="provider-header" role="banner">
+    <div class="container provider-header-container">
+      
+      <!-- Brand Logo -->
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+
+      <!-- Provider Navigation Actions -->
+      <nav class="header-nav-actions" aria-label="Provider Navigation">
+        <a href="provider-dashboard.html" class="header-nav-link active">Dashboard</a>
+        <a href="provider-requests.html" class="header-nav-link">Jobs / Requests</a>
+        <a href="provider-services.html" class="header-nav-link">My Services</a>
+        <a href="provider-availability.html" class="header-nav-link">Availability</a>
+        
+        <!-- Messages -->
+        <a href="messages.html" class="header-nav-link" aria-label="Messages">
+          <span class="icon-badge-wrapper">
+            💬
+            <span class="icon-badge">2</span>
+          </span>
+        </a>
+
+        <!-- Provider Avatar & Business Info -->
+        <a href="provider-profile-setup.html" style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2); text-decoration: none;">
+          <div class="provider-avatar" style="width: 36px; height: 36px; border: 2px solid var(--color-primary);">
+            <img src="../images/providers/provider-1.svg" alt="John Plumbing Services">
+          </div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.2;">
+            <span style="font-size: var(--font-size-caption); font-weight: 700; color: var(--color-text-primary);">John Plumbing</span>
+            <span style="font-size: 0.65rem; color: var(--color-primary); font-weight: 600;">Verified Artisan</span>
+          </div>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: S01 PROVIDER DASHBOARD
+       ========================================================================= -->
+  <main class="main-content section" id="providerDashboardMain" style="padding-top: var(--space-6);">
+    <div class="container">
+
+      <!-- 1. Artisan Welcome Greeting -->
+      <div class="dashboard-welcome-banner">
+        <div>
+          <span class="section-eyebrow" style="margin-bottom: 4px;">Artisan Workspace</span>
+          <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+            Good day, John! 👋
+          </h1>
+          <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+            You have new customer inquiries waiting for your confirmation in Awka and surrounding areas.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+          <a href="provider-services.html" class="btn btn-primary">
+            + Add New Service
+          </a>
+          <a href="provider-availability.html" class="btn btn-outline">
+            Set Weekly Availability
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Summary Metric Cards (New, Upcoming, Completed, Rating) -->
+      <div class="dashboard-summary-grid" style="grid-template-columns: repeat(4, 1fr);">
+        
+        <!-- New Requests Metric -->
+        <div class="dashboard-metric-card">
+          <div class="metric-icon-box active-icon">🔔</div>
+          <div>
+            <div class="metric-number" id="provNewCount">1</div>
+            <div class="metric-label">New Inquiries</div>
+          </div>
+        </div>
+
+        <!-- Upcoming Jobs Metric -->
+        <div class="dashboard-metric-card">
+          <div class="metric-icon-box upcoming-icon">📅</div>
+          <div>
+            <div class="metric-number" id="provUpcomingCount">1</div>
+            <div class="metric-label">Accepted Jobs</div>
+          </div>
+        </div>
+
+        <!-- Completed Jobs Metric -->
+        <div class="dashboard-metric-card">
+          <div class="metric-icon-box completed-icon">🏆</div>
+          <div>
+            <div class="metric-number" id="provCompletedCount">84</div>
+            <div class="metric-label">Jobs Completed</div>
+          </div>
+        </div>
+
+        <!-- Rating Metric -->
+        <div class="dashboard-metric-card">
+          <div class="metric-icon-box" style="background: var(--color-warning-light); color: var(--color-warning-text);">⭐</div>
+          <div>
+            <div class="metric-number">4.8 <span style="font-size: 1rem; color: var(--color-text-secondary); font-weight: 500;">/ 5</span></div>
+            <div class="metric-label">34 Reviews</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. Dashboard Layout (Main: Incoming Requests; Sidebar: Quick Actions & Profile Strength) -->
+      <div class="dashboard-layout-grid">
+        
+        <!-- Main Column: New Incoming Customer Requests -->
+        <div>
+          
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <h2 style="font-size: var(--font-size-h3); margin: 0;">Incoming Customer Requests</h2>
+                <span id="newRequestsBadge" class="service-chip" style="font-weight: 700; background: var(--color-primary-light); color: var(--color-primary);">1 New</span>
+              </div>
+              <a href="provider-requests.html" class="btn btn-ghost btn-sm" style="color: var(--color-primary); font-weight: 700;">View All Jobs →</a>
+            </div>
+
+            <!-- New Requests List Container -->
+            <div id="providerIncomingRequestsContainer">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Accepted / Scheduled Jobs List -->
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <h2 style="font-size: var(--font-size-h3); margin: 0;">Scheduled Work Orders</h2>
+                <span class="service-chip" style="font-weight: 700; background: var(--color-warning-light); color: var(--color-warning-text);">In Progress / Scheduled</span>
+              </div>
+            </div>
+
+            <!-- Scheduled list -->
+            <div id="providerScheduledJobsContainer">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sidebar Column: Quick Actions & Profile Strength -->
+        <div>
+          
+          <!-- Profile Strength Indicator -->
+          <div class="dashboard-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+              <h3 style="font-size: var(--font-size-label); font-weight: 700; margin: 0; color: var(--color-text-primary);">Profile Completion</h3>
+              <span style="font-weight: 800; color: var(--color-primary); font-size: var(--font-size-label);">85%</span>
+            </div>
+
+            <div class="completion-progress-track" style="margin-bottom: var(--space-3);">
+              <div class="completion-progress-fill" style="width: 85%;"></div>
+            </div>
+
+            <p style="font-size: var(--font-size-caption); color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+              Add more specialized plumbing service items and your workshop certificate to reach 100% verified status.
+            </p>
+
+            <a href="provider-profile-setup.html" class="btn btn-outline btn-full btn-sm">
+              Complete Profile
+            </a>
+          </div>
+
+          <!-- Quick Actions Menu -->
+          <div class="dashboard-card">
+            <h3 style="font-size: var(--font-size-label); text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+              Artisan Quick Tools
+            </h3>
+
+            <a href="provider-services.html" class="quick-action-item">
+              <span style="font-size: 1.25rem;">🛠️</span>
+              <span>Manage Service Catalogue</span>
+            </a>
+
+            <a href="provider-availability.html" class="quick-action-item">
+              <span style="font-size: 1.25rem;">🕒</span>
+              <span>Set Working Availability</span>
+            </a>
+
+            <a href="provider-profile.html?id=prov-001" class="quick-action-item">
+              <span style="font-size: 1.25rem;">👁️</span>
+              <span>View Public Profile & Reviews</span>
+            </a>
+
+            <a href="messages.html" class="quick-action-item">
+              <span style="font-size: 1.25rem;">💬</span>
+              <span>Customer Messages Inbox</span>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Accept Confirmation Modal -->
+  <div class="modal-backdrop" id="acceptRequestModal" role="dialog" aria-modal="true" aria-labelledby="acceptModalHeading">
+    <div class="modal-dialog modal-confirm-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="acceptModalHeading">Accept Service Request</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-confirm-icon" style="background: var(--color-primary-light); color: var(--color-primary);">✅</div>
+        <h4 style="font-size: var(--font-size-h3); margin-bottom: var(--space-2);">Confirm Job Acceptance</h4>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary);" id="acceptModalCustomerText">
+          Accepting will notify the customer and schedule this job in your active work orders.
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmAcceptSubmitBtn">Confirm & Accept Job</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Mock Data Layer & Provider Dashboard Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      let requests = window.HandyAPI ? window.HandyAPI.getRequests() : [];
+      let pendingRequestIdToAccept = null;
+
+      const incomingContainer = document.getElementById('providerIncomingRequestsContainer');
+      const scheduledContainer = document.getElementById('providerScheduledJobsContainer');
+      const newCount = document.getElementById('provNewCount');
+      const newBadge = document.getElementById('newRequestsBadge');
+
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function openModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('open');
+      }
+
+      function closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('open');
+      }
+
+      document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', (e) => { if (e.target === b) closeModal(b.id); });
+        b.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => closeModal(b.id));
+        });
+      });
+
+      function renderDashboardRequests() {
+        requests = window.HandyAPI ? window.HandyAPI.getRequests() : [];
+        const pending = requests.filter(r => r.status === 'pending');
+        const scheduled = requests.filter(r => r.status === 'accepted' || r.status === 'scheduled' || r.status === 'inprogress');
+
+        if (newCount) newCount.textContent = pending.length;
+        if (newBadge) newBadge.textContent = `${pending.length} New`;
+
+        // 1. Render Incoming Pending
+        if (incomingContainer) {
+          if (pending.length === 0) {
+            incomingContainer.innerHTML = `
+              <div class="empty-state" style="padding: var(--space-6) var(--space-4);">
+                <p>No pending inquiries at this moment. You're all caught up!</p>
+              </div>
+            `;
+          } else {
+            incomingContainer.innerHTML = pending.map(r => `
+              <div class="active-request-card" style="border-left: 4px solid var(--color-warning);">
+                <div>
+                  <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
+                    <span style="font-weight: 700; font-size: var(--font-size-body);">${r.serviceName}</span>
+                    <span class="status-badge pending">⏳ Pending Response</span>
+                  </div>
+                  <div style="font-size: var(--font-size-label); color: var(--color-text-secondary);">
+                    Customer: <strong>${r.customerName}</strong> • Request ID: <code>${r.id}</code>
+                  </div>
+                  <div style="font-size: var(--font-size-caption); color: var(--color-text-muted); margin-top: 2px;">
+                    📍 ${r.location} • Preferred: <strong>${r.preferredDate}</strong>
+                  </div>
+                  <p style="font-size: var(--font-size-caption); color: var(--color-text-secondary); margin-top: var(--space-2); background: var(--color-surface-muted); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                    "${r.description}"
+                  </p>
+                </div>
+
+                <div style="display: flex; gap: var(--space-2);">
+                  <a href="provider-request-details.html?id=${r.id}" class="btn btn-secondary btn-sm">View Details</a>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="triggerAcceptModal('${r.id}')">✓ Accept Job</button>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        // 2. Render Scheduled / In-Progress
+        if (scheduledContainer) {
+          if (scheduled.length === 0) {
+            scheduledContainer.innerHTML = `
+              <div class="empty-state" style="padding: var(--space-6) var(--space-4);">
+                <p>No active scheduled jobs.</p>
+              </div>
+            `;
+          } else {
+            scheduledContainer.innerHTML = scheduled.map(r => `
+              <div class="active-request-card" style="border-left: 4px solid var(--color-primary);">
+                <div>
+                  <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
+                    <span style="font-weight: 700; font-size: var(--font-size-body);">${r.serviceName}</span>
+                    <span class="status-badge ${r.status}">✓ ${r.status}</span>
+                  </div>
+                  <div style="font-size: var(--font-size-label); color: var(--color-text-secondary);">
+                    Customer: <strong>${r.customerName}</strong> • 📍 ${r.location}
+                  </div>
+                  <div style="font-size: var(--font-size-caption); color: var(--color-text-muted); margin-top: 2px;">
+                    Scheduled Arrival: <strong>${r.preferredDate}</strong>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: var(--space-2);">
+                  <a href="provider-request-details.html?id=${r.id}" class="btn btn-secondary btn-sm">Manage Job</a>
+                  <a href="messages.html" class="btn btn-outline btn-sm">💬 Message</a>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+      }
+
+      window.triggerAcceptModal = function (reqId) {
+        pendingRequestIdToAccept = reqId;
+        const r = requests.find(item => item.id === reqId);
+        if (r) {
+          document.getElementById('acceptModalCustomerText').textContent = `Accept request #${r.id} for "${r.serviceName}" from ${r.customerName}?`;
+        }
+        openModal('acceptRequestModal');
+      };
+
+      const confirmAcceptBtn = document.getElementById('confirmAcceptSubmitBtn');
+      if (confirmAcceptBtn) {
+        confirmAcceptBtn.addEventListener('click', () => {
+          if (pendingRequestIdToAccept && window.HandyAPI) {
+            window.HandyAPI.updateRequestStatus(pendingRequestIdToAccept, 'accepted');
+            closeModal('acceptRequestModal');
+            showToast(`Request #${pendingRequestIdToAccept} accepted! Job scheduled.`, 'success');
+            renderDashboardRequests();
+          }
+        });
+      }
+
+      // Initial Render
+      renderDashboardRequests();
+
+    })();
+  </script>
+</body>
+</html>

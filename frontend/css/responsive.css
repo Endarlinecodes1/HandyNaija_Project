@@ -1,0 +1,453 @@
+/* ==========================================================================
+   HANDYNAIJA RESPONSIVE STYLES
+   Version 1.0 (Mobile-First Responsive Pass)
+   Breakpoints: Desktop (>992px), Tablet (768px - 992px), Mobile (<768px, <576px)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   GLOBAL LAYOUT UTILITIES
+   -------------------------------------------------------------------------- */
+.form-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.dashboard-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+/* --------------------------------------------------------------------------
+   1. TABLET & MEDIUM SCREENS (<= 992px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  /* Hide Desktop Nav Links on Medium Screens */
+  .desktop-nav-links {
+    display: none !important;
+  }
+
+  /* Show Mobile Menu Button */
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .search-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-field-group:first-child {
+    grid-column: span 2;
+  }
+
+  .search-form-grid .btn-primary {
+    grid-column: span 2;
+  }
+
+  .search-results-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .providers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  .profile-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-account-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-filter-toggle {
+    display: inline-flex;
+  }
+
+  .filter-sidebar {
+    position: static;
+  }
+
+  .filter-sidebar.collapsed-mobile {
+    display: none;
+  }
+
+  .filter-sidebar.open-mobile {
+    display: block;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. MOBILE SCREENS (<= 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 64px;
+    --space-12: 2.5rem;
+    --space-16: 3.5rem;
+  }
+
+  /* Typography scale on Mobile */
+  h1, .text-h1, .hero-title {
+    font-size: var(--font-size-h1-mobile);
+  }
+
+  h2, .text-h2 {
+    font-size: 1.375rem;
+  }
+
+  h3, .text-h3 {
+    font-size: 1.125rem;
+  }
+
+  /* Two-column forms collapse to one column on Mobile */
+  .form-grid-2col {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  /* Provider cards use 1 column on Mobile */
+  .providers-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  /* Search fields stack vertically on Mobile */
+  .hero-search-unified-form {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .hero-search-unified-form .hero-search-submit-btn {
+    width: 100%;
+  }
+
+  .search-main-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  .search-location-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .p03-search-bar-form {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .p03-search-bar-form button[type="submit"] {
+    width: 100%;
+  }
+
+  /* Primary CTAs full-width on Mobile */
+  .btn-primary-mobile-full,
+  .form-actions .btn-primary,
+  .auth-card .btn-primary,
+  .request-form-card .btn-primary,
+  .search-box-card .btn-primary {
+    width: 100%;
+  }
+
+  /* Messages: Two-panel converts to list-then-chat on Mobile */
+  .messages-chat-box {
+    grid-template-columns: 1fr;
+    height: calc(100vh - var(--header-height));
+    margin: 0;
+    border-radius: 0;
+    border: none;
+  }
+
+  .messages-chat-box .chat-sidebar.hide-mobile {
+    display: none;
+  }
+
+  .messages-chat-box .chat-main-panel.hide-mobile {
+    display: none;
+  }
+
+  .mobile-chat-back-btn {
+    display: inline-flex;
+  }
+
+  /* Dashboard summary cards stack to 1 column on Mobile */
+  .dashboard-summary-grid,
+  .dashboard-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  /* Vertical Timeline for Mobile */
+  .timeline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .timeline::before {
+    left: 18px;
+    top: 20px;
+    bottom: 20px;
+    width: 4px;
+    height: calc(100% - 40px);
+    right: auto;
+  }
+
+  .timeline-step {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: var(--space-3);
+  }
+
+  .timeline-dot {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  /* Provider Profile Mobile */
+  .profile-hero-main {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .profile-title-row {
+    justify-content: center;
+  }
+
+  .profile-meta-pills {
+    justify-content: center;
+  }
+
+  .mobile-sticky-action-bar {
+    display: flex;
+  }
+
+  body.has-sticky-bar {
+    padding-bottom: 80px;
+  }
+
+  /* Auth Mobile */
+  .auth-card {
+    padding: var(--space-6) var(--space-4);
+    box-shadow: var(--shadow-md);
+  }
+
+  .role-choice-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  /* Header adjustments */
+  .header-actions .public-auth-group {
+    display: none; /* Collapses into mobile drawer for clean mobile header */
+  }
+
+  .header-actions .role-switcher {
+    display: none;
+  }
+
+  /* Hero adjustments */
+  .hero {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-10);
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-body);
+  }
+
+  .trust-strip {
+    gap: var(--space-4);
+  }
+
+  /* Grids Stack */
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .category-card {
+    padding: var(--space-3);
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .category-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Rating Overview Breakdown Mobile Stack */
+  .rating-overview-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-5) !important;
+  }
+
+  .rating-overview-score-box {
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-right: 0 !important;
+    padding-bottom: var(--space-4);
+  }
+
+  /* Admin Header & Toolbars Mobile Stack */
+  .admin-header-container {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .admin-header-container .header-nav-actions {
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: var(--space-1);
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  .admin-toolbar-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Admin Table Horizontal Scrolling Container */
+  .admin-table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: inset -6px 0 8px -4px rgba(0, 0, 0, 0.08);
+  }
+
+  .admin-table {
+    min-width: 600px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. SMALL PHONES (<= 576px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 576px) {
+  .search-main-row .btn {
+    width: 100%;
+  }
+
+  .popular-chips-container {
+    gap: var(--space-2);
+  }
+
+  .popular-service-btn {
+    width: calc(50% - var(--space-2));
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
+    font-size: var(--font-size-caption);
+  }
+
+  /* Bottom sheet modal on small mobile */
+  .modal-dialog {
+    max-width: 100%;
+    margin: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    position: fixed;
+    bottom: 0;
+    max-height: 85vh;
+  }
+
+  .modal-header {
+    padding: var(--space-4);
+  }
+
+  .modal-body {
+    padding: var(--space-4);
+  }
+
+  .modal-footer {
+    padding: var(--space-3) var(--space-4);
+    flex-direction: column-reverse;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+
+  .provider-footer {
+    flex-direction: column;
+  }
+
+  .provider-footer .btn {
+    width: 100%;
+  }
+
+  .toast-container {
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+  }
+
+  .toast {
+    max-width: 100%;
+    min-width: unset;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. ACCESSIBILITY: REDUCED MOTION PREFERENCE
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

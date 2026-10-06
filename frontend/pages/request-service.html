@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Request a local service on HandyNaija. Connect with verified plumbers, electricians, mechanics, cleaners, and tradespeople across Nigeria.">
+  <title>Request a Service — HandyNaija</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+
+  <style>
+    /* Request a Service Form & Submit Container Styles */
+    .dashboard-card {
+      position: relative;
+      overflow: visible;
+    }
+
+    .request-service-modal,
+    .modal-content {
+      position: relative;
+    }
+
+    #requestServiceForm {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .submit-button-container,
+    .submit-btn-container {
+      position: sticky;
+      bottom: 0;
+      background: #ffffff;
+      padding: 16px 0;
+      z-index: 100;
+      border-top: 1px solid var(--color-border, #eee);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+      margin-top: var(--space-4);
+    }
+
+    #submitRequestBtn {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 100% !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      min-height: 48px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .w-100 {
+      width: 100% !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#requestServiceForm" class="skip-link">Skip to service request form</a>
+
+  <!-- =========================================================================
+       CUSTOMER HEADER
+       ========================================================================= -->
+  <header class="customer-header" role="banner">
+    <div class="container customer-header-container">
+      
+      <!-- Brand Logo -->
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+
+      <!-- Quick Nav Links -->
+      <nav class="header-nav-actions" aria-label="Customer Navigation">
+        <a href="dashboard.html" class="header-nav-link">Dashboard</a>
+        <a href="services.html" class="header-nav-link">Services</a>
+        <a href="search-results.html" class="header-nav-link">Find Pros</a>
+        
+        <a href="messages.html" class="header-nav-link" aria-label="Messages">
+          <span class="icon-badge-wrapper">
+            💬
+            <span class="icon-badge">2</span>
+          </span>
+        </a>
+
+        <!-- Customer Avatar -->
+        <a href="profile.html" style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2); text-decoration: none;">
+          <div class="provider-avatar" style="width: 36px; height: 36px;">
+            <img src="../images/providers/provider-1.svg" alt="Chris Okonkwo">
+          </div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.2;">
+            <span style="font-size: var(--font-size-caption); font-weight: 700; color: var(--color-text-primary);">Chris O.</span>
+            <span style="font-size: 0.65rem; color: var(--color-primary); font-weight: 600;">Customer</span>
+          </div>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: C02 CREATE SERVICE REQUEST
+       ========================================================================= -->
+  <main class="main-content section" id="mainContent" style="padding-top: var(--space-6);">
+    <div class="container" style="max-width: 800px;">
+
+      <!-- Back Navigation Link -->
+      <a href="dashboard.html" class="profile-back-link" id="backNavigationLink">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Dashboard
+      </a>
+
+      <!-- Selected Provider Banner (if requested for specific artisan) -->
+      <div id="targetProviderBanner" style="display: none; background: var(--color-primary-light); border: 1px solid var(--color-primary-border); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-6); align-items: center; gap: var(--space-4);">
+        <!-- Populated via JS if provider query param exists -->
+      </div>
+
+      <!-- Main Form Container -->
+      <div class="dashboard-card request-service-modal modal-content" style="box-shadow: var(--shadow-md);">
+        
+        <!-- Form Header -->
+        <div class="dashboard-card-header" style="flex-direction: column; align-items: flex-start;">
+          <div class="section-eyebrow">Service Booking</div>
+          <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+            Request a Service
+          </h1>
+          <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+            Describe the problem or scope of work. Verified local artisans will be notified immediately.
+          </p>
+        </div>
+
+        <!-- Success Confirmation Banner (Hidden by default) -->
+        <div id="requestCreatedBanner" class="alert alert-success" style="display: none;" role="status">
+          <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
+            <span style="font-size: 1.5rem;">🎉</span>
+            <div>
+              <strong style="font-size: var(--font-size-h3);" id="createdBannerHeading">Service Request Created!</strong>
+              <p style="font-size: var(--font-size-label); margin-top: 4px; color: var(--color-text-secondary);" id="createdBannerText">
+                Your request has been submitted. The artisan has been notified to confirm availability.
+              </p>
+              <div style="margin-top: var(--space-4); display: flex; gap: var(--space-3);" id="createdBannerActions">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create Request Form -->
+        <form id="requestServiceForm" novalidate>
+          
+          <!-- 1. Service Selector -->
+          <div class="form-group" style="margin-bottom: var(--space-5);">
+            <label class="form-label" for="formServiceCategory">
+              Service Category <span class="required-mark">*</span>
+            </label>
+            <select class="form-control" id="formServiceCategory" required>
+              <option value="">Choose the trade category you need...</option>
+              <option value="plumbing">Plumbing & Pipe Fitting (Leak fixes, borehole pumps, bathrooms)</option>
+              <option value="electrical">Electrical & Solar (Inverters, wiring, distribution board)</option>
+              <option value="cleaning">Cleaning & Fumigation (Deep home cleaning, pest control)</option>
+              <option value="mechanic">Auto Mechanic & Diagnostics (Engine, brakes, scanning)</option>
+              <option value="carpenter">Carpentry & Woodwork (Furniture, wardrobes, kitchen cabinets)</option>
+              <option value="tutor">Home Tutoring & Lessons (WAEC, JAMB, primary, coding)</option>
+              <option value="technician">AC & Refrigeration Tech (AC gas, fridge repairs)</option>
+              <option value="painter">Painting & POP Design (Interior screeding, POP ceilings)</option>
+            </select>
+            <div class="form-feedback-error" id="serviceCatError">
+              <span>Please select a service category.</span>
+            </div>
+          </div>
+
+          <!-- 2. Problem Description -->
+          <div class="form-group" style="margin-bottom: var(--space-5);">
+            <label class="form-label" for="formProblemDesc">
+              Describe the Problem or Scope of Work <span class="required-mark">*</span>
+            </label>
+            <textarea 
+              class="form-control" 
+              id="formProblemDesc" 
+              rows="4" 
+              placeholder="E.g., Kitchen sink is leaking underneath the cabinet. Water pools on the floor whenever the tap is opened. Need pipe replacement." 
+              required
+            ></textarea>
+            <div class="form-helper">Be as detailed as possible to help the artisan prepare the right tools and materials.</div>
+            <div class="form-feedback-error" id="problemDescError">
+              <span>Please describe the problem you need help with (minimum 10 characters).</span>
+            </div>
+          </div>
+
+          <!-- 3. State, City, and Area Fields -->
+          <div class="form-grid-2col" style="margin-bottom: var(--space-4);">
+            
+            <div class="form-group">
+              <label class="form-label" for="state">State <span class="required-mark">*</span></label>
+              <select class="form-control" id="state" name="state" required>
+                <option value="">All States (Nigeria)</option>
+                <option value="Abia">Abia</option>
+                <option value="Adamawa">Adamawa</option>
+                <option value="Akwa Ibom">Akwa Ibom</option>
+                <option value="Anambra">Anambra</option>
+                <option value="Bauchi">Bauchi</option>
+                <option value="Bayelsa">Bayelsa</option>
+                <option value="Benue">Benue</option>
+                <option value="Borno">Borno</option>
+                <option value="Cross River">Cross River</option>
+                <option value="Delta">Delta</option>
+                <option value="Ebonyi">Ebonyi</option>
+                <option value="Edo">Edo</option>
+                <option value="Ekiti">Ekiti</option>
+                <option value="Enugu">Enugu</option>
+                <option value="Gombe">Gombe</option>
+                <option value="Imo">Imo</option>
+                <option value="Jigawa">Jigawa</option>
+                <option value="Kaduna">Kaduna</option>
+                <option value="Kano">Kano</option>
+                <option value="Katsina">Katsina</option>
+                <option value="Kebbi">Kebbi</option>
+                <option value="Kogi">Kogi</option>
+                <option value="Kwara">Kwara</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Nasarawa">Nasarawa</option>
+                <option value="Niger">Niger</option>
+                <option value="Ogun">Ogun</option>
+                <option value="Ondo">Ondo</option>
+                <option value="Osun">Osun</option>
+                <option value="Oyo">Oyo</option>
+                <option value="Plateau">Plateau</option>
+                <option value="Rivers">Rivers</option>
+                <option value="Sokoto">Sokoto</option>
+                <option value="Taraba">Taraba</option>
+                <option value="Yobe">Yobe</option>
+                <option value="Zamfara">Zamfara</option>
+                <option value="FCT-Abuja">FCT-Abuja</option>
+              </select>
+              <div class="form-feedback-error" id="stateError">
+                <span>Please select your state.</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="formCity">City / Town <span class="required-mark">*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="formCity" 
+                value="Awka" 
+                placeholder="e.g. Awka, Onitsha, Ikeja" 
+                required
+              >
+              <div class="form-feedback-error" id="cityError">
+                <span>Please enter your city or town.</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-5);">
+            <label class="form-label" for="formArea">
+              Specific Area / Street Landmark <span class="required-mark">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="formArea" 
+              value="Ifite Road near Aroma Junction" 
+              placeholder="e.g. Ifite Road, Aroma Junction, Agu-Awka" 
+              required
+            >
+            <div class="form-helper">Provide a landmark or compound identifier so the artisan can locate you easily.</div>
+            <div class="form-feedback-error" id="areaError">
+              <span>Please provide your specific area or landmark.</span>
+            </div>
+          </div>
+
+          <!-- 4. Preferred Date & Time Controls -->
+          <div class="form-grid-2col" style="margin-bottom: var(--space-5);">
+            
+            <div class="form-group">
+              <label class="form-label" for="formPreferredDate">Preferred Date</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="formPreferredDate" 
+                value="Saturday (Oct 4, 2026)" 
+                placeholder="e.g. Tomorrow or Saturday"
+              >
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="formPreferredTime">Preferred Time Window</label>
+              <select class="form-control" id="formPreferredTime">
+                <option value="Morning (08:00 AM - 11:00 AM)">Morning (08:00 AM - 11:00 AM)</option>
+                <option value="Afternoon (12:00 PM - 03:00 PM)" selected>Afternoon (12:00 PM - 03:00 PM)</option>
+                <option value="Evening (04:00 PM - 07:00 PM)">Evening (04:00 PM - 07:00 PM)</option>
+                <option value="Emergency (Immediate Assistance)">Emergency (Immediate Assistance)</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- 5. Optional Image Upload Area with Local Preview -->
+          <div class="form-group" style="margin-bottom: var(--space-5);">
+            <label class="form-label" for="jobImageUpload">
+              Attach Photos of the Issue (Optional)
+            </label>
+            
+            <div class="image-upload-zone" id="dropzoneArea">
+              <input 
+                type="file" 
+                id="jobImageUpload" 
+                accept="image/*" 
+                multiple 
+                style="display: none;"
+                aria-label="Upload photo of the repair issue"
+              >
+              <div style="font-size: 2rem; margin-bottom: var(--space-2);">📸</div>
+              <div style="font-weight: 700; color: var(--color-text-primary); font-size: var(--font-size-label);">
+                Click to browse or drag & drop photos here
+              </div>
+              <div style="font-size: var(--font-size-caption); color: var(--color-text-muted); margin-top: 4px;">
+                PNG, JPG, or JPEG up to 5MB. Photos help the artisan give accurate price estimates.
+              </div>
+            </div>
+
+            <!-- Previews container -->
+            <div class="image-previews-container" id="imagePreviewsContainer"></div>
+          </div>
+
+          <!-- 6. Additional Notes -->
+          <div class="form-group" style="margin-bottom: var(--space-6);">
+            <label class="form-label" for="formAdditionalNotes">
+              Special Notes / Compound Access Instructions (Optional)
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="formAdditionalNotes" 
+              placeholder="e.g. Please call before entering the gate, gatekeeper is on site."
+            >
+          </div>
+
+          <!-- 7. Submit Action Button -->
+          <div class="submit-button-container submit-btn-container">
+            <button type="submit" id="submitRequestBtn" class="btn btn-primary w-100">Submit Request</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-2);">
+              <a href="dashboard.html" class="btn btn-ghost btn-sm" style="color: var(--color-text-secondary); text-decoration: none;">← Cancel and return</a>
+              <span style="font-size: var(--font-size-caption); color: var(--color-text-muted);">🔒 Free request • Verified local artisans</span>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Mock Data Layer & Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetProviderId = urlParams.get('providerId') || urlParams.get('id');
+      const targetCategory = urlParams.get('category');
+
+      const form = document.getElementById('requestServiceForm');
+      const catSelect = document.getElementById('formServiceCategory');
+      const descInput = document.getElementById('formProblemDesc');
+      const stateSelect = document.getElementById('state') || document.getElementById('formState') || document.querySelector('select[name="state"]');
+      const cityInput = document.getElementById('formCity');
+      const areaInput = document.getElementById('formArea');
+      const dateInput = document.getElementById('formPreferredDate');
+      const timeSelect = document.getElementById('formPreferredTime');
+      const notesInput = document.getElementById('formAdditionalNotes');
+      const fileInput = document.getElementById('jobImageUpload');
+      const dropzone = document.getElementById('dropzoneArea');
+      const previewsContainer = document.getElementById('imagePreviewsContainer');
+      const submitBtn = document.getElementById('submitRequestBtn');
+      const successBanner = document.getElementById('requestCreatedBanner');
+      const bannerActions = document.getElementById('createdBannerActions');
+
+      let uploadedImages = [];
+
+      // Pre-fill target provider if arrived via provider profile
+      if (targetProviderId && window.HandyAPI) {
+        const p = window.HandyAPI.getProviderById(targetProviderId);
+        if (p) {
+          const banner = document.getElementById('targetProviderBanner');
+          if (banner) {
+            banner.style.display = 'flex';
+            banner.innerHTML = `
+              <div class="provider-avatar" style="width: 48px; height: 48px;">
+                <img src="../${p.avatar}" alt="${p.name}">
+              </div>
+              <div>
+                <div style="font-size: var(--font-size-label); font-weight: 700;">Direct Request to: ${p.name} ${p.isVerified ? '✓' : ''}</div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">${p.categoryName} • 📍 ${p.city}, ${p.state} • Base rate: ${p.startingRate}</div>
+              </div>
+            `;
+          }
+          if (catSelect) catSelect.value = p.category;
+          if (cityInput && p.city) cityInput.value = p.city;
+          if (stateSelect && p.state) stateSelect.value = p.state;
+        }
+      } else if (targetCategory && catSelect) {
+        catSelect.value = targetCategory;
+      }
+
+      // Toast Notification Helper
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      // Dropzone interaction
+      if (dropzone && fileInput) {
+        dropzone.addEventListener('click', () => fileInput.click());
+        dropzone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          dropzone.style.borderColor = 'var(--color-primary)';
+          dropzone.style.backgroundColor = 'var(--color-primary-subtle)';
+        });
+        dropzone.addEventListener('dragleave', () => {
+          dropzone.style.borderColor = 'var(--color-border)';
+          dropzone.style.backgroundColor = 'var(--color-surface-muted)';
+        });
+        dropzone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropzone.style.borderColor = 'var(--color-border)';
+          dropzone.style.backgroundColor = 'var(--color-surface-muted)';
+          if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleFiles(e.dataTransfer.files);
+          }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            handleFiles(e.target.files);
+          }
+        });
+      }
+
+      function handleFiles(files) {
+        Array.from(files).forEach(file => {
+          if (!file.type.startsWith('image/')) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const dataUrl = e.target.result;
+            uploadedImages.push(dataUrl);
+            renderPreviews();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function renderPreviews() {
+        if (!previewsContainer) return;
+        previewsContainer.innerHTML = uploadedImages.map((img, idx) => `
+          <div class="image-preview-item">
+            <img src="${img}" alt="Attached issue photo">
+            <button type="button" class="image-preview-remove" onclick="removeImage(${idx})" aria-label="Remove image">&times;</button>
+          </div>
+        `).join('');
+      }
+
+      window.removeImage = function (index) {
+        uploadedImages.splice(index, 1);
+        renderPreviews();
+      };
+
+      // Clear error states in real-time as user types/selects
+      if (catSelect) catSelect.addEventListener('change', () => {
+        if (catSelect.value) {
+          catSelect.classList.remove('is-invalid');
+          const err = document.getElementById('serviceCatError');
+          if (err) err.style.display = 'none';
+        }
+      });
+
+      if (descInput) descInput.addEventListener('input', () => {
+        if (descInput.value.trim().length >= 10) {
+          descInput.classList.remove('is-invalid');
+          const err = document.getElementById('problemDescError');
+          if (err) err.style.display = 'none';
+        }
+      });
+
+      if (stateSelect) stateSelect.addEventListener('change', () => {
+        if (stateSelect.value) {
+          stateSelect.classList.remove('is-invalid');
+          const err = document.getElementById('stateError');
+          if (err) err.style.display = 'none';
+        }
+      });
+
+      if (cityInput) cityInput.addEventListener('input', () => {
+        if (cityInput.value.trim()) {
+          cityInput.classList.remove('is-invalid');
+          const err = document.getElementById('cityError');
+          if (err) err.style.display = 'none';
+        }
+      });
+
+      if (areaInput) areaInput.addEventListener('input', () => {
+        if (areaInput.value.trim()) {
+          areaInput.classList.remove('is-invalid');
+          const err = document.getElementById('areaError');
+          if (err) err.style.display = 'none';
+        }
+      });
+
+      // Form Validation & Submission
+      function validateForm() {
+        let isValid = true;
+        let firstInvalidElement = null;
+
+        // Reset errors
+        document.querySelectorAll('.form-feedback-error').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.form-control').forEach(el => el.classList.remove('is-invalid'));
+
+        // Category validation
+        if (!catSelect.value) {
+          catSelect.classList.add('is-invalid');
+          const err = document.getElementById('serviceCatError');
+          if (err) err.style.display = 'flex';
+          isValid = false;
+          if (!firstInvalidElement) firstInvalidElement = catSelect;
+        }
+
+        // Description validation (minimum 10 chars)
+        if (!descInput.value.trim() || descInput.value.trim().length < 10) {
+          descInput.classList.add('is-invalid');
+          const err = document.getElementById('problemDescError');
+          if (err) err.style.display = 'flex';
+          isValid = false;
+          if (!firstInvalidElement) firstInvalidElement = descInput;
+        }
+
+        // State validation
+        if (stateSelect && !stateSelect.value) {
+          stateSelect.classList.add('is-invalid');
+          const err = document.getElementById('stateError');
+          if (err) err.style.display = 'flex';
+          isValid = false;
+          if (!firstInvalidElement) firstInvalidElement = stateSelect;
+        }
+
+        // City validation
+        if (!cityInput.value.trim()) {
+          cityInput.classList.add('is-invalid');
+          const err = document.getElementById('cityError');
+          if (err) err.style.display = 'flex';
+          isValid = false;
+          if (!firstInvalidElement) firstInvalidElement = cityInput;
+        }
+
+        // Area validation
+        if (!areaInput.value.trim()) {
+          areaInput.classList.add('is-invalid');
+          const err = document.getElementById('areaError');
+          if (err) err.style.display = 'flex';
+          isValid = false;
+          if (!firstInvalidElement) firstInvalidElement = areaInput;
+        }
+
+        if (firstInvalidElement) {
+          firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          firstInvalidElement.focus();
+        }
+
+        return isValid;
+      }
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          if (!validateForm()) {
+            showToast('Please fill in all required fields to submit your request.', 'danger');
+            return;
+          }
+
+          // Show simulated loading state
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<span>⏳ Submitting Request...</span>`;
+
+          setTimeout(() => {
+            const provider = targetProviderId && window.HandyAPI ? window.HandyAPI.getProviderById(targetProviderId) : null;
+            const categoryText = catSelect.options[catSelect.selectedIndex].text.split('(')[0].trim();
+
+            const newReq = window.HandyAPI ? window.HandyAPI.createRequest({
+              serviceName: categoryText || 'Custom Service',
+              category: catSelect.value,
+              providerId: provider ? provider.id : 'prov-001',
+              providerName: provider ? provider.name : 'John Plumbing Services',
+              customerId: 'cust-101',
+              customerName: 'Chris Okonkwo',
+              state: stateSelect ? stateSelect.value : 'Anambra',
+              city: cityInput.value.trim(),
+              area: areaInput.value.trim(),
+              description: descInput.value.trim(),
+              date: dateInput.value.trim(),
+              time: timeSelect.value
+            }) : { id: 'REQ-00126' };
+
+            form.style.display = 'none';
+
+            if (successBanner) {
+              successBanner.style.display = 'block';
+              document.getElementById('createdBannerHeading').textContent = `Service Request #${newReq.id} Created!`;
+              document.getElementById('createdBannerText').textContent = `Your request for "${newReq.serviceName}" in ${newReq.city}, ${newReq.state} has been received. You can track progress and communicate with the provider anytime.`;
+              
+              if (bannerActions) {
+                bannerActions.innerHTML = `
+                  <a href="request-details.html?id=${newReq.id}" class="btn btn-primary btn-sm">View Request Details</a>
+                  <a href="dashboard.html" class="btn btn-outline btn-sm">Return to Dashboard</a>
+                `;
+              }
+            }
+
+            showToast(`Request #${newReq.id} submitted successfully!`, 'success');
+          }, 800);
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>

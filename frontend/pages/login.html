@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Log in to your HandyNaija account. Access your service requests, messages, and artisan profile securely.">
+  <title>Login — HandyNaija Service Marketplace</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#loginFormCard" class="skip-link">Skip to login form</a>
+
+  <!-- =========================================================================
+       MINIMAL AUTH HEADER
+       ========================================================================= -->
+  <header class="header" role="banner" style="position: static; border-bottom: 1px solid var(--color-border-subtle);">
+    <div class="container header-container" style="justify-content: space-between;">
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+      <div style="font-size: var(--font-size-label);">
+        Don't have an account? <a href="register.html" style="color: var(--color-primary); font-weight: 700; text-decoration: none;">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       LOGIN SCREEN CONTENT (P05)
+       ========================================================================= -->
+  <main class="auth-page-container" id="loginFormCard">
+    <div class="auth-card">
+
+      <!-- Header Section -->
+      <div class="auth-header">
+        <div class="auth-brand-logo">
+          <img src="../images/logo/logo.svg" alt="HandyNaija" width="140" height="34">
+        </div>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Log in to manage your service requests or artisan jobs</p>
+      </div>
+
+      <!-- Simulated Success Alert Banner (Hidden by default) -->
+      <div id="loginSuccessBanner" class="alert alert-success" style="display: none; margin-bottom: var(--space-4);" role="status">
+        <div style="display: flex; align-items: center; gap: var(--space-2);">
+          <span>✅</span>
+          <div>
+            <strong>Login Successful!</strong>
+            <div style="font-size: var(--font-size-caption);">Redirecting to your dashboard...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Login Form -->
+      <form id="loginForm" novalidate>
+
+        <!-- Email or Phone Field -->
+        <div class="form-group" id="emailGroup" style="margin-bottom: var(--space-4);">
+          <label class="form-label" for="loginIdentifier">
+            Email or Phone Number <span class="required-mark">*</span>
+          </label>
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="loginIdentifier" 
+              name="identifier" 
+              placeholder="e.g. chris@example.com or 08031234567" 
+              autocomplete="username"
+              required
+            >
+          </div>
+          <div class="form-feedback-error" id="identifierError">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span>Please enter a valid email address or 11-digit Nigerian phone number.</span>
+          </div>
+        </div>
+
+        <!-- Password Field with Visibility Toggle -->
+        <div class="form-group" id="passwordGroup" style="margin-bottom: var(--space-2);">
+          <label class="form-label" for="loginPassword">
+            Password <span class="required-mark">*</span>
+          </label>
+          <div class="password-input-wrapper">
+            <input 
+              type="password" 
+              class="form-control" 
+              id="loginPassword" 
+              name="password" 
+              placeholder="Enter your password" 
+              autocomplete="current-password"
+              required
+            >
+            <button 
+              type="button" 
+              class="password-toggle-btn" 
+              id="togglePasswordBtn" 
+              aria-label="Show password as plain text"
+              aria-pressed="false"
+            >
+              👁️
+            </button>
+          </div>
+          <div class="form-feedback-error" id="passwordError">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span>Password is required (minimum 6 characters).</span>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password Row -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); font-size: var(--font-size-caption);">
+          <label class="form-check" style="margin-bottom: 0;">
+            <input type="checkbox" id="rememberMe" class="form-check-input" checked>
+            <span class="form-check-label">Remember me</span>
+          </label>
+          <button type="button" class="btn-ghost" id="openForgotModalBtn" style="padding: 0; color: var(--color-primary); font-size: var(--font-size-caption); cursor: pointer; background: none; border: none; font-weight: 600;">
+            Forgot Password?
+          </button>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="loginSubmitBtn">
+          Log In
+        </button>
+
+      </form>
+
+      <!-- Quick Demo Login Presets -->
+      <div style="background: var(--color-surface-muted); padding: var(--space-3); border-radius: var(--radius-md); margin-top: var(--space-6); border: 1px solid var(--color-border); font-size: var(--font-size-caption);">
+        <div style="font-weight: 700; color: var(--color-text-secondary); margin-bottom: var(--space-2);">Quick Prototype Fill:</div>
+        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" id="fillCustomerPresetBtn">👤 Customer (Chris)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="fillProviderPresetBtn">🔧 Artisan (John)</button>
+        </div>
+      </div>
+
+      <!-- Auth Footer Link -->
+      <div class="auth-footer">
+        New to HandyNaija? <a href="register.html">Create a free account</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       FORGOT PASSWORD MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="forgotPasswordModal" role="dialog" aria-modal="true" aria-labelledby="forgotPasswordTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="forgotPasswordTitle">Reset Your Password</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="forgotPasswordForm">
+        <div class="modal-body">
+          <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+            Enter your registered email address or phone number. We'll send you an OTP code to reset your password.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="resetIdentifier">Email or Phone Number *</label>
+            <input type="text" class="form-control" id="resetIdentifier" placeholder="e.g. 08031234567" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Reset Link / OTP</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../js/auth.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const form = document.getElementById('loginForm');
+      const identifierInput = document.getElementById('loginIdentifier');
+      const passwordInput = document.getElementById('loginPassword');
+      const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+      const successBanner = document.getElementById('loginSuccessBanner');
+      const submitBtn = document.getElementById('loginSubmitBtn');
+
+      // Toast Notification Helper
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      // Password Visibility Toggle
+      if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', () => {
+          const isPassword = passwordInput.getAttribute('type') === 'password';
+          passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+          togglePasswordBtn.textContent = isPassword ? '🙈' : '👁️';
+          togglePasswordBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password as plain text');
+          togglePasswordBtn.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+        });
+      }
+
+      // Quick Demo Presets
+      const customerPreset = document.getElementById('fillCustomerPresetBtn');
+      const providerPreset = document.getElementById('fillProviderPresetBtn');
+
+      if (customerPreset) {
+        customerPreset.addEventListener('click', () => {
+          identifierInput.value = 'chris.okonkwo@example.com';
+          passwordInput.value = 'Password123!';
+          clearErrors();
+        });
+      }
+
+      if (providerPreset) {
+        providerPreset.addEventListener('click', () => {
+          identifierInput.value = '08031234567';
+          passwordInput.value = 'ArtisanPass2026!';
+          clearErrors();
+        });
+      }
+
+      function clearErrors() {
+        identifierInput.classList.remove('is-invalid');
+        passwordInput.classList.remove('is-invalid');
+        const idErr = document.getElementById('identifierError');
+        const passErr = document.getElementById('passwordError');
+        if (idErr) idErr.style.display = 'none';
+        if (passErr) passErr.style.display = 'none';
+      }
+
+      // Validation
+      function validateForm() {
+        let isValid = true;
+        clearErrors();
+
+        const idVal = identifierInput.value.trim();
+        const passVal = passwordInput.value;
+
+        // Check identifier
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(idVal);
+        const isPhone = /^[0-9+]{10,14}$/.test(idVal.replace(/\s+/g, ''));
+
+        if (!idVal || (!isEmail && !isPhone)) {
+          identifierInput.classList.add('is-invalid');
+          const idErr = document.getElementById('identifierError');
+          if (idErr) idErr.style.display = 'flex';
+          isValid = false;
+        } else {
+          identifierInput.classList.add('is-valid');
+        }
+
+        // Check password
+        if (!passVal || passVal.length < 6) {
+          passwordInput.classList.add('is-invalid');
+          const passErr = document.getElementById('passwordError');
+          if (passErr) passErr.style.display = 'flex';
+          isValid = false;
+        } else {
+          passwordInput.classList.add('is-valid');
+        }
+
+        return isValid;
+      }
+
+      // Submit handler
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          if (!validateForm()) {
+            showToast('Please correct the highlighted errors before submitting.', 'danger');
+            return;
+          }
+
+          // Disable button during simulated auth
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<span>⏳ Signing in...</span>`;
+
+          setTimeout(() => {
+            if (successBanner) successBanner.style.display = 'block';
+            showToast('Welcome back! Login successful.', 'success');
+
+            // Detect role from identifier
+            const isProvider = identifierInput.value.includes('08031234567') || identifierInput.value.includes('john');
+            const targetRole = isProvider ? 'provider' : 'customer';
+
+            if (window.HandyAuth) {
+              window.HandyAuth.switchRole(targetRole);
+            }
+
+            setTimeout(() => {
+              window.location.href = isProvider ? 'provider-dashboard.html' : 'dashboard.html';
+            }, 1200);
+          }, 600);
+        });
+      }
+
+      // Forgot Password Modal Handlers
+      const forgotModal = document.getElementById('forgotPasswordModal');
+      const openForgotBtn = document.getElementById('openForgotModalBtn');
+      const forgotForm = document.getElementById('forgotPasswordForm');
+
+      if (openForgotBtn && forgotModal) {
+        openForgotBtn.addEventListener('click', () => {
+          forgotModal.classList.add('open');
+        });
+      }
+
+      document.querySelectorAll('[data-close-modal]').forEach(b => {
+        b.addEventListener('click', () => {
+          if (forgotModal) forgotModal.classList.remove('open');
+        });
+      });
+
+      if (forgotForm) {
+        forgotForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (forgotModal) forgotModal.classList.remove('open');
+          showToast('Password reset instructions have been sent to your phone/email.', 'success');
+          forgotForm.reset();
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>

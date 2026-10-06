@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View and manage incoming customer service requests, accepted job orders, and completed work history on HandyNaija.">
+  <title>Provider Service Requests — HandyNaija</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#providerRequestsMain" class="skip-link">Skip to requests list</a>
+
+  <!-- =========================================================================
+       PROVIDER HEADER
+       ========================================================================= -->
+  <header class="provider-header" role="banner">
+    <div class="container provider-header-container">
+      
+      <!-- Brand Logo -->
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+
+      <!-- Provider Nav Actions -->
+      <nav class="header-nav-actions" aria-label="Provider Navigation">
+        <a href="provider-dashboard.html" class="header-nav-link">Dashboard</a>
+        <a href="provider-requests.html" class="header-nav-link active">Jobs / Requests</a>
+        <a href="provider-services.html" class="header-nav-link">My Services</a>
+        <a href="provider-availability.html" class="header-nav-link">Availability</a>
+        
+        <a href="messages.html" class="header-nav-link" aria-label="Messages">
+          <span class="icon-badge-wrapper">
+            💬
+            <span class="icon-badge">2</span>
+          </span>
+        </a>
+
+        <a href="provider-profile-setup.html" style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2); text-decoration: none;">
+          <div class="provider-avatar" style="width: 36px; height: 36px; border: 2px solid var(--color-primary);">
+            <img src="../images/providers/provider-1.svg" alt="John Plumbing Services">
+          </div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.2;">
+            <span style="font-size: var(--font-size-caption); font-weight: 700; color: var(--color-text-primary);">John Plumbing</span>
+            <span style="font-size: 0.65rem; color: var(--color-primary); font-weight: 600;">Work Orders</span>
+          </div>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: S04 PROVIDER SERVICE REQUESTS
+       ========================================================================= -->
+  <main class="main-content section" id="providerRequestsMain" style="padding-top: var(--space-6);">
+    <div class="container">
+
+      <!-- Breadcrumb & Header -->
+      <div style="margin-bottom: var(--space-6);">
+        <a href="provider-dashboard.html" class="profile-back-link">
+          ← Back to Dashboard
+        </a>
+        <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+          Service Requests & Work Orders
+        </h1>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+          Filter and manage customer repair inquiries, scheduled arrivals, and job completion history.
+        </p>
+      </div>
+
+      <!-- Main Card with Filter Tabs -->
+      <div class="dashboard-card" style="box-shadow: var(--shadow-sm);">
+        
+        <!-- Filter Tabs Bar: All, Pending, Accepted, Scheduled, Completed -->
+        <div class="filter-tabs-bar" role="tablist" aria-label="Filter Requests by Lifecycle Status">
+          <button type="button" class="filter-tab-btn active" data-filter="all" role="tab" aria-selected="true">All Requests (<span id="tabCountAll">2</span>)</button>
+          <button type="button" class="filter-tab-btn" data-filter="pending" role="tab" aria-selected="false">Pending Response (<span id="tabCountPending">1</span>)</button>
+          <button type="button" class="filter-tab-btn" data-filter="accepted" role="tab" aria-selected="false">Accepted (<span id="tabCountAccepted">1</span>)</button>
+          <button type="button" class="filter-tab-btn" data-filter="scheduled" role="tab" aria-selected="false">Scheduled</button>
+          <button type="button" class="filter-tab-btn" data-filter="completed" role="tab" aria-selected="false">Completed</button>
+        </div>
+
+        <!-- Requests List Container -->
+        <div id="providerRequestsContainer" style="display: flex; flex-direction: column; gap: var(--space-3);">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Mock Data Layer & Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      let currentTab = 'all';
+      const container = document.getElementById('providerRequestsContainer');
+      const tabs = document.querySelectorAll('.filter-tab-btn');
+
+      const STATUS_CONFIG = {
+        pending: { label: 'Pending Response', icon: '⏳', class: 'pending' },
+        accepted: { label: 'Accepted Job', icon: '✓', class: 'accepted' },
+        scheduled: { label: 'Scheduled Arrival', icon: '📅', class: 'scheduled' },
+        inprogress: { label: 'In Progress', icon: '⚙️', class: 'inprogress' },
+        completed: { label: 'Completed', icon: '🎉', class: 'completed' },
+        cancelled: { label: 'Cancelled', icon: '🚫', class: 'cancelled' }
+      };
+
+      function showToast(message, type = 'info') {
+        const c = document.getElementById('toastContainer');
+        if (!c) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        c.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function renderRequests() {
+        if (!container) return;
+
+        // Loading shimmer simulation
+        container.innerHTML = `
+          <div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div></div>
+        `;
+
+        setTimeout(() => {
+          const allRequests = window.HandyAPI ? window.HandyAPI.getRequests() : [];
+
+          // Update tab counters
+          const countAll = allRequests.length;
+          const countPending = allRequests.filter(r => r.status === 'pending').length;
+          const countAccepted = allRequests.filter(r => r.status === 'accepted').length;
+
+          const elAll = document.getElementById('tabCountAll');
+          const elPend = document.getElementById('tabCountPending');
+          const elAcc = document.getElementById('tabCountAccepted');
+          if (elAll) elAll.textContent = countAll;
+          if (elPend) elPend.textContent = countPending;
+          if (elAcc) elAcc.textContent = countAccepted;
+
+          let filtered = allRequests;
+          if (currentTab !== 'all') {
+            filtered = allRequests.filter(r => r.status === currentTab);
+          }
+
+          if (filtered.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state" style="padding: var(--space-8) var(--space-4);">
+                <div class="empty-state-icon">📋</div>
+                <h3>No Requests in "${currentTab.toUpperCase()}"</h3>
+                <p>There are no customer service requests matching this status filter.</p>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = filtered.map(r => {
+            const statusMeta = STATUS_CONFIG[r.status] || STATUS_CONFIG.pending;
+            const isPending = r.status === 'pending';
+
+            return `
+              <div class="active-request-card" style="border-left: 4px solid ${isPending ? 'var(--color-warning)' : 'var(--color-primary)'};">
+                <div>
+                  <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1); flex-wrap: wrap;">
+                    <span style="font-weight: 800; font-family: monospace; font-size: 0.8rem; background: var(--color-surface-muted); padding: 2px 6px; border-radius: var(--radius-xs);">${r.id}</span>
+                    <span style="font-weight: 700; font-size: var(--font-size-body);">${r.serviceName}</span>
+                    <span class="status-badge ${statusMeta.class}">${statusMeta.icon} ${statusMeta.label}</span>
+                  </div>
+
+                  <div style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-bottom: 2px;">
+                    Customer: <strong>${r.customerName}</strong> • Masked Contact: <code>+234 803 *** 1234</code>
+                  </div>
+
+                  <div style="font-size: var(--font-size-caption); color: var(--color-text-muted);">
+                    📍 ${r.location} • Preferred Schedule: <strong>${r.preferredDate}</strong>
+                  </div>
+
+                  <p style="font-size: var(--font-size-caption); color: var(--color-text-secondary); margin-top: var(--space-2); line-height: 1.5; background: var(--color-surface-muted); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                    Scope: "${r.description}"
+                  </p>
+                </div>
+
+                <div style="display: flex; gap: var(--space-2); align-items: center;">
+                  <a href="provider-request-details.html?id=${r.id}" class="btn btn-secondary btn-sm">View Details</a>
+                  <a href="messages.html" class="btn btn-outline btn-sm">💬 Message</a>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+        }, 150);
+      }
+
+      // Tab switcher
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          currentTab = tab.getAttribute('data-filter');
+          renderRequests();
+        });
+      });
+
+      // Initial Render
+      renderRequests();
+
+    })();
+  </script>
+</body>
+</html>

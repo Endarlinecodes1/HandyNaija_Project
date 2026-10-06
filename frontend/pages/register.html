@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Register on HandyNaija as a customer looking for verified artisans or as a skilled service provider growing your trade in Nigeria.">
+  <title>Register — HandyNaija Service Marketplace</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#registerMainCard" class="skip-link">Skip to registration form</a>
+
+  <!-- =========================================================================
+       MINIMAL AUTH HEADER
+       ========================================================================= -->
+  <header class="header" role="banner" style="position: static; border-bottom: 1px solid var(--color-border-subtle);">
+    <div class="container header-container" style="justify-content: space-between;">
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+      <div style="font-size: var(--font-size-label);">
+        Already have an account? <a href="login.html" style="color: var(--color-primary); font-weight: 700; text-decoration: none;">Log in</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       REGISTRATION SCREEN CONTENT (P06 / P07)
+       ========================================================================= -->
+  <main class="auth-page-container" id="registerMainCard">
+    <div class="auth-card auth-card-wide">
+
+      <!-- Header Section -->
+      <div class="auth-header">
+        <div class="auth-brand-logo">
+          <img src="../images/logo/logo.svg" alt="HandyNaija" width="140" height="34">
+        </div>
+        <h1 class="auth-title">Join HandyNaija</h1>
+        <p class="auth-subtitle">Choose how you want to use Nigeria's trusted artisan marketplace</p>
+      </div>
+
+      <!-- Role Choice Tabs: [I need a service] vs [I provide services] -->
+      <fieldset style="border: none; padding: 0; margin: 0;">
+        <legend class="sr-only">Select your account type</legend>
+        <div class="role-choice-grid" role="radiogroup" aria-label="Account Type Selection">
+          
+          <!-- Option 1: Customer -->
+          <div 
+            class="role-choice-card selected" 
+            id="roleChoiceCustomer" 
+            role="radio" 
+            aria-checked="true" 
+            tabindex="0"
+          >
+            <div class="role-choice-icon">🏠</div>
+            <div class="role-choice-title">I need a service</div>
+            <div class="role-choice-desc">Find, contact, and hire verified local pros</div>
+          </div>
+
+          <!-- Option 2: Service Provider / Artisan -->
+          <div 
+            class="role-choice-card" 
+            id="roleChoiceProvider" 
+            role="radio" 
+            aria-checked="false" 
+            tabindex="0"
+          >
+            <div class="role-choice-icon">🛠️</div>
+            <div class="role-choice-title">I provide services</div>
+            <div class="role-choice-desc">List your skills, get job requests, and grow</div>
+          </div>
+
+        </div>
+      </fieldset>
+
+      <!-- Success State Alert Banner (Hidden by default) -->
+      <div id="registerSuccessBanner" class="alert alert-success" style="display: none; margin-bottom: var(--space-6);" role="status">
+        <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
+          <span style="font-size: 1.5rem;">🎉</span>
+          <div>
+            <strong style="font-size: var(--font-size-h3);">Account Created Successfully!</strong>
+            <p style="font-size: var(--font-size-label); margin-top: 4px; color: var(--color-text-secondary);" id="registerSuccessDetails">
+              Your registration as a customer is complete. You can now explore verified artisans across Nigeria.
+            </p>
+            <div style="margin-top: var(--space-3); display: flex; gap: var(--space-3);">
+              <a href="login.html" class="btn btn-primary btn-sm">Proceed to Login</a>
+              <a href="services.html" class="btn btn-outline btn-sm">Browse Services</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
+           FORM 1: CUSTOMER REGISTRATION FORM
+           ===================================================================== -->
+      <form id="customerRegisterForm" novalidate>
+        
+        <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4); border-bottom: 1px solid var(--color-border-subtle); padding-bottom: var(--space-2);">
+          <span class="service-chip" style="font-weight: 700; background: var(--color-primary-light); color: var(--color-primary);">Customer Registration</span>
+        </div>
+
+        <!-- Full Name -->
+        <div class="form-group" style="margin-bottom: var(--space-4);">
+          <label class="form-label" for="custFullName">
+            Full Name <span class="required-mark">*</span>
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="custFullName" 
+            placeholder="e.g. Chris Okonkwo" 
+            autocomplete="name"
+            required
+          >
+          <div class="form-feedback-error" id="custNameError">
+            <span>Please enter your full name (minimum 3 characters).</span>
+          </div>
+        </div>
+
+        <!-- Email & Phone in 2-Column Grid on Desktop -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+          
+          <div class="form-group">
+            <label class="form-label" for="custEmail">
+              Email Address <span class="required-mark">*</span>
+            </label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="custEmail" 
+              placeholder="e.g. chris@example.com" 
+              autocomplete="email"
+              required
+            >
+            <div class="form-feedback-error" id="custEmailError">
+              <span>Please enter a valid email address (e.g. name@domain.com).</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="custPhone">
+              Phone Number <span class="required-mark">*</span>
+            </label>
+            <input 
+              type="tel" 
+              class="form-control" 
+              id="custPhone" 
+              placeholder="e.g. 08031234567" 
+              autocomplete="tel"
+              required
+            >
+            <div class="form-feedback-error" id="custPhoneError">
+              <span>Enter an 11-digit Nigerian phone number.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- State & City -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+          
+          <div class="form-group">
+            <label class="form-label" for="custState">State *</label>
+            <select class="form-control" id="custState" required>
+              <option value="Anambra">Anambra State</option>
+              <option value="Lagos">Lagos State</option>
+              <option value="Abuja (FCT)">Abuja (FCT)</option>
+              <option value="Rivers">Rivers State</option>
+              <option value="Oyo">Oyo State</option>
+              <option value="Enugu">Enugu State</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="custCity">City / Town *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="custCity" 
+              value="Awka" 
+              placeholder="e.g. Awka, Ikeja, Maitama" 
+              required
+            >
+          </div>
+
+        </div>
+
+        <!-- Password & Confirm Password -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+          
+          <div class="form-group">
+            <label class="form-label" for="custPassword">Password *</label>
+            <div class="password-input-wrapper">
+              <input 
+                type="password" 
+                class="form-control" 
+                id="custPassword" 
+                placeholder="At least 6 characters" 
+                required
+              >
+              <button type="button" class="password-toggle-btn" data-toggle-for="custPassword" aria-label="Toggle password visibility">👁️</button>
+            </div>
+            <div class="form-feedback-error" id="custPassError">
+              <span>Password must be at least 6 characters.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="custConfirmPassword">Confirm Password *</label>
+            <div class="password-input-wrapper">
+              <input 
+                type="password" 
+                class="form-control" 
+                id="custConfirmPassword" 
+                placeholder="Re-enter password" 
+                required
+              >
+              <button type="button" class="password-toggle-btn" data-toggle-for="custConfirmPassword" aria-label="Toggle confirm password visibility">👁️</button>
+            </div>
+            <div class="form-feedback-error" id="custConfirmError">
+              <span>Passwords do not match. Please re-check.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Terms Agreement Checkbox -->
+        <div class="form-group" style="margin-bottom: var(--space-6);">
+          <label class="form-check">
+            <input type="checkbox" id="custTermsCheck" class="form-check-input" required>
+            <span class="form-check-label" style="font-size: var(--font-size-caption);">
+              I agree to the HandyNaija <a href="../index.html#aboutSection" target="_blank" style="color: var(--color-primary); font-weight: 600;">Terms of Service</a> and <a href="../index.html#aboutSection" target="_blank" style="color: var(--color-primary); font-weight: 600;">Privacy Policy</a>.
+            </span>
+          </label>
+          <div class="form-feedback-error" id="custTermsError">
+            <span>You must accept the terms of service to create an account.</span>
+          </div>
+        </div>
+
+      <!-- =====================================================================
+           FORM 2: SERVICE PROVIDER / ARTISAN REGISTRATION (2-STEP WIZARD)
+           ===================================================================== -->
+      <div id="providerRegisterWrap" style="display: none;">
+        
+        <!-- Wizard Stepper Indicator -->
+        <div class="provider-wizard-steps">
+          <div class="wizard-step-node active" id="pageProvStep1Node">
+            <div class="wizard-step-circle" id="pageProvStep1Circle">1</div>
+            <div class="wizard-step-info">
+              <div class="wizard-step-title">Basic Info</div>
+              <div class="wizard-step-subtitle">Contact & Location</div>
+            </div>
+          </div>
+          <div class="wizard-step-divider" id="pageProvStepDivider"></div>
+          <div class="wizard-step-node" id="pageProvStep2Node">
+            <div class="wizard-step-circle" id="pageProvStep2Circle">2</div>
+            <div class="wizard-step-info">
+              <div class="wizard-step-title">Verification & Skills</div>
+              <div class="wizard-step-subtitle">ID & Documentation</div>
+            </div>
+          </div>
+        </div>
+
+        <form id="providerRegisterForm" novalidate>
+          
+          <!-- STEP 1: BASIC INFO -->
+          <div id="pageProvStep1Content">
+            
+            <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4); border-bottom: 1px solid var(--color-border-subtle); padding-bottom: var(--space-2);">
+              <span class="service-chip" style="font-weight: 700; background: var(--color-primary-light); color: var(--color-primary);">Step 1: Artisan Contact & Location</span>
+            </div>
+
+            <!-- Full Legal Name -->
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label" for="provContactName">
+                Full Legal Name <span class="required-mark">*</span>
+              </label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="provContactName" 
+                placeholder="e.g. John Chinedu" 
+                required
+              >
+              <div class="form-feedback-error" id="provContactError">
+                <span>Please enter your full legal name.</span>
+              </div>
+            </div>
+
+            <!-- Email & Phone -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+              
+              <div class="form-group">
+                <label class="form-label" for="provEmail">
+                  Email Address <span class="required-mark">*</span>
+                </label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  id="provEmail" 
+                  placeholder="e.g. john@example.com" 
+                  required
+                >
+                <div class="form-feedback-error" id="provEmailError">
+                  <span>Please enter a valid email address.</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="provPhone">
+                  Phone Number (WhatsApp Active) <span class="required-mark">*</span>
+                </label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  id="provPhone" 
+                  placeholder="e.g. 0803 123 4567 or +234 803 123 4567" 
+                  required
+                >
+                <div class="form-feedback-error" id="provPhoneError">
+                  <span>Enter a valid Nigerian phone number (+234 or 11 digits).</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- State, City & Address -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+              <div class="form-group">
+                <label class="form-label" for="provState">State *</label>
+                <select class="form-control" id="provState" required>
+                  <option value="Anambra" selected>Anambra State</option>
+                  <option value="Lagos">Lagos State</option>
+                  <option value="Abuja (FCT)">Abuja (FCT)</option>
+                  <option value="Rivers">Rivers State</option>
+                  <option value="Oyo">Oyo State</option>
+                  <option value="Enugu">Enugu State</option>
+                  <option value="Kano">Kano State</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="provCity">City / Town *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="provCity" 
+                  value="Awka" 
+                  placeholder="e.g. Awka, Ikeja" 
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label" for="provAddress">Full Workshop / Street Address <span class="required-mark">*</span></label>
+              <input type="text" class="form-control" id="provAddress" placeholder="e.g. Shop 14, Aroma Plaza, Zik Avenue, Awka" required>
+            </div>
+
+            <!-- Password & Confirm Password -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+              
+              <div class="form-group">
+                <label class="form-label" for="provPassword">Password *</label>
+                <div class="password-input-wrapper">
+                  <input 
+                    type="password" 
+                    class="form-control" 
+                    id="provPassword" 
+                    placeholder="At least 6 characters" 
+                    required
+                  >
+                  <button type="button" class="password-toggle-btn" data-toggle-for="provPassword" aria-label="Toggle password visibility">👁️</button>
+                </div>
+                <div class="form-feedback-error" id="provPassError">
+                  <span>Password must be at least 6 characters.</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="provConfirmPassword">Confirm Password *</label>
+                <div class="password-input-wrapper">
+                  <input 
+                    type="password" 
+                    class="form-control" 
+                    id="provConfirmPassword" 
+                    placeholder="Re-enter password" 
+                    required
+                  >
+                  <button type="button" class="password-toggle-btn" data-toggle-for="provConfirmPassword" aria-label="Toggle confirm password visibility">👁️</button>
+                </div>
+                <div class="form-feedback-error" id="provConfirmError">
+                  <span>Passwords do not match. Please re-check.</span>
+                </div>
+              </div>
+
+            </div>
+
+            <button type="button" class="btn btn-primary btn-full btn-lg" id="pageProvNextBtn">
+              Next: Verification & Skills →
+            </button>
+          </div>
+
+          <!-- STEP 2: VERIFICATION & SKILLS -->
+          <div id="pageProvStep2Content" style="display: none;">
+            
+            <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4); border-bottom: 1px solid var(--color-border-subtle); padding-bottom: var(--space-2);">
+              <span class="service-chip" style="font-weight: 700; background: var(--color-warning-light); color: var(--color-warning-text);">Step 2: ID Credentials & Trade Skills</span>
+            </div>
+
+            <!-- Trade Categories Multi-Select -->
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label">
+                Service Categories <span class="required-mark">*</span> <small class="text-muted">(Multi-select allowed)</small>
+              </label>
+              <div class="category-chips-grid" id="pageProvCategoryChips">
+                <button type="button" class="category-chip-btn selected" data-cat="plumbing">💧 Plumbing</button>
+                <button type="button" class="category-chip-btn" data-cat="electrical">⚡ Electrical & Solar</button>
+                <button type="button" class="category-chip-btn" data-cat="carpentry">🪚 Carpentry</button>
+                <button type="button" class="category-chip-btn" data-cat="tailoring">🧵 Tailoring</button>
+                <button type="button" class="category-chip-btn" data-cat="cleaning">🧹 Cleaning</button>
+                <button type="button" class="category-chip-btn" data-cat="painting">🎨 Painting & POP</button>
+                <button type="button" class="category-chip-btn" data-cat="technician">❄️ AC & Cooling</button>
+                <button type="button" class="category-chip-btn" data-cat="mechanic">🚗 Auto Mechanic</button>
+                <button type="button" class="category-chip-btn" data-cat="tutor">📚 Tutoring</button>
+              </div>
+              <input type="hidden" id="pageProvCategoriesInput" value="plumbing">
+            </div>
+
+            <!-- Experience & ID Type -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
+              <div class="form-group">
+                <label class="form-label" for="pageProvExperience">Years of Experience <span class="required-mark">*</span></label>
+                <select class="form-control" id="pageProvExperience" required>
+                  <option value="1-2">1 – 2 Years</option>
+                  <option value="3-5" selected>3 – 5 Years</option>
+                  <option value="6-10">6 – 10 Years</option>
+                  <option value="10+">10+ Years (Master Artisan)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="pageProvIdType">Form of ID <span class="required-mark">*</span></label>
+                <select class="form-control" id="pageProvIdType" required>
+                  <option value="NIN" selected>National Identity Number (NIN)</option>
+                  <option value="VotersCard">Voter's Card (PVC)</option>
+                  <option value="DriversLicense">Driver's License</option>
+                  <option value="Passport">International Passport</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- NIN Number Field (11 Digits) -->
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label" for="pageProvNin" id="pageProvNinLabel">
+                NIN Number (11 Digits) <span class="required-mark">*</span>
+              </label>
+              <input type="text" class="form-control" id="pageProvNin" placeholder="e.g. 12345678901" maxlength="11" required>
+              <div class="form-feedback-error" id="pageProvNinError">
+                <span>NIN must be strictly 11 numerical digits.</span>
+              </div>
+            </div>
+
+            <!-- Bio / Description -->
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label" for="pageProvBio">Short Bio / Service Description <span class="required-mark">*</span></label>
+              <textarea class="form-control" id="pageProvBio" rows="2" placeholder="Tell customers about your craftsmanship, tools, and warranties..." required></textarea>
+            </div>
+
+            <!-- Upload ID Front & Back -->
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label">
+                Upload ID Photo (Front & Back) <span class="required-mark">*</span>
+                <small class="text-muted">(Max 5MB each • Image or PDF)</small>
+              </label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);">
+                <div class="file-upload-card" id="pageProvIdFrontBox" onclick="document.getElementById('pageProvIdFrontFile').click()">
+                  <div class="file-upload-icon">📄</div>
+                  <div class="file-upload-text">ID Card (Front)</div>
+                  <div class="file-upload-hint">Click to choose file</div>
+                  <div class="file-upload-filename" id="pageProvIdFrontName"></div>
+                  <input type="file" id="pageProvIdFrontFile" accept="image/*,application/pdf" style="display: none;">
+                </div>
+
+                <div class="file-upload-card" id="pageProvIdBackBox" onclick="document.getElementById('pageProvIdBackFile').click()">
+                  <div class="file-upload-icon">📄</div>
+                  <div class="file-upload-text">ID Card (Back)</div>
+                  <div class="file-upload-hint">Click to choose file</div>
+                  <div class="file-upload-filename" id="pageProvIdBackName"></div>
+                  <input type="file" id="pageProvIdBackFile" accept="image/*,application/pdf" style="display: none;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Photo & CAC -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-4);">
+              <div class="file-upload-card" id="pageProvAvatarBox" onclick="document.getElementById('pageProvAvatarFile').click()">
+                <div class="file-upload-icon">👤</div>
+                <div class="file-upload-text">Profile Photo <span class="required-mark">*</span></div>
+                <div class="file-upload-hint">Max 5MB Image</div>
+                <div class="file-upload-filename" id="pageProvAvatarName"></div>
+                <input type="file" id="pageProvAvatarFile" accept="image/*" style="display: none;">
+              </div>
+
+              <div class="file-upload-card" id="pageProvCacBox" onclick="document.getElementById('pageProvCacFile').click()">
+                <div class="file-upload-icon">🏢</div>
+                <div class="file-upload-text">CAC Certificate <small>(Optional)</small></div>
+                <div class="file-upload-hint">If registered business</div>
+                <div class="file-upload-filename" id="pageProvCacName"></div>
+                <input type="file" id="pageProvCacFile" accept="image/*,application/pdf" style="display: none;">
+              </div>
+            </div>
+
+            <!-- Guarantor Details -->
+            <div style="background: var(--color-surface-hover); border-radius: var(--radius-md); padding: var(--space-3); border: 1px solid var(--color-border); margin-bottom: var(--space-4);">
+              <div style="font-weight: 700; font-size: var(--font-size-caption); color: var(--color-text-primary); margin-bottom: 6px;">
+                🤝 Guarantor Information <small class="text-muted">(Optional but Recommended)</small>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);">
+                <input type="text" class="form-control" id="pageProvGuarantorName" placeholder="Guarantor Full Name" style="font-size: var(--font-size-caption);">
+                <input type="tel" class="form-control" id="pageProvGuarantorPhone" placeholder="Guarantor Phone" style="font-size: var(--font-size-caption);">
+              </div>
+            </div>
+
+            <!-- Background Verification Checkbox -->
+            <div class="form-group" style="margin-bottom: var(--space-6);">
+              <label class="form-check">
+                <input type="checkbox" id="pageProvConsentCheck" class="form-check-input" required checked>
+                <span class="form-check-label" style="font-size: var(--font-size-caption);">
+                  I confirm my information is true and I agree to background verification. <span class="required-mark">*</span>
+                </span>
+              </label>
+              <div class="form-feedback-error" id="pageProvConsentError">
+                <span>You must agree to background verification.</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: var(--space-3);">
+              <button type="button" class="btn btn-secondary" id="pageProvBackBtn" style="min-width: 120px;">
+                ← Back
+              </button>
+              <button type="submit" class="btn btn-primary btn-lg" id="pageProvSubmitBtn" style="flex: 1;">
+                Submit Provider Application
+              </button>
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Auth Footer Link -->
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Log in here</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../js/auth.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. Role Choice Tabs Toggle
+      const roleCustTab = document.getElementById('roleChoiceCustomer');
+      const roleProvTab = document.getElementById('roleChoiceProvider');
+      const custForm = document.getElementById('customerRegisterForm');
+      const provWrap = document.getElementById('providerRegisterWrap');
+      const provForm = document.getElementById('providerRegisterForm');
+      const successBanner = document.getElementById('registerSuccessBanner');
+      const successDetails = document.getElementById('registerSuccessDetails');
+
+      function selectRole(role) {
+        if (role === 'customer') {
+          roleCustTab.classList.add('selected');
+          roleCustTab.setAttribute('aria-checked', 'true');
+          roleProvTab.classList.remove('selected');
+          roleProvTab.setAttribute('aria-checked', 'false');
+          custForm.style.display = 'block';
+          provWrap.style.display = 'none';
+        } else {
+          roleProvTab.classList.add('selected');
+          roleProvTab.setAttribute('aria-checked', 'true');
+          roleCustTab.classList.remove('selected');
+          roleCustTab.setAttribute('aria-checked', 'false');
+          custForm.style.display = 'none';
+          provWrap.style.display = 'block';
+        }
+        if (successBanner) successBanner.style.display = 'none';
+      }
+
+      roleCustTab.addEventListener('click', () => selectRole('customer'));
+      roleProvTab.addEventListener('click', () => selectRole('provider'));
+
+      // 2. Password Visibility Toggles
+      document.querySelectorAll('.password-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-toggle-for');
+          const targetInput = document.getElementById(targetId);
+          if (targetInput) {
+            const isPass = targetInput.getAttribute('type') === 'password';
+            targetInput.setAttribute('type', isPass ? 'text' : 'password');
+            btn.textContent = isPass ? '🙈' : '👁️';
+            btn.setAttribute('aria-label', isPass ? 'Hide password' : 'Show password as plain text');
+          }
+        });
+      });
+
+      // 3. Toast Helper
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function isValidNigerianPhone(phone) {
+        if (!phone) return false;
+        const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+        return /^(\+?234|0)[789][01]\d{8}$/.test(cleaned);
+      }
+
+      // 4. Provider Wizard Navigation
+      const pageStep1 = document.getElementById('pageProvStep1Content');
+      const pageStep2 = document.getElementById('pageProvStep2Content');
+      const pageNode1 = document.getElementById('pageProvStep1Node');
+      const pageNode2 = document.getElementById('pageProvStep2Node');
+      const pageCircle1 = document.getElementById('pageProvStep1Circle');
+      const pageDivider = document.getElementById('pageProvStepDivider');
+      const pageNextBtn = document.getElementById('pageProvNextBtn');
+      const pageBackBtn = document.getElementById('pageProvBackBtn');
+
+      if (pageNextBtn) {
+        pageNextBtn.addEventListener('click', () => {
+          const name = document.getElementById('provContactName')?.value.trim();
+          const email = document.getElementById('provEmail')?.value.trim();
+          const phone = document.getElementById('provPhone')?.value.trim();
+          const address = document.getElementById('provAddress')?.value.trim();
+          const pass = document.getElementById('provPassword')?.value || '';
+          const confirmPass = document.getElementById('provConfirmPassword')?.value || '';
+
+          if (!name || !email || !phone || !address || !pass || !confirmPass) {
+            showToast('Please fill in all basic info fields.', 'warning');
+            return;
+          }
+
+          if (!isValidNigerianPhone(phone)) {
+            showToast('Please enter a valid Nigerian phone number (+234 or 11 digits).', 'danger');
+            document.getElementById('provPhoneError').style.display = 'flex';
+            return;
+          } else {
+            document.getElementById('provPhoneError').style.display = 'none';
+          }
+
+          if (pass.length < 6 || pass !== confirmPass) {
+            showToast('Passwords do not match or are less than 6 characters.', 'danger');
+            document.getElementById('provPassError').style.display = 'flex';
+            return;
+          } else {
+            document.getElementById('provPassError').style.display = 'none';
+          }
+
+          pageStep1.style.display = 'none';
+          pageStep2.style.display = 'block';
+          pageNode1.classList.remove('active');
+          pageNode1.classList.add('completed');
+          pageCircle1.textContent = '✓';
+          pageNode2.classList.add('active');
+          pageDivider.classList.add('active');
+        });
+      }
+
+      if (pageBackBtn) {
+        pageBackBtn.addEventListener('click', () => {
+          pageStep2.style.display = 'none';
+          pageStep1.style.display = 'block';
+          pageNode1.classList.add('active');
+          pageNode1.classList.remove('completed');
+          pageCircle1.textContent = '1';
+          pageNode2.classList.remove('active');
+          pageDivider.classList.remove('active');
+        });
+      }
+
+      // 5. Category Chips Multi-Select
+      const catChipsContainer = document.getElementById('pageProvCategoryChips');
+      if (catChipsContainer) {
+        catChipsContainer.querySelectorAll('.category-chip-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            btn.classList.toggle('selected');
+            const selected = Array.from(catChipsContainer.querySelectorAll('.category-chip-btn.selected')).map(b => b.getAttribute('data-cat'));
+            if (selected.length === 0) {
+              btn.classList.add('selected');
+              selected.push(btn.getAttribute('data-cat'));
+            }
+            document.getElementById('pageProvCategoriesInput').value = selected.join(',');
+          });
+        });
+      }
+
+      // 6. File Upload Handlers (5MB Max)
+      function attachFileHandler(inputId, boxId, nameId) {
+        const input = document.getElementById(inputId);
+        const box = document.getElementById(boxId);
+        const nameDisplay = document.getElementById(nameId);
+        if (!input) return;
+
+        input.addEventListener('change', () => {
+          if (!input.files || input.files.length === 0) return;
+          const file = input.files[0];
+          if (file.size > 5 * 1024 * 1024) {
+            showToast(`File "${file.name}" exceeds 5MB limit. Please select a smaller file.`, 'danger');
+            input.value = '';
+            if (box) box.classList.remove('has-file');
+            if (nameDisplay) nameDisplay.textContent = '';
+            return;
+          }
+          if (box) box.classList.add('has-file');
+          if (nameDisplay) nameDisplay.textContent = `✓ ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+          showToast(`Uploaded: ${file.name}`, 'info');
+        });
+      }
+
+      attachFileHandler('pageProvIdFrontFile', 'pageProvIdFrontBox', 'pageProvIdFrontName');
+      attachFileHandler('pageProvIdBackFile', 'pageProvIdBackBox', 'pageProvIdBackName');
+      attachFileHandler('pageProvAvatarFile', 'pageProvAvatarBox', 'pageProvAvatarName');
+      attachFileHandler('pageProvCacFile', 'pageProvCacBox', 'pageProvCacName');
+
+      // 7. Customer Form Submission
+      custForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById('custFullName');
+        const emailInput = document.getElementById('custEmail');
+        const phoneInput = document.getElementById('custPhone');
+        const stateInput = document.getElementById('custState');
+        const passInput = document.getElementById('custPassword');
+        const confirmInput = document.getElementById('custConfirmPassword');
+        const termsCheck = document.getElementById('custTermsCheck');
+
+        if (!nameInput.value.trim() || !emailInput.value.trim() || !phoneInput.value.trim() || !passInput.value) {
+          showToast('Please fill in all required customer fields.', 'warning');
+          return;
+        }
+
+        if (passInput.value !== confirmInput.value) {
+          showToast('Passwords do not match.', 'danger');
+          return;
+        }
+
+        if (!termsCheck.checked) {
+          showToast('Please agree to terms to continue.', 'warning');
+          return;
+        }
+
+        if (window.HandyAuth) {
+          const user = window.HandyAuth.registerCustomer({
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim(),
+            phone: phoneInput.value.trim(),
+            state: stateInput.value
+          });
+
+          custForm.style.display = 'none';
+          if (successBanner) {
+            successDetails.innerHTML = `
+              <strong>Welcome, ${user.name}!</strong> Your customer account is now ready.<br>
+              You can explore verified local pros across Nigeria immediately.
+            `;
+            successBanner.style.display = 'block';
+          }
+          showToast('Customer account created successfully!', 'success');
+        }
+      });
+
+      // 8. Provider Form Submission
+      provForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('provContactName')?.value.trim();
+        const email = document.getElementById('provEmail')?.value.trim();
+        const phone = document.getElementById('provPhone')?.value.trim();
+        const state = document.getElementById('provState')?.value;
+        const city = document.getElementById('provCity')?.value.trim();
+        const address = document.getElementById('provAddress')?.value.trim();
+        const categories = (document.getElementById('pageProvCategoriesInput')?.value || 'plumbing').split(',');
+        const experience = document.getElementById('pageProvExperience')?.value;
+        const idType = document.getElementById('pageProvIdType')?.value;
+        const nin = document.getElementById('pageProvNin')?.value.trim();
+        const bio = document.getElementById('pageProvBio')?.value.trim();
+        const consent = document.getElementById('pageProvConsentCheck');
+
+        if (!nin) {
+          showToast('NIN / ID number is required.', 'danger');
+          document.getElementById('pageProvNinError').style.display = 'flex';
+          return;
+        }
+
+        if (idType === 'NIN' && !/^\d{11}$/.test(nin)) {
+          showToast('NIN must be strictly 11 numerical digits.', 'danger');
+          document.getElementById('pageProvNinError').style.display = 'flex';
+          return;
+        } else {
+          document.getElementById('pageProvNinError').style.display = 'none';
+        }
+
+        if (!bio) {
+          showToast('Please provide a brief description of services.', 'warning');
+          return;
+        }
+
+        if (consent && !consent.checked) {
+          showToast('Please agree to the background verification terms.', 'warning');
+          return;
+        }
+
+        const idFront = document.getElementById('pageProvIdFrontFile')?.files[0];
+        const idBack = document.getElementById('pageProvIdBackFile')?.files[0];
+        const avatar = document.getElementById('pageProvAvatarFile')?.files[0];
+        const cac = document.getElementById('pageProvCacFile')?.files[0];
+        const guarantorName = document.getElementById('pageProvGuarantorName')?.value.trim();
+        const guarantorPhone = document.getElementById('pageProvGuarantorPhone')?.value.trim();
+
+        if (window.HandyAuth) {
+          const newProvider = window.HandyAuth.registerProvider({
+            name,
+            email,
+            phone,
+            state,
+            city,
+            address,
+            categories,
+            experienceYears: experience,
+            idType,
+            ninNumber: nin,
+            bio,
+            idPhotoFront: idFront ? idFront.name : 'nin_front_doc.jpg',
+            idPhotoBack: idBack ? idBack.name : 'nin_back_doc.jpg',
+            profilePhoto: avatar ? 'images/providers/provider-1.svg' : 'images/providers/provider-1.svg',
+            cacDocument: cac ? cac.name : '',
+            guarantorName,
+            guarantorPhone,
+            verificationStatus: 'pending'
+          });
+
+          provWrap.style.display = 'none';
+          if (successBanner) {
+            successBanner.className = 'alert alert-info';
+            successBanner.innerHTML = `
+              <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
+                <span style="font-size: 1.75rem;">🛡️</span>
+                <div>
+                  <strong style="font-size: var(--font-size-h3); color: var(--color-primary);">Application Submitted for Review!</strong>
+                  <div class="reg-review-banner" style="margin-top: var(--space-3);">
+                    <strong>⏳ Verification SLA Notice:</strong><br>
+                    Your account will be reviewed and verified within 24 hours. You will be notified once approved.
+                  </div>
+                  <div style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: var(--space-2);">
+                    Registered Artisan: <strong>${newProvider.name}</strong> • ${idType}: <strong>${nin}</strong>
+                  </div>
+                  <div style="margin-top: var(--space-4); display: flex; gap: var(--space-3);">
+                    <a href="../index.html" class="btn btn-primary btn-sm">Return to Homepage</a>
+                    <a href="login.html" class="btn btn-outline btn-sm">Provider Login</a>
+                  </div>
+                </div>
+              </div>
+            `;
+            successBanner.style.display = 'block';
+          }
+          showToast('Your account will be reviewed and verified within 24 hours. You will be notified once approved.', 'success');
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
+

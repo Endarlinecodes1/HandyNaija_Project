@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse HandyNaija service categories. Find verified local plumbers, electricians, mechanics, cleaners, tutors, technicians, carpenters, and painters across Nigeria.">
+  <title>Services — HandyNaija Local Service Marketplace</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+
+  <!-- =========================================================================
+       CUSTOMER HEADER (Section 6.2 / P02 Customer Navigation)
+       Logo → Search → Dashboard → Messages → Notifications → Profile
+       ========================================================================= -->
+  <header class="customer-header" role="banner">
+    <div class="container customer-header-container">
+      
+      <!-- Brand Logo -->
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+
+      <!-- In-Header Search Bar -->
+      <div class="header-search-bar">
+        <form action="search-results.html" method="GET" class="input-with-icon">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" name="query" class="form-control" placeholder="Search services (e.g. plumbing, wiring)..." aria-label="Search services">
+        </form>
+      </div>
+
+      <!-- Navigation & Profile Actions -->
+      <nav class="header-nav-actions" aria-label="Customer Navigation">
+        <a href="services.html" class="header-nav-link active">Services</a>
+        <a href="search-results.html" class="header-nav-link">Find Pros</a>
+        <a href="dashboard.html" class="header-nav-link">Dashboard</a>
+        
+        <a href="messages.html" class="header-nav-link" aria-label="Messages">
+          <span class="icon-badge-wrapper">
+            💬
+            <span class="icon-badge">2</span>
+          </span>
+        </a>
+
+        <!-- Customer Profile Summary -->
+        <a href="profile.html" style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2); text-decoration: none;">
+          <div class="provider-avatar" style="width: 36px; height: 36px;">
+            <img src="../images/providers/provider-1.svg" alt="Chris Okonkwo">
+          </div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.2;">
+            <span style="font-size: var(--font-size-caption); font-weight: 700; color: var(--color-text-primary);">Chris O.</span>
+            <span style="font-size: 0.65rem; color: var(--color-primary); font-weight: 600;">Customer</span>
+          </div>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: P02 SERVICE CATEGORIES SCREEN
+       ========================================================================= -->
+  <main class="main-content section" id="mainContent" style="padding-top: var(--space-8);">
+    <div class="container">
+
+      <!-- P02 Wireframe Title & Search Header -->
+      <div class="categories-hero-card">
+        <div class="section-eyebrow">Service Marketplace</div>
+        <h1 class="text-h1" style="margin-bottom: var(--space-2);">Services</h1>
+        <p class="text-body" style="max-width: 580px; margin: 0 auto; color: var(--color-text-secondary);">
+          Find a professional by service category.
+        </p>
+
+        <!-- Search Services Input (P02 Wireframe) -->
+        <div class="category-search-box">
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="categorySearchInput" 
+              class="form-control" 
+              placeholder="Search services (e.g. Electrician, Plumber, Painter)..." 
+              aria-label="Filter service categories"
+              style="padding-top: 0.75rem; padding-bottom: 0.75rem; font-size: var(--font-size-body); box-shadow: var(--shadow-sm);"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- P02 Wireframe Service Categories Grid -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+        <h2 class="text-h2" style="font-size: var(--font-size-h3); margin: 0;">Browse All Service Categories</h2>
+        <span id="categoryCountBadge" class="service-chip" style="font-weight: 600;">8 Categories Available</span>
+      </div>
+
+      <!-- Dynamic Category Cards Grid -->
+      <div class="categories-grid" id="p02CategoriesGrid" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6);">
+        <!-- Populated and filtered dynamically by local mock data -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       REUSABLE PUBLIC FOOTER
+       ========================================================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-brand">
+          <a href="../index.html" aria-label="HandyNaija Home">
+            <img src="../images/logo/logo.svg" alt="HandyNaija" width="160" height="38" style="filter: brightness(0) invert(1);">
+          </a>
+          <p>HandyNaija is Nigeria's trusted artisan marketplace connecting households with verified tradespeople.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Top Services</h4>
+          <nav class="footer-links" aria-label="Top Services">
+            <a href="search-results.html?category=plumbing" class="footer-link">Plumbing & Pipe Fitting</a>
+            <a href="search-results.html?category=electrical" class="footer-link">Electrical & Solar</a>
+            <a href="search-results.html?category=cleaning" class="footer-link">Cleaning & Fumigation</a>
+            <a href="search-results.html?category=mechanic" class="footer-link">Auto Mechanics</a>
+            <a href="search-results.html?category=technician" class="footer-link">AC & Refrigeration</a>
+          </nav>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Navigation</h4>
+          <nav class="footer-links" aria-label="Quick Links">
+            <a href="../index.html" class="footer-link">Home</a>
+            <a href="services.html" class="footer-link">All Services</a>
+            <a href="search-results.html" class="footer-link">Search Providers</a>
+            <a href="../index.html#howItWorksSection" class="footer-link">How It Works</a>
+            <a href="../index.html#contactSection" class="footer-link">Contact Support</a>
+          </nav>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Major Hubs</h4>
+          <nav class="footer-links" aria-label="Coverage Hubs">
+            <span class="footer-link">📍 Awka & Onitsha, Anambra</span>
+            <span class="footer-link">📍 Ikeja & Lekki, Lagos</span>
+            <span class="footer-link">📍 Maitama & Wuse, Abuja</span>
+            <span class="footer-link">📍 Port Harcourt, Rivers</span>
+          </nav>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 HandyNaija Marketplace Ltd. All rights reserved. Built for Nigeria.</div>
+        <div style="display: flex; gap: var(--space-4);">
+          <a href="../index.html#aboutSection" class="footer-link">Privacy Policy</a>
+          <a href="../index.html#aboutSection" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mock API & Local Category Data Layer -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // 8 Categories explicitly defined in P02 Wireframe
+      const P02_CATEGORIES = [
+        {
+          id: 'electrical',
+          name: 'Electrician',
+          slug: 'electrical',
+          icon: '../images/icons/electrical.svg',
+          description: 'Inverter setups, conduit wiring, distribution boards, generator repairs & fault troubleshooting.',
+          providerCount: 64,
+          badgeColor: '#FEF3C7'
+        },
+        {
+          id: 'plumbing',
+          name: 'Plumber',
+          slug: 'plumbing',
+          icon: '../images/icons/plumbing.svg',
+          description: 'Emergency leak fixes, pipe installation, water heater setup, borehole pump maintenance & bathroom fittings.',
+          providerCount: 48,
+          badgeColor: '#E6F4EA'
+        },
+        {
+          id: 'mechanic',
+          name: 'Mechanic',
+          slug: 'mechanic',
+          icon: '../images/icons/mechanic.svg',
+          description: 'Engine diagnostics, computerized auto scanning, brake repairs, transmission servicing & breakdown rescue.',
+          providerCount: 29,
+          badgeColor: '#FEE2E2'
+        },
+        {
+          id: 'cleaning',
+          name: 'Cleaner',
+          slug: 'cleaning',
+          icon: '../images/icons/cleaning.svg',
+          description: 'Deep residential cleaning, office sanitization, post-construction cleanup & professional fumigation.',
+          providerCount: 35,
+          badgeColor: '#E0F2FE'
+        },
+        {
+          id: 'tutor',
+          name: 'Tutor',
+          slug: 'tutor',
+          icon: '../images/icons/tutor.svg',
+          description: 'Private home tutors for WAEC, JAMB, NECO, IGCSE, primary school subjects, STEM & coding for kids.',
+          providerCount: 41,
+          badgeColor: '#ECFDF5'
+        },
+        {
+          id: 'technician',
+          name: 'Technician',
+          slug: 'technician',
+          icon: '../images/icons/technician.svg',
+          description: 'Air conditioner gas charging, inverter AC servicing, refrigerator/freezer repairs & washing machines.',
+          providerCount: 37,
+          badgeColor: '#F3E8FF'
+        },
+        {
+          id: 'carpenter',
+          name: 'Carpenter',
+          slug: 'carpenter',
+          icon: '../images/icons/carpenter.svg',
+          description: 'Custom kitchen cabinets, modern wardrobes, hardwood door hanging, roof repairs & furniture crafting.',
+          providerCount: 22,
+          badgeColor: '#FFEDD5'
+        },
+        {
+          id: 'painter',
+          name: 'Painter',
+          slug: 'painter',
+          icon: '../images/icons/painter.svg',
+          description: 'Interior wall screeding, washable paints, 3D wall panels, POP ceiling installation & exterior coatings.',
+          providerCount: 19,
+          badgeColor: '#FCE7F3'
+        }
+      ];
+
+      const grid = document.getElementById('p02CategoriesGrid');
+      const searchInput = document.getElementById('categorySearchInput');
+      const countBadge = document.getElementById('categoryCountBadge');
+
+      function renderCategories(list) {
+        if (!grid) return;
+
+        if (countBadge) {
+          countBadge.textContent = `${list.length} Categor${list.length === 1 ? 'y' : 'ies'} Found`;
+        }
+
+        if (list.length === 0) {
+          grid.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1; width: 100%;">
+              <div class="empty-state-icon">🔍</div>
+              <h3 class="empty-state-title">No Matching Categories Found</h3>
+              <p class="empty-state-text">We couldn't find any service category matching "${searchInput.value.trim()}". Try searching for "Plumber", "Electrician", or "Mechanic".</p>
+              <div class="empty-state-actions">
+                <button class="btn btn-outline btn-sm" id="resetCategorySearchBtn">Clear Search</button>
+              </div>
+            </div>
+          `;
+
+          const resetBtn = document.getElementById('resetCategorySearchBtn');
+          if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+              searchInput.value = '';
+              renderCategories(P02_CATEGORIES);
+              searchInput.focus();
+            });
+          }
+          return;
+        }
+
+        grid.innerHTML = list.map(cat => `
+          <a href="search-results.html?category=${cat.slug}" class="category-card-p02" aria-label="View verified ${cat.name} service providers">
+            <div class="category-icon-wrapper" style="background-color: ${cat.badgeColor};">
+              <img src="${cat.icon}" alt="" width="40" height="40" loading="lazy">
+            </div>
+            <h3>${cat.name}</h3>
+            <p>${cat.description}</p>
+            <div class="category-card-p02-footer">
+              <span>${cat.providerCount} Verified Providers</span>
+              <span>→</span>
+            </div>
+          </a>
+        `).join('');
+      }
+
+      // Initial Render
+      renderCategories(P02_CATEGORIES);
+
+      // Real-time Frontend Search & Filtering
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const term = e.target.value.toLowerCase().trim();
+          const filtered = P02_CATEGORIES.filter(c => 
+            c.name.toLowerCase().includes(term) || 
+            c.description.toLowerCase().includes(term) || 
+            c.slug.toLowerCase().includes(term)
+          );
+          renderCategories(filtered);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

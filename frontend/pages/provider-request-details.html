@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View customer job order details, accept or propose new appointment schedules, and manage repairs on HandyNaija.">
+  <title>Job Order Details — HandyNaija Provider</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Accessible Skip Link -->
+  <a href="#providerJobContent" class="skip-link">Skip to job order content</a>
+
+  <!-- =========================================================================
+       PROVIDER HEADER
+       ========================================================================= -->
+  <header class="provider-header" role="banner">
+    <div class="container provider-header-container">
+      
+      <!-- Brand Logo -->
+      <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+        <img src="../images/logo/logo.svg" alt="HandyNaija Logo" width="160" height="38">
+      </a>
+
+      <!-- Provider Nav Actions -->
+      <nav class="header-nav-actions" aria-label="Provider Navigation">
+        <a href="provider-dashboard.html" class="header-nav-link">Dashboard</a>
+        <a href="provider-requests.html" class="header-nav-link active">Jobs / Requests</a>
+        <a href="provider-services.html" class="header-nav-link">My Services</a>
+        <a href="provider-availability.html" class="header-nav-link">Availability</a>
+        
+        <a href="messages.html" class="header-nav-link" aria-label="Messages">
+          <span class="icon-badge-wrapper">
+            💬
+            <span class="icon-badge">2</span>
+          </span>
+        </a>
+
+        <a href="provider-profile-setup.html" style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2); text-decoration: none;">
+          <div class="provider-avatar" style="width: 36px; height: 36px; border: 2px solid var(--color-primary);">
+            <img src="../images/providers/provider-1.svg" alt="John Plumbing Services">
+          </div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.2;">
+            <span style="font-size: var(--font-size-caption); font-weight: 700; color: var(--color-text-primary);">John Plumbing</span>
+            <span style="font-size: 0.65rem; color: var(--color-primary); font-weight: 600;">Job Order</span>
+          </div>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: S05 PROVIDER REQUEST DETAILS
+       ========================================================================= -->
+  <main class="main-content section" id="providerJobContent" style="padding-top: var(--space-6);">
+    <div class="container" style="max-width: 860px;">
+
+      <!-- Back Navigation -->
+      <a href="provider-requests.html" class="profile-back-link">
+        ← Back to Service Requests
+      </a>
+
+      <!-- Job Order Header Card -->
+      <div class="dashboard-card" style="box-shadow: var(--shadow-sm);">
+        
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4);">
+          <div>
+            <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
+              <span class="service-chip" id="jobIdPill" style="font-weight: 800; font-family: monospace;">REQ-00124</span>
+              <span class="service-chip" id="jobCatPill" style="background: var(--color-primary-light); color: var(--color-primary);">Plumbing</span>
+            </div>
+            <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);" id="jobServiceName">
+              Kitchen Sink Pipe Leak Repair
+            </h1>
+          </div>
+
+          <div id="jobStatusBadgeContainer">
+            <span class="status-badge accepted" id="jobStatusBadge" style="font-size: var(--font-size-label); padding: 0.4rem 0.85rem;">
+              ✓ Accepted Job
+            </span>
+          </div>
+        </div>
+
+        <!-- Action Control Buttons: Accept, Propose Time, Reject, Message -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); border-top: 1px solid var(--color-border-subtle); padding-top: var(--space-4); margin-top: var(--space-4);">
+          <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary btn-sm" id="provAcceptJobBtn">
+              ✅ Accept Request
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="provProposeTimeBtn">
+              🕒 Propose New Time
+            </button>
+            <a href="messages.html" class="btn btn-outline btn-sm">
+              💬 Message Customer
+            </a>
+          </div>
+
+          <button type="button" class="btn btn-ghost btn-sm" style="color: var(--color-danger);" id="provRejectJobBtn">
+            ❌ Decline Job
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Customer & Schedule Breakdown Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6); margin-bottom: var(--space-6);">
+        
+        <!-- 1. Customer Summary Card -->
+        <div class="dashboard-card" style="margin-bottom: 0;">
+          <h3 style="font-size: var(--font-size-label); text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+            Customer Details
+          </h3>
+
+          <div style="display: flex; gap: var(--space-3); align-items: center; margin-bottom: var(--space-3);">
+            <div class="provider-avatar" style="width: 48px; height: 48px;">
+              <img src="../images/providers/provider-1.svg" alt="Customer Avatar">
+            </div>
+            <div>
+              <div style="font-size: var(--font-size-body); font-weight: 700; color: var(--color-text-primary);" id="custNameDisplay">
+                Chris Okonkwo
+              </div>
+              <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">
+                Verified Household Customer
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary); border-top: 1px solid var(--color-border-subtle); padding-top: var(--space-3);">
+            <strong>Masked Contact:</strong> <span id="custPhoneDisplay">+234 803 *** 1234</span>
+            <div style="color: var(--color-text-muted); font-size: 0.65rem; margin-top: 2px;">Direct phone numbers are revealed upon job acceptance.</div>
+          </div>
+        </div>
+
+        <!-- 2. Location & Schedule Card -->
+        <div class="dashboard-card" style="margin-bottom: 0;">
+          <h3 style="font-size: var(--font-size-label); text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+            Location & Schedule
+          </h3>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+            <div>
+              <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">Requested Arrival Time</div>
+              <div style="font-size: var(--font-size-body); font-weight: 700; color: var(--color-text-primary);" id="jobScheduleDisplay">
+                Saturday, 10:00 AM
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">Service Address & Landmark</div>
+              <div style="font-size: var(--font-size-label); font-weight: 600; color: var(--color-text-primary);" id="jobLocationDisplay">
+                Ifite Road near Aroma Junction, Awka, Anambra State
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Problem Description & Attached Details -->
+      <div class="dashboard-card">
+        <h3 style="font-size: var(--font-size-h3); margin-bottom: var(--space-3);">
+          Job Scope & Description
+        </h3>
+        <p style="font-size: var(--font-size-body); line-height: 1.7; color: var(--color-text-secondary);" id="jobDescDisplay">
+          Kitchen sink is leaking underneath the cabinet. Water pools on the floor whenever the tap is opened. Need pipe replacement.
+        </p>
+
+        <div style="background: var(--color-surface-muted); padding: var(--space-4); border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-top: var(--space-4); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2);">
+          <div>
+            <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">Estimated Diagnostic / Base Fee</div>
+            <strong style="font-size: var(--font-size-h3); color: var(--color-primary);">₦5,000</strong>
+          </div>
+          <span style="font-size: var(--font-size-caption); color: var(--color-text-muted);">Final cost subject to on-site inspection and replacement parts.</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       MODALS: ACCEPT, PROPOSE TIME, REJECT
+       ========================================================================= -->
+
+  <!-- 1. ACCEPT CONFIRMATION MODAL -->
+  <div class="modal-backdrop" id="modalAcceptJob" role="dialog" aria-modal="true" aria-labelledby="modalAcceptTitle">
+    <div class="modal-dialog modal-confirm-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalAcceptTitle">Accept Service Request</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-confirm-icon" style="background: var(--color-primary-light); color: var(--color-primary);">✅</div>
+        <h4 style="font-size: var(--font-size-h3); margin-bottom: var(--space-2);">Confirm Appointment</h4>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary);">
+          You are accepting this request for the scheduled time. The customer will be notified immediately.
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmAcceptBtnAction">Confirm Acceptance</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PROPOSE NEW TIME MODAL -->
+  <div class="modal-backdrop" id="modalProposeTime" role="dialog" aria-modal="true" aria-labelledby="modalProposeTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalProposeTitle">Propose Alternative Time</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <form id="proposeTimeForm">
+        <div class="modal-body">
+          <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+            If you are unavailable at the customer's requested time, suggest an alternative window that fits your schedule.
+          </p>
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label" for="proposedDateInput">Proposed Alternative Date & Time *</label>
+            <input type="text" class="form-control" id="proposedDateInput" value="Sunday, 02:00 PM" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="proposedReasonInput">Short Note to Customer (Optional)</label>
+            <input type="text" class="form-control" id="proposedReasonInput" placeholder="e.g. Currently on an emergency call-out, can arrive Sunday afternoon.">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Proposed Time</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. REJECT CONFIRMATION MODAL -->
+  <div class="modal-backdrop" id="modalRejectJob" role="dialog" aria-modal="true" aria-labelledby="modalRejectTitle">
+    <div class="modal-dialog modal-confirm-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalRejectTitle">Decline Request</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-confirm-icon danger">❌</div>
+        <h4 style="font-size: var(--font-size-h3); margin-bottom: var(--space-2);">Decline this job order?</h4>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary);">
+          The customer will be notified so they can connect with another verified artisan in their area.
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-destructive" id="confirmRejectBtnAction">Yes, Decline Job</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Mock Data Layer & Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const requestId = urlParams.get('id') || 'REQ-00124';
+
+      let requests = window.HandyAPI ? window.HandyAPI.getRequests() : [];
+      let currentReq = requests.find(r => r.id === requestId) || requests[0];
+
+      function showToast(message, type = 'info') {
+        const c = document.getElementById('toastContainer');
+        if (!c) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        c.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function openModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('open');
+      }
+
+      function closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('open');
+      }
+
+      document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', (e) => { if (e.target === b) closeModal(b.id); });
+        b.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => closeModal(b.id));
+        });
+      });
+
+      function renderJobDetails() {
+        if (!currentReq) return;
+
+        document.getElementById('jobIdPill').textContent = currentReq.id;
+        document.getElementById('jobCatPill').textContent = currentReq.category.toUpperCase();
+        document.getElementById('jobServiceName').textContent = currentReq.serviceName;
+        document.getElementById('custNameDisplay').textContent = currentReq.customerName;
+        document.getElementById('jobScheduleDisplay').textContent = currentReq.preferredDate;
+        document.getElementById('jobLocationDisplay').textContent = currentReq.location;
+        document.getElementById('jobDescDisplay').textContent = currentReq.description;
+
+        const badge = document.getElementById('jobStatusBadge');
+        if (badge) {
+          badge.className = `status-badge ${currentReq.status}`;
+          badge.innerHTML = `<span>✓</span> <span>${currentReq.status.toUpperCase()}</span>`;
+        }
+      }
+
+      // Modal Triggers
+      const acceptBtn = document.getElementById('provAcceptJobBtn');
+      if (acceptBtn) acceptBtn.addEventListener('click', () => openModal('modalAcceptJob'));
+
+      const proposeBtn = document.getElementById('provProposeTimeBtn');
+      if (proposeBtn) proposeBtn.addEventListener('click', () => openModal('modalProposeTime'));
+
+      const rejectBtn = document.getElementById('provRejectJobBtn');
+      if (rejectBtn) rejectBtn.addEventListener('click', () => openModal('modalRejectJob'));
+
+      // Confirm Accept
+      const confirmAccept = document.getElementById('confirmAcceptBtnAction');
+      if (confirmAccept) {
+        confirmAccept.addEventListener('click', () => {
+          if (window.HandyAPI) {
+            currentReq = window.HandyAPI.updateRequestStatus(currentReq.id, 'accepted');
+          } else {
+            currentReq.status = 'accepted';
+          }
+          closeModal('modalAcceptJob');
+          renderJobDetails();
+          showToast(`Job #${currentReq.id} accepted! Scheduled in work orders.`, 'success');
+        });
+      }
+
+      // Confirm Propose Time
+      const proposeForm = document.getElementById('proposeTimeForm');
+      if (proposeForm) {
+        proposeForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const newTime = document.getElementById('proposedDateInput').value.trim();
+          closeModal('modalProposeTime');
+          showToast(`Proposed new time: "${newTime}" sent to customer.`, 'info');
+        });
+      }
+
+      // Confirm Reject
+      const confirmReject = document.getElementById('confirmRejectBtnAction');
+      if (confirmReject) {
+        confirmReject.addEventListener('click', () => {
+          if (window.HandyAPI) {
+            currentReq = window.HandyAPI.updateRequestStatus(currentReq.id, 'rejected');
+          } else {
+            currentReq.status = 'rejected';
+          }
+          closeModal('modalRejectJob');
+          renderJobDetails();
+          showToast(`Job #${currentReq.id} declined.`, 'warning');
+        });
+      }
+
+      // Initial Render
+      renderJobDetails();
+
+    })();
+  </script>
+</body>
+</html>

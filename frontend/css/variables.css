@@ -1,0 +1,175 @@
+/* ==========================================================================
+   HANDYNAIJA DESIGN SYSTEM — CSS VARIABLES & TOKENS
+   Version 1.0 (MVP)
+   Visual Direction: Clean, Trustworthy, Friendly, Modern
+   Specification Compliant: UI/UX Design System Guidelines
+   ========================================================================== */
+
+:root {
+  /* --- Brand & Primary Colors (Nigerian Emerald Green #0d7a5f) --- */
+  --color-primary: #0d7a5f;            /* Primary brand color */
+  --color-primary-hover: #0a654e;      /* Deep interactive hover */
+  --color-primary-active: #07503d;     /* Active press state */
+  --color-primary-light: #e8f5f1;      /* Light tint background */
+  --color-primary-subtle: #f0f9f6;     /* Very subtle tint */
+  --color-primary-border: #b2dfd4;     /* Soft primary border */
+  --color-primary-focus: rgba(13, 122, 95, 0.25); /* Focus outline ring */
+
+  /* --- Accent Colors (Warm Gold / Amber) --- */
+  --color-accent: #F59E0B;             /* Star ratings & highlight accents */
+  --color-accent-hover: #D97706;
+  --color-accent-light: #FEF3C7;
+  --color-accent-border: #FDE68A;
+
+  /* --- Secondary & Informational (Trust Blue) --- */
+  --color-secondary: #0284C7;          /* Secondary actions / verification */
+  --color-secondary-hover: #0369A1;
+  --color-secondary-light: #E0F2FE;
+  --color-secondary-border: #BAE6FD;
+  
+  /* --- Neutral Grayscale & Surfaces --- */
+  --color-bg-main: #F8FAFC;            /* App canvas background */
+  --color-surface: #FFFFFF;            /* Cards / Modals surface */
+  --color-surface-hover: #F1F5F9;      /* List item hover */
+  --color-surface-elevated: #FFFFFF;   /* Elevated panels */
+  --color-surface-muted: #F8FAFC;      /* Inset sections */
+  
+  /* --- Typography Colors (High Contrast & Legibility) --- */
+  --color-text-primary: #0F172A;       /* Slate 900 - Body & Titles */
+  --color-text-secondary: #475569;     /* Slate 600 - Secondary text */
+  --color-text-muted: #94A3B8;         /* Slate 400 - Placeholders / hints */
+  --color-text-inverse: #FFFFFF;       /* White text on dark / primary */
+  --color-text-link: #0d7a5f;          /* Hyperlinks */
+
+  /* --- Borders & Dividers --- */
+  --color-border: #E2E8F0;             /* Slate 200 standard border */
+  --color-border-subtle: #F1F5F9;      /* Slate 100 subtle divider */
+  --color-border-focus: #0d7a5f;       /* Focus active border */
+
+  /* --- Status Badge Colors (Accessible Multi-cue States) --- */
+  --color-status-pending-bg: #FEF3C7;
+  --color-status-pending-text: #92400E;
+  --color-status-pending-border: #FDE68A;
+
+  --color-status-accepted-bg: #E0F2FE;
+  --color-status-accepted-text: #0369A1;
+  --color-status-accepted-border: #BAE6FD;
+
+  --color-status-scheduled-bg: #F3E8FF;
+  --color-status-scheduled-text: #6B21A8;
+  --color-status-scheduled-border: #E9D5FF;
+
+  --color-status-inprogress-bg: #DCFCE7;
+  --color-status-inprogress-text: #15803D;
+  --color-status-inprogress-border: #BBF7D0;
+
+  --color-status-completed-bg: #DEF7EC;
+  --color-status-completed-text: #03543F;
+  --color-status-completed-border: #BCF0DA;
+
+  --color-status-rejected-bg: #FEE2E2;
+  --color-status-rejected-text: #991B1B;
+  --color-status-rejected-border: #FECACA;
+
+  --color-status-cancelled-bg: #F1F5F9;
+  --color-status-cancelled-text: #475569;
+  --color-status-cancelled-border: #CBD5E1;
+
+  --color-verified-bg: #ECFDF5;
+  --color-verified-text: #047857;
+  --color-verified-border: #A7F3D0;
+
+  /* --- System Feedback & Alert States --- */
+  --color-success: #10B981;
+  --color-success-bg: #ECFDF5;
+  --color-success-border: #A7F3D0;
+  --color-success-text: #065F46;
+
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FFFBEB;
+  --color-warning-border: #FDE68A;
+  --color-warning-text: #92400E;
+
+  --color-danger: #EF4444;
+  --color-danger-bg: #FEF2F2;
+  --color-danger-border: #FECACA;
+  --color-danger-text: #991B1B;
+
+  --color-info: #3B82F6;
+  --color-info-bg: #EFF6FF;
+  --color-info-border: #BFDBFE;
+  --color-info-text: #1E40AF;
+
+  /* --- Typography Settings --- */
+  --font-family-base: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  /* Typography Scale (UI/UX Specification Guidelines) */
+  --font-size-h1-desktop: 2.25rem;     /* 36px (32–40px range) */
+  --font-size-h1-mobile: 1.875rem;     /* 30px (28–32px range) */
+  --font-size-h2: 1.625rem;            /* 26px (24–30px range) */
+  --font-size-h3: 1.25rem;             /* 20px (18–22px range) */
+  --font-size-body: 1rem;              /* 16px (15–17px range) */
+  --font-size-label: 0.875rem;         /* 14px (13–15px range) */
+  --font-size-button: 0.9375rem;       /* 15px (14–16px range) */
+  --font-size-caption: 0.75rem;        /* 12px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.35;
+  --line-height-base: 1.6;
+  --line-height-relaxed: 1.75;
+
+  /* --- Spacing System --- */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+
+  /* --- Border Radii --- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* --- Elevation & Shadows --- */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+  --shadow-inner: inset 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+
+  /* --- Transitions & Timing --- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Layout & Container Constraints --- */
+  --container-max-width: 1200px;
+  --container-narrow-width: 800px;
+  --header-height: 72px;
+  --mobile-nav-height: 64px;
+
+  /* --- Z-Index Layers --- */
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-drawer: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 350;
+  --z-toast: 500;
+}

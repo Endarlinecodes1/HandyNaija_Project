@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HandyNaija Admin Operations Console. Monitor marketplace metrics, manage artisan verification, service categories, and platform safety.">
+  <title>Admin Operations Console — HandyNaija</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body style="background: #F8FAFC;">
+
+  <!-- Accessible Skip Link -->
+  <a href="#adminDashboardContent" class="skip-link">Skip to admin overview</a>
+
+  <!-- =========================================================================
+       ADMIN NAVIGATION HEADER (A01)
+       ========================================================================= -->
+  <header class="admin-header" role="banner">
+    <div class="container admin-header-container">
+      
+      <!-- Brand & Admin Console Badge -->
+      <div style="display: flex; align-items: center; gap: var(--space-3);">
+        <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+          <img src="../images/logo/logo.svg" alt="HandyNaija" width="150" height="36" style="filter: brightness(0) invert(1);">
+        </a>
+        <span style="font-size: 0.65rem; background: #334155; color: #38BDF8; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-xs); text-transform: uppercase; letter-spacing: 0.05em;">
+          Admin Ops
+        </span>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="header-nav-actions" aria-label="Admin Navigation" style="gap: var(--space-1);">
+        <a href="admin-dashboard.html" class="admin-nav-link active">Dashboard</a>
+        <a href="admin-users.html?role=customer" class="admin-nav-link">Customers</a>
+        <a href="admin-users.html?role=provider" class="admin-nav-link">Providers</a>
+        <a href="admin-categories.html" class="admin-nav-link">Categories</a>
+        <a href="admin-requests.html" class="admin-nav-link">Requests</a>
+        <a href="admin-reports.html" class="admin-nav-link">
+          Reviews/Reports
+          <span style="background: var(--color-danger); color: #FFF; font-size: 0.65rem; padding: 1px 5px; border-radius: var(--radius-full); margin-left: 4px;">3</span>
+        </a>
+        <button type="button" class="admin-nav-link" id="openSettingsBtn" style="background: none; border: none; cursor: pointer; color: inherit; font: inherit;">Settings</button>
+      </nav>
+
+      <!-- Admin Identity Indicator -->
+      <div style="display: flex; align-items: center; gap: var(--space-2);">
+        <div class="provider-avatar" style="width: 32px; height: 32px; border: 1px solid #475569;">
+          <img src="../images/providers/provider-2.svg" alt="Admin Avatar">
+        </div>
+        <span style="font-size: var(--font-size-caption); color: #E2E8F0; font-weight: 700;">Admin User</span>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: A01 ADMIN DASHBOARD
+       ========================================================================= -->
+  <main class="main-content section" id="adminDashboardContent" style="padding-top: var(--space-6);">
+    <div class="container">
+
+      <!-- Admin Title & Quick Actions Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-3);">
+        <div>
+          <div class="section-eyebrow" style="color: #64748B;">Platform Operations (Mock Environment)</div>
+          <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+            Marketplace Overview
+          </h1>
+        </div>
+
+        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+          <a href="admin-users.html?status=pending" class="btn btn-secondary btn-sm" style="color: var(--color-warning-text); border-color: var(--color-warning-border); background: #FEFCE8;">
+            🪪 Review ID Uploads (<span id="dashPendingBadge">1 Pending</span>)
+          </a>
+          <a href="admin-reports.html" class="btn btn-secondary btn-sm" style="color: var(--color-danger); border-color: var(--color-danger-border);">
+            ⚠️ View Reports (3 Open)
+          </a>
+          <a href="admin-users.html?role=provider" class="btn btn-secondary btn-sm">
+            👥 Manage Providers
+          </a>
+          <a href="admin-categories.html" class="btn btn-primary btn-sm">
+            🏷️ Manage Categories
+          </a>
+        </div>
+      </div>
+
+      <!-- 1. Marketplace Overview Summary Cards (5 Metrics) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8);">
+        
+        <!-- Total Customers -->
+        <div class="dashboard-card" style="margin-bottom: 0; padding: var(--space-5);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+            <span style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: 700; text-transform: uppercase;">Customers</span>
+            <span style="font-size: 1.25rem;">🏠</span>
+          </div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-text-primary);">1,240</div>
+          <div style="font-size: var(--font-size-caption); color: var(--color-success); font-weight: 600; margin-top: 4px;">↑ +14% this month</div>
+        </div>
+
+        <!-- Total Providers & ID Verification SLA -->
+        <div class="dashboard-card" style="margin-bottom: 0; padding: var(--space-5); border-left: 4px solid var(--color-warning);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+            <span style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: 700; text-transform: uppercase;">Artisans & Pros</span>
+            <span style="font-size: 1.25rem;">🛠️</span>
+          </div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-text-primary);">385</div>
+          <div style="font-size: var(--font-size-caption); color: var(--color-primary); font-weight: 600; margin-top: 4px;">
+            312 Verified • <a href="admin-users.html?status=pending" style="color: var(--color-warning-text); font-weight: 700; text-decoration: underline;">Review Pending IDs</a>
+          </div>
+        </div>
+
+        <!-- Active Requests -->
+        <div class="dashboard-card" style="margin-bottom: 0; padding: var(--space-5);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+            <span style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: 700; text-transform: uppercase;">Active Requests</span>
+            <span style="font-size: 1.25rem;">⚡</span>
+          </div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-text-primary);">48</div>
+          <div style="font-size: var(--font-size-caption); color: var(--color-warning-text); font-weight: 600; margin-top: 4px;">18 In Progress</div>
+        </div>
+
+        <!-- Completed Jobs -->
+        <div class="dashboard-card" style="margin-bottom: 0; padding: var(--space-5);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+            <span style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: 700; text-transform: uppercase;">Completed Jobs</span>
+            <span style="font-size: 1.25rem;">🏆</span>
+          </div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-text-primary);">960</div>
+          <div style="font-size: var(--font-size-caption); color: var(--color-text-muted); margin-top: 4px;">98.4% Satisfaction</div>
+        </div>
+
+        <!-- Open Safety Reports -->
+        <div class="dashboard-card" style="margin-bottom: 0; padding: var(--space-5); border-left: 4px solid var(--color-danger);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+            <span style="font-size: var(--font-size-caption); color: var(--color-danger); font-weight: 700; text-transform: uppercase;">Open Reports</span>
+            <span style="font-size: 1.25rem;">⚠️</span>
+          </div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-danger);">3</div>
+          <div style="font-size: var(--font-size-caption); color: var(--color-danger); font-weight: 600; margin-top: 4px;">Requires Review</div>
+        </div>
+
+      </div>
+
+      <!-- 2. Admin 2-Column Section (Left: Recent Activity Feed; Right: Quick Links & Coverage) -->
+      <div class="dashboard-layout-grid">
+        
+        <!-- Left: Recent Activity Feed -->
+        <div class="dashboard-card">
+          <div class="dashboard-card-header">
+            <h2 style="font-size: var(--font-size-h3); margin: 0;">Recent Marketplace Activity</h2>
+            <span class="service-chip" style="font-weight: 600;">Live Feed</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+            
+            <div style="display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-subtle);">
+              <span style="font-size: 1.25rem;">⚡</span>
+              <div style="flex: 1;">
+                <div style="font-size: var(--font-size-label); font-weight: 700; color: var(--color-text-primary);">
+                  New Request Created (#REQ-00125)
+                </div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">
+                  Chris Okonkwo requested <strong>Solar Inverter Inspection</strong> with Chidi Solar in Ikeja, Lagos.
+                </div>
+                <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 2px;">5 minutes ago</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-subtle);">
+              <span style="font-size: 1.25rem;">✅</span>
+              <div style="flex: 1;">
+                <div style="font-size: var(--font-size-label); font-weight: 700; color: var(--color-text-primary);">
+                  Job Accepted (#REQ-00124)
+                </div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">
+                  John Plumbing Services accepted <strong>Kitchen Pipe Leak Repair</strong> in Awka, Anambra.
+                </div>
+                <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 2px;">25 minutes ago</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-subtle);">
+              <span style="font-size: 1.25rem;">🌟</span>
+              <div style="flex: 1;">
+                <div style="font-size: var(--font-size-label); font-weight: 700; color: var(--color-text-primary);">
+                  5-Star Review Submitted
+                </div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">
+                  Emeka N. reviewed <strong>John Plumbing Services</strong>: "Punctual and professional PVC fitting."
+                </div>
+                <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 2px;">2 hours ago</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3) 0;">
+              <span style="font-size: 1.25rem;">⚠️</span>
+              <div style="flex: 1;">
+                <div style="font-size: var(--font-size-label); font-weight: 700; color: var(--color-danger);">
+                  Safety Flag Raised (#REP-089)
+                </div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">
+                  Customer reported suspicious pricing behavior on an AC technician profile.
+                </div>
+                <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-top: 2px;">4 hours ago</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Admin Operations Shortcuts -->
+        <div>
+          
+          <div class="dashboard-card">
+            <h3 style="font-size: var(--font-size-label); text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+              Management Modules
+            </h3>
+
+            <a href="admin-users.html" class="quick-action-item">
+              <span style="font-size: 1.25rem;">👥</span>
+              <div>
+                <div>User & Artisan Management</div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: normal;">Verify ID, suspend accounts, view records</div>
+              </div>
+            </a>
+
+            <a href="admin-categories.html" class="quick-action-item">
+              <span style="font-size: 1.25rem;">🏷️</span>
+              <div>
+                <div>Category Management</div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: normal;">Edit 8 service trades, adjust icons & counts</div>
+              </div>
+            </a>
+
+            <a href="admin-requests.html" class="quick-action-item">
+              <span style="font-size: 1.25rem;">📋</span>
+              <div>
+                <div>Request Lifecycle Control</div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: normal;">Monitor all platform orders across Nigeria</div>
+              </div>
+            </a>
+
+            <a href="admin-reports.html" class="quick-action-item">
+              <span style="font-size: 1.25rem;">🛡️</span>
+              <div>
+                <div>Reports & Moderation</div>
+                <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: normal;">Investigate complaints and enforce policy</div>
+              </div>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       SETTINGS MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="adminSettingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="settingsModalTitle">⚙️ Marketplace Platform Settings</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="toggle-switch-wrapper">
+          <div>
+            <div class="toggle-switch-label">Live Platform Operations</div>
+            <div class="toggle-switch-desc">Accept new customer service bookings across all states.</div>
+          </div>
+          <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-primary);">
+        </div>
+
+        <div class="toggle-switch-wrapper">
+          <div>
+            <div class="toggle-switch-label">Strict Artisan NIN / ID Verification</div>
+            <div class="toggle-switch-desc">Require manual document inspection before displaying the verified badge.</div>
+          </div>
+          <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-primary);">
+        </div>
+
+        <div class="toggle-switch-wrapper">
+          <div>
+            <div class="toggle-switch-label">Automated SMS Dispatch Alerts</div>
+            <div class="toggle-switch-desc">Send immediate SMS alerts to artisans when a customer submits a request.</div>
+          </div>
+          <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-primary);">
+        </div>
+
+        <div class="form-group" style="margin-top: var(--space-4);">
+          <label class="form-label" for="commissionRateInput">Marketplace Service Commission Rate (%)</label>
+          <input type="number" class="form-control" id="commissionRateInput" value="10" min="0" max="30">
+          <small style="color: var(--color-text-muted); font-size: 0.75rem;">Standard platform fee deducted upon completed job payout.</small>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveAdminSettingsBtn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Reusable Footer -->
+  <footer class="footer" role="contentinfo" style="background: #0F172A; margin-top: var(--space-12);">
+    <div class="container" style="text-align: center; color: #94A3B8; font-size: var(--font-size-caption);">
+      <div>&copy; 2026 HandyNaija Marketplace Ltd. Internal Administration Console. Local Mock Data Only.</div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      function showToast(message, type = 'info') {
+        const c = document.getElementById('toastContainer');
+        if (!c) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        c.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function openModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('open');
+      }
+
+      function closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('open');
+      }
+
+      document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', (e) => { if (e.target === b) closeModal(b.id); });
+        b.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => closeModal(b.id));
+        });
+      });
+
+      const settingsBtn = document.getElementById('openSettingsBtn');
+      if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => openModal('adminSettingsModal'));
+      }
+
+      const saveSettingsBtn = document.getElementById('saveAdminSettingsBtn');
+      if (saveSettingsBtn) {
+        saveSettingsBtn.addEventListener('click', () => {
+          closeModal('adminSettingsModal');
+          showToast('Platform settings updated successfully!', 'success');
+        });
+      }
+
+      // Read pending providers count from storage
+      try {
+        const pending = JSON.parse(localStorage.getItem('handynaija_pending_providers') || '[]');
+        const count = 1 + pending.filter(p => p.verificationStatus === 'pending').length;
+        const badge = document.getElementById('dashPendingBadge');
+        if (badge) badge.textContent = `${count} Pending`;
+      } catch (e) {}
+
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" width="240" height="56" fill="none">
+  <!-- Brand Icon -->
+  <rect x="4" y="8" width="40" height="40" rx="12" fill="#0d7a5f"/>
+  <path d="M16 28L22 34L32 20" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="34" cy="18" r="3" fill="#F59E0B"/>
+  
+  <!-- Text Brand -->
+  <text x="54" y="32" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="800" fill="#0F172A" letter-spacing="-0.5">
+    HANDY<tspan fill="#0d7a5f">NAIJA</tspan>
+  </text>
+  <text x="55" y="44" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="600" fill="#64748B" letter-spacing="1.5">
+    TRUSTED LOCAL SERVICES
+  </text>
+</svg>

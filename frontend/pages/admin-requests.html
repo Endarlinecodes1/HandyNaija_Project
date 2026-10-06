@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Monitor and manage customer service requests across Nigeria on HandyNaija. Track order lifecycle states and resolve issues.">
+  <title>Request Management — HandyNaija Admin</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body style="background: #F8FAFC;">
+
+  <!-- Accessible Skip Link -->
+  <a href="#adminRequestsContent" class="skip-link">Skip to request management</a>
+
+  <!-- =========================================================================
+       ADMIN HEADER
+       ========================================================================= -->
+  <header class="admin-header" role="banner">
+    <div class="container admin-header-container">
+      <div style="display: flex; align-items: center; gap: var(--space-3);">
+        <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+          <img src="../images/logo/logo.svg" alt="HandyNaija" width="150" height="36" style="filter: brightness(0) invert(1);">
+        </a>
+        <span style="font-size: 0.65rem; background: #334155; color: #38BDF8; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-xs); text-transform: uppercase;">Admin Ops</span>
+      </div>
+
+      <nav class="header-nav-actions" aria-label="Admin Navigation" style="gap: var(--space-1);">
+        <a href="admin-dashboard.html" class="admin-nav-link">Dashboard</a>
+        <a href="admin-users.html?role=customer" class="admin-nav-link">Customers</a>
+        <a href="admin-users.html?role=provider" class="admin-nav-link">Providers</a>
+        <a href="admin-categories.html" class="admin-nav-link">Categories</a>
+        <a href="admin-requests.html" class="admin-nav-link active">Requests</a>
+        <a href="admin-reports.html" class="admin-nav-link">
+          Reviews/Reports
+          <span style="background: var(--color-danger); color: #FFF; font-size: 0.65rem; padding: 1px 5px; border-radius: var(--radius-full); margin-left: 4px;">3</span>
+        </a>
+        <button type="button" class="admin-nav-link" id="openSettingsBtn" style="background: none; border: none; cursor: pointer; color: inherit; font: inherit;">Settings</button>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: var(--space-2);">
+        <div class="provider-avatar" style="width: 32px; height: 32px; border: 1px solid #475569;">
+          <img src="../images/providers/provider-2.svg" alt="Admin Avatar">
+        </div>
+        <span style="font-size: var(--font-size-caption); color: #E2E8F0; font-weight: 700;">Admin User</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: A04 REQUEST MANAGEMENT
+       ========================================================================= -->
+  <main class="main-content section" id="adminRequestsContent" style="padding-top: var(--space-6);">
+    <div class="container">
+
+      <!-- Breadcrumb & Title -->
+      <div style="margin-bottom: var(--space-6);">
+        <a href="admin-dashboard.html" class="profile-back-link">
+          ← Back to Admin Dashboard
+        </a>
+        <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+          Platform Service Requests & Orders
+        </h1>
+        <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+          Monitor job requests across Nigeria, review booking details, and manage lifecycle state overrides.
+        </p>
+      </div>
+
+      <!-- Controls & Filter Toolbar -->
+      <div class="dashboard-card" style="margin-bottom: var(--space-6); padding: var(--space-4);">
+        <div class="admin-toolbar-grid">
+          
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="form-control" id="reqSearchInput" placeholder="Search by ID, customer, provider, or location...">
+          </div>
+
+          <select class="form-control" id="reqCategorySelect">
+            <option value="all">All Service Categories</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="electrical">Electrical & Solar</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="mechanic">Mechanic</option>
+            <option value="carpenter">Carpentry</option>
+            <option value="tutor">Tutoring</option>
+            <option value="technician">AC Technician</option>
+            <option value="painter">Painting</option>
+          </select>
+
+          <select class="form-control" id="reqStatusSelect">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="accepted">Accepted</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="inprogress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="resetReqFiltersBtn">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Requests Data Table -->
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Service</th>
+              <th>Customer</th>
+              <th>Artisan</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="requestsTableBody">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       MODALS: VIEW DETAILS / OVERRIDE STATUS
+       ========================================================================= -->
+  <div class="modal-backdrop" id="adminReqDetailsModal" role="dialog" aria-modal="true" aria-labelledby="adminModalHeading">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="adminModalHeading">Request Inspection & Lifecycle Control</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="adminModalBody">
+        <!-- Injected via JS -->
+      </div>
+      <div class="modal-footer" style="flex-wrap: wrap; justify-content: space-between;">
+        <button type="button" class="btn btn-secondary btn-sm" data-close-modal>Close</button>
+        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary btn-sm" id="overrideCompletedBtn">Mark Completed</button>
+          <button type="button" class="btn btn-destructive btn-sm" id="overrideCancelledBtn">Cancel Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: ADMIN SETTINGS
+       ========================================================================= -->
+  <div class="modal-backdrop" id="adminSettingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="settingsModalTitle">⚙️ Platform Operations Settings</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="toggle-switch-wrapper">
+          <div>
+            <div class="toggle-switch-label">Live Platform Operations</div>
+            <div class="toggle-switch-desc">Accept new customer service bookings across all states.</div>
+          </div>
+          <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-primary);">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveAdminSettingsBtn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Reusable Footer -->
+  <footer class="footer" role="contentinfo" style="background: #0F172A; margin-top: var(--space-12);">
+    <div class="container" style="text-align: center; color: #94A3B8; font-size: var(--font-size-caption);">
+      <div>&copy; 2026 HandyNaija Marketplace Ltd. Internal Administration Console. Local Mock Data Only.</div>
+    </div>
+  </footer>
+
+  <!-- Mock Data Layer & Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      let requests = window.HandyAPI ? window.HandyAPI.getRequests() : [];
+      let selectedReqId = null;
+
+      const tbody = document.getElementById('requestsTableBody');
+      const searchInput = document.getElementById('reqSearchInput');
+      const catSelect = document.getElementById('reqCategorySelect');
+      const statusSelect = document.getElementById('reqStatusSelect');
+      const resetBtn = document.getElementById('resetReqFiltersBtn');
+
+      const STATUS_CONFIG = {
+        pending: { label: 'Pending', icon: '⏳', class: 'pending' },
+        accepted: { label: 'Accepted', icon: '✓', class: 'accepted' },
+        scheduled: { label: 'Scheduled', icon: '📅', class: 'scheduled' },
+        inprogress: { label: 'In Progress', icon: '⚙️', class: 'inprogress' },
+        completed: { label: 'Completed', icon: '🎉', class: 'completed' },
+        cancelled: { label: 'Cancelled', icon: '🚫', class: 'cancelled' }
+      };
+
+      function showToast(message, type = 'info') {
+        const c = document.getElementById('toastContainer');
+        if (!c) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        c.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function openModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('open');
+      }
+
+      function closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('open');
+      }
+
+      document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', (e) => { if (e.target === b) closeModal(b.id); });
+        b.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => closeModal(b.id));
+        });
+      });
+
+      function renderTable() {
+        if (!tbody) return;
+
+        requests = window.HandyAPI ? window.HandyAPI.getRequests() : [];
+        const q = searchInput.value.toLowerCase().trim();
+        const cat = catSelect.value;
+        const status = statusSelect.value;
+
+        const filtered = requests.filter(r => {
+          if (cat !== 'all' && r.category !== cat) return false;
+          if (status !== 'all' && r.status !== status) return false;
+          if (q) {
+            const matchId = r.id.toLowerCase().includes(q);
+            const matchCust = r.customerName.toLowerCase().includes(q);
+            const matchProv = r.providerName.toLowerCase().includes(q);
+            const matchLoc = r.location.toLowerCase().includes(q);
+            if (!matchId && !matchCust && !matchProv && !matchLoc) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr><td colspan="7" style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">No requests found matching current filters.</td></tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(r => {
+          const sMeta = STATUS_CONFIG[r.status] || STATUS_CONFIG.pending;
+          return `
+            <tr>
+              <td><code>${r.id}</code></td>
+              <td><strong>${r.serviceName}</strong></td>
+              <td>${r.customerName}</td>
+              <td>${r.providerName}</td>
+              <td style="font-size: var(--font-size-caption);">📍 ${r.location}</td>
+              <td><span class="status-badge ${sMeta.class}">${sMeta.icon} ${sMeta.label}</span></td>
+              <td>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="inspectRequest('${r.id}')">Inspect</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      window.inspectRequest = function (reqId) {
+        selectedReqId = reqId;
+        const r = requests.find(item => item.id === reqId);
+        if (!r) return;
+
+        const body = document.getElementById('adminModalBody');
+        body.innerHTML = `
+          <div style="margin-bottom: var(--space-3);">
+            <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary);">Request ID & Service</div>
+            <strong style="font-size: var(--font-size-h3); color: var(--color-text-primary);">${r.serviceName} (${r.id})</strong>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-4); background: var(--color-surface-muted); padding: var(--space-3); border-radius: var(--radius-md); font-size: var(--font-size-caption);">
+            <div><strong>Customer:</strong> ${r.customerName}</div>
+            <div><strong>Artisan:</strong> ${r.providerName}</div>
+            <div><strong>Location:</strong> ${r.location}</div>
+            <div><strong>Schedule:</strong> ${r.preferredDate}</div>
+            <div><strong>Contact:</strong> ${r.customerPhone}</div>
+            <div><strong>Current Status:</strong> <span class="status-badge ${r.status}" style="font-size: 0.7rem;">${r.status}</span></div>
+          </div>
+          <div>
+            <div style="font-size: var(--font-size-caption); color: var(--color-text-secondary); font-weight: 700;">Problem Description:</div>
+            <p style="font-size: var(--font-size-label); line-height: 1.6; margin-top: 4px; background: var(--color-surface); padding: var(--space-3); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
+              "${r.description}"
+            </p>
+          </div>
+        `;
+        openModal('adminReqDetailsModal');
+      };
+
+      const compBtn = document.getElementById('overrideCompletedBtn');
+      if (compBtn) {
+        compBtn.addEventListener('click', () => {
+          if (selectedReqId && window.HandyAPI) {
+            window.HandyAPI.updateRequestStatus(selectedReqId, 'completed');
+            closeModal('adminReqDetailsModal');
+            renderTable();
+            showToast(`Request #${selectedReqId} marked as COMPLETED`, 'success');
+          }
+        });
+      }
+
+      const cancBtn = document.getElementById('overrideCancelledBtn');
+      if (cancBtn) {
+        cancBtn.addEventListener('click', () => {
+          if (selectedReqId && window.HandyAPI) {
+            window.HandyAPI.updateRequestStatus(selectedReqId, 'cancelled');
+            closeModal('adminReqDetailsModal');
+            renderTable();
+            showToast(`Request #${selectedReqId} has been CANCELLED`, 'warning');
+          }
+        });
+      }
+
+      if (searchInput) searchInput.addEventListener('input', renderTable);
+      if (catSelect) catSelect.addEventListener('change', renderTable);
+      if (statusSelect) statusSelect.addEventListener('change', renderTable);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          catSelect.value = 'all';
+          statusSelect.value = 'all';
+          renderTable();
+        });
+      }
+
+      const settingsBtn = document.getElementById('openSettingsBtn');
+      if (settingsBtn) settingsBtn.addEventListener('click', () => openModal('adminSettingsModal'));
+
+      const saveSettingsBtn = document.getElementById('saveAdminSettingsBtn');
+      if (saveSettingsBtn) {
+        saveSettingsBtn.addEventListener('click', () => {
+          closeModal('adminSettingsModal');
+          showToast('Platform settings saved successfully!', 'success');
+        });
+      }
+
+      renderTable();
+
+    })();
+  </script>
+</body>
+</html>

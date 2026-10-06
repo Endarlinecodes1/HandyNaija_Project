@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage HandyNaija service trade categories. Add new categories, edit trade descriptions, and manage artisan allocations.">
+  <title>Category Management — HandyNaija Admin</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- HandyNaija Modular CSS Architecture -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body style="background: #F8FAFC;">
+
+  <!-- Accessible Skip Link -->
+  <a href="#adminCategoriesContent" class="skip-link">Skip to category management</a>
+
+  <!-- =========================================================================
+       ADMIN HEADER
+       ========================================================================= -->
+  <header class="admin-header" role="banner">
+    <div class="container admin-header-container">
+      <div style="display: flex; align-items: center; gap: var(--space-3);">
+        <a href="../index.html" class="brand-logo" aria-label="HandyNaija Home">
+          <img src="../images/logo/logo.svg" alt="HandyNaija" width="150" height="36" style="filter: brightness(0) invert(1);">
+        </a>
+        <span style="font-size: 0.65rem; background: #334155; color: #38BDF8; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-xs); text-transform: uppercase;">Admin Ops</span>
+      </div>
+
+      <nav class="header-nav-actions" aria-label="Admin Navigation" style="gap: var(--space-1);">
+        <a href="admin-dashboard.html" class="admin-nav-link">Dashboard</a>
+        <a href="admin-users.html?role=customer" class="admin-nav-link">Customers</a>
+        <a href="admin-users.html?role=provider" class="admin-nav-link">Providers</a>
+        <a href="admin-categories.html" class="admin-nav-link active">Categories</a>
+        <a href="admin-requests.html" class="admin-nav-link">Requests</a>
+        <a href="admin-reports.html" class="admin-nav-link">
+          Reviews/Reports
+          <span style="background: var(--color-danger); color: #FFF; font-size: 0.65rem; padding: 1px 5px; border-radius: var(--radius-full); margin-left: 4px;">3</span>
+        </a>
+        <button type="button" class="admin-nav-link" id="openSettingsBtn" style="background: none; border: none; cursor: pointer; color: inherit; font: inherit;">Settings</button>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: var(--space-2);">
+        <div class="provider-avatar" style="width: 32px; height: 32px; border: 1px solid #475569;">
+          <img src="../images/providers/provider-2.svg" alt="Admin Avatar">
+        </div>
+        <span style="font-size: var(--font-size-caption); color: #E2E8F0; font-weight: 700;">Admin User</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: A03 CATEGORY MANAGEMENT
+       ========================================================================= -->
+  <main class="main-content section" id="adminCategoriesContent" style="padding-top: var(--space-6);">
+    <div class="container">
+
+      <!-- Breadcrumb & Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-3);">
+        <div>
+          <a href="admin-dashboard.html" class="profile-back-link">
+            ← Back to Admin Dashboard
+          </a>
+          <h1 style="font-size: var(--font-size-h2); margin: 0; color: var(--color-text-primary);">
+            Service Category Management
+          </h1>
+          <p style="font-size: var(--font-size-label); color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 0;">
+            Manage platform trade categories, assign descriptions, and monitor registered provider counts.
+          </p>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="openAddCategoryModalBtn">
+          + Add New Category
+        </button>
+      </div>
+
+      <!-- Controls Toolbar -->
+      <div class="dashboard-card" style="margin-bottom: var(--space-6); padding: var(--space-4);">
+        <div class="admin-toolbar-grid">
+          <div class="input-with-icon">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="form-control" id="catSearchInput" placeholder="Search category by name, slug, or trade...">
+          </div>
+
+          <select class="form-control" id="catStatusFilter">
+            <option value="all">All Statuses</option>
+            <option value="active">Active Only</option>
+            <option value="disabled">Disabled Only</option>
+          </select>
+
+          <div></div>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="resetCatFiltersBtn">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories Data Table -->
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Category Name</th>
+              <th>Slug / Identifier</th>
+              <th>Active Pros</th>
+              <th>Description & Scope</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="categoriesTableBody">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       MODALS: ADD/EDIT CATEGORY
+       ========================================================================= -->
+  <div class="modal-backdrop" id="categoryEditModal" role="dialog" aria-modal="true" aria-labelledby="catModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="catModalTitle">Add Service Category</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <form id="categoryCrudForm">
+        <input type="hidden" id="editCatIndex" value="-1">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label" for="catNameInput">Category Name *</label>
+            <input type="text" class="form-control" id="catNameInput" placeholder="e.g. Masonry & Bricklaying" required>
+          </div>
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label" for="catSlugInput">Slug / Identifier *</label>
+            <input type="text" class="form-control" id="catSlugInput" placeholder="e.g. masonry" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="catDescInput">Description & Trade Scope *</label>
+            <textarea class="form-control" id="catDescInput" rows="3" placeholder="Describe the trades covered under this category..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveCategoryBtn">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: ADMIN SETTINGS
+       ========================================================================= -->
+  <div class="modal-backdrop" id="adminSettingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="settingsModalTitle">⚙️ Platform Operations Settings</h3>
+        <button class="modal-close-btn" data-close-modal aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="toggle-switch-wrapper">
+          <div>
+            <div class="toggle-switch-label">Live Platform Operations</div>
+            <div class="toggle-switch-desc">Accept new customer service bookings across all states.</div>
+          </div>
+          <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--color-primary);">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveAdminSettingsBtn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Reusable Footer -->
+  <footer class="footer" role="contentinfo" style="background: #0F172A; margin-top: var(--space-12);">
+    <div class="container" style="text-align: center; color: #94A3B8; font-size: var(--font-size-caption);">
+      <div>&copy; 2026 HandyNaija Marketplace Ltd. Internal Administration Console. Local Mock Data Only.</div>
+    </div>
+  </footer>
+
+  <!-- Mock Data Layer & Script -->
+  <script src="../js/api.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      let categories = [
+        { name: 'Plumber (Plumbing & Pipe Fitting)', slug: 'plumbing', count: 48, desc: 'Leak repairs, borehole pumps, bathroom & kitchen installations', active: true },
+        { name: 'Electrician (Electrical & Solar)', slug: 'electrical', count: 64, desc: 'Inverter setups, wiring, generator repairs & appliance repairs', active: true },
+        { name: 'Cleaner (Cleaning & Fumigation)', slug: 'cleaning', count: 35, desc: 'Deep residential cleaning, office cleaning & pest control', active: true },
+        { name: 'Mechanic (Auto & Diagnostics)', slug: 'mechanic', count: 29, desc: 'Engine diagnostics, brake repairs, AC fix & roadside assistance', active: true },
+        { name: 'Carpenter (Carpentry & Woodwork)', slug: 'carpenter', count: 22, desc: 'Custom furniture, kitchen cabinets, roof repairs & door fittings', active: true },
+        { name: 'Tutor (Home Lessons & Tutoring)', slug: 'tutor', count: 41, desc: 'WAEC/JAMB prep, primary school home tutors, coding & music', active: true },
+        { name: 'Technician (AC & Cold Tech)', slug: 'technician', count: 37, desc: 'Air conditioner servicing, gas refilling, freezer repairs', active: true },
+        { name: 'Painter (Painting & POP)', slug: 'painter', count: 19, desc: 'Interior & exterior painting, screeding, POP ceiling installation', active: true }
+      ];
+
+      const tbody = document.getElementById('categoriesTableBody');
+      const form = document.getElementById('categoryCrudForm');
+      const nameInput = document.getElementById('catNameInput');
+      const slugInput = document.getElementById('catSlugInput');
+      const descInput = document.getElementById('catDescInput');
+      const indexInput = document.getElementById('editCatIndex');
+      const modalTitle = document.getElementById('catModalTitle');
+      const searchInput = document.getElementById('catSearchInput');
+      const statusFilter = document.getElementById('catStatusFilter');
+      const resetBtn = document.getElementById('resetCatFiltersBtn');
+
+      function showToast(message, type = 'info') {
+        const c = document.getElementById('toastContainer');
+        if (!c) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const icons = { success: '✅', warning: '⚠️', danger: '❌', info: 'ℹ️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><div>${message}</div>`;
+        c.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      function openModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('open');
+      }
+
+      function closeModal(id) {
+        const m = document.getElementById(id);
+        if (m) m.classList.remove('open');
+      }
+
+      document.querySelectorAll('.modal-backdrop').forEach(b => {
+        b.addEventListener('click', (e) => { if (e.target === b) closeModal(b.id); });
+        b.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => closeModal(b.id));
+        });
+      });
+
+      function renderCategoriesTable() {
+        if (!tbody) return;
+
+        const q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        const stat = statusFilter ? statusFilter.value : 'all';
+
+        const filtered = categories.filter((cat, idx) => {
+          if (stat === 'active' && !cat.active) return false;
+          if (stat === 'disabled' && cat.active) return false;
+          if (q) {
+            const matchName = cat.name.toLowerCase().includes(q);
+            const matchSlug = cat.slug.toLowerCase().includes(q);
+            const matchDesc = cat.desc.toLowerCase().includes(q);
+            if (!matchName && !matchSlug && !matchDesc) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr><td colspan="6" style="text-align: center; padding: var(--space-8); color: var(--color-text-muted);">No categories match current search filters.</td></tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map((cat, idx) => {
+          const originalIdx = categories.indexOf(cat);
+          return `
+            <tr>
+              <td>
+                <div style="font-weight: 700; color: var(--color-text-primary);">${cat.name}</div>
+              </td>
+              <td><code>${cat.slug}</code></td>
+              <td><strong>${cat.count}</strong> pros</td>
+              <td style="font-size: var(--font-size-caption); color: var(--color-text-secondary); max-width: 320px;">
+                ${cat.desc}
+              </td>
+              <td>
+                <span class="status-badge ${cat.active ? 'accepted' : 'cancelled'}">
+                  ${cat.active ? 'Active' : 'Disabled'}
+                </span>
+              </td>
+              <td>
+                <div style="display: flex; gap: var(--space-2);">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="openEditCatModal(${originalIdx})">Edit</button>
+                  <button type="button" class="btn btn-ghost btn-sm" style="color: ${cat.active ? 'var(--color-danger)' : 'var(--color-success)'};" onclick="toggleCatActive(${originalIdx})">
+                    ${cat.active ? 'Disable' : 'Enable'}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      window.openAddCatModal = function () {
+        if (form) form.reset();
+        indexInput.value = '-1';
+        modalTitle.textContent = 'Add Service Category';
+        openModal('categoryEditModal');
+      };
+
+      const addBtn = document.getElementById('openAddCategoryModalBtn');
+      if (addBtn) addBtn.addEventListener('click', window.openAddCatModal);
+
+      window.openEditCatModal = function (idx) {
+        const cat = categories[idx];
+        if (!cat) return;
+        indexInput.value = idx;
+        nameInput.value = cat.name;
+        slugInput.value = cat.slug;
+        descInput.value = cat.desc;
+        modalTitle.textContent = `Edit "${cat.name}"`;
+        openModal('categoryEditModal');
+      };
+
+      window.toggleCatActive = function (idx) {
+        categories[idx].active = !categories[idx].active;
+        renderCategoriesTable();
+        showToast(`Category status updated to ${categories[idx].active ? 'Active' : 'Disabled'}`, 'info');
+      };
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const idx = parseInt(indexInput.value, 10);
+          const name = nameInput.value.trim();
+          const slug = slugInput.value.trim().toLowerCase().replace(/\s+/g, '-');
+          const desc = descInput.value.trim();
+
+          if (idx >= 0) {
+            categories[idx].name = name;
+            categories[idx].slug = slug;
+            categories[idx].desc = desc;
+            showToast(`Category "${name}" updated successfully!`, 'success');
+          } else {
+            categories.push({
+              name: name,
+              slug: slug,
+              count: 0,
+              desc: desc,
+              active: true
+            });
+            showToast(`Category "${name}" added to marketplace!`, 'success');
+          }
+
+          closeModal('categoryEditModal');
+          renderCategoriesTable();
+        });
+      }
+
+      if (searchInput) searchInput.addEventListener('input', renderCategoriesTable);
+      if (statusFilter) statusFilter.addEventListener('change', renderCategoriesTable);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          statusFilter.value = 'all';
+          renderCategoriesTable();
+        });
+      }
+
+      const settingsBtn = document.getElementById('openSettingsBtn');
+      if (settingsBtn) settingsBtn.addEventListener('click', () => openModal('adminSettingsModal'));
+
+      const saveSettingsBtn = document.getElementById('saveAdminSettingsBtn');
+      if (saveSettingsBtn) {
+        saveSettingsBtn.addEventListener('click', () => {
+          closeModal('adminSettingsModal');
+          showToast('Platform settings saved successfully!', 'success');
+        });
+      }
+
+      // Initial Render
+      renderCategoriesTable();
+
+    })();
+  </script>
+</body>
+</html>
