@@ -13,13 +13,11 @@
 
   const API_BASE_CANDIDATES = [
     window.HANDYNAIJA_API_URL,
-    'http://127.0.0.1:5000/api/v1',
-    'http://localhost:5000/api/v1',
-    'http://127.0.0.1:8000/api/v1',
-    'http://localhost:8000/api/v1'
+    'https://handynaija-backend.onrender.com/api/v1',
+
   ].filter(Boolean);
 
-  let activeApiBase = API_BASE_CANDIDATES[0] || 'http://127.0.0.1:5000/api/v1';
+  let activeApiBase = API_BASE_CANDIDATES[0] || 'https://handynaija-backend.onrender.com/api/v1';
 
   async function apiFetch(path, options) {
     let lastError = null;

@@ -8,7 +8,7 @@
   'use strict';
 
   // Base API endpoint (Configurable via window.HANDYNAIJA_API_URL)
-  const API_BASE_URL = window.HANDYNAIJA_API_URL || 'http://127.0.0.1:5000/api/v1';
+  const API_BASE_URL = window.HANDYNAIJA_API_URL || 'https://handynaija-backend.onrender.com/api/v1';
 
   const STORAGE_KEYS = {
     PROVIDERS: 'handynaija_providers',
