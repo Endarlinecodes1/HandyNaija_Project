@@ -221,13 +221,8 @@
             
             <div class="form-group">
               <label class="form-label" for="setupState">State <span class="required-mark">*</span></label>
-              <select class="form-control" id="setupState" required>
-                <option value="Anambra" selected>Anambra State</option>
-                <option value="Lagos">Lagos State</option>
-                <option value="Abuja (FCT)">Abuja (FCT)</option>
-                <option value="Rivers">Rivers State</option>
-                <option value="Oyo">Oyo State</option>
-                <option value="Enugu">Enugu State</option>
+              <select class="form-control" id="setupState" required style="max-height: 250px; overflow-y: auto;">
+                <option value="">Select State</option>
               </select>
             </div>
 
@@ -297,6 +292,7 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- Mock Data Layer & Setup Script -->
+  <script type="module" src="../js/nigeria-states.js"></script>
   <script src="../js/api.js"></script>
   <script>
     (function () {
@@ -308,12 +304,23 @@
       const avatarPreview = document.getElementById('setupAvatarPreview');
       const bizNameInput = document.getElementById('setupBizName');
       const expInput = document.getElementById('setupExperience');
+      const stateSelect = document.getElementById('setupState');
       const areaInput = document.getElementById('setupArea');
       const bioInput = document.getElementById('setupBio');
       const submitBtn = document.getElementById('saveProfileSetupBtn');
       const successBanner = document.getElementById('setupSuccessBanner');
       const progressFill = document.getElementById('progressBarFill');
       const progressText = document.getElementById('progressPercentText');
+
+      // Populate State dropdown dynamically from NIGERIA_STATES
+      if (stateSelect) {
+        const states = window.NIGERIA_STATES || [
+          "Abia State","Adamawa State","Akwa Ibom State","Anambra State","Bauchi State","Bayelsa State","Benue State","Borno State","Cross River State","Delta State","Ebonyi State","Edo State","Ekiti State","Enugu State","Abuja (FCT)","Gombe State","Imo State","Jigawa State","Kaduna State","Kano State","Katsina State","Kebbi State","Kogi State","Kwara State","Lagos State","Nasarawa State","Niger State","Ogun State","Ondo State","Osun State","Oyo State","Plateau State","Rivers State","Sokoto State","Taraba State","Yobe State","Zamfara State"
+        ];
+        const cur = stateSelect.value;
+        stateSelect.innerHTML = '<option value="">Select State</option>' + states.map(s => `<option value="${s}"${s === 'Anambra State' ? ' selected' : ''}>${s}</option>`).join('');
+        if (cur) stateSelect.value = cur;
+      }
 
       function showToast(message, type = 'info') {
         const container = document.getElementById('toastContainer');

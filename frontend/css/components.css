@@ -1160,6 +1160,30 @@ textarea.form-control {
   flex-direction: column;
 }
 
+/* Global State Select Dropdown Scrollable Fix */
+#state,
+#filterStateSelect,
+#filter-state,
+#custState,
+#provState,
+#setupState,
+#profileState,
+#heroStateSelect,
+#heroCitySelect,
+#filterCitySelect,
+#requestState,
+#regCustStateInput,
+#regProvStateSelect,
+select#state,
+select[name="state"],
+select[name="city"],
+select[data-populate="states"],
+select[data-populate="cities"],
+.state-select {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
 .request-service-modal form,
 .modal-content form,
 #requestServiceForm {

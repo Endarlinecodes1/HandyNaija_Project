@@ -23,36 +23,64 @@
     },
 
     initLocationSelectors: function () {
-      const locations = window.HandyAPI ? window.HandyAPI.getLocations() : [];
-      const stateSelects = document.querySelectorAll('select[data-populate="states"]');
-      const citySelects = document.querySelectorAll('select[data-populate="cities"]');
+      const states = (typeof window !== 'undefined' && window.NIGERIA_STATES) ? window.NIGERIA_STATES : [
+        "Abia State","Adamawa State","Akwa Ibom State","Anambra State","Bauchi State","Bayelsa State","Benue State","Borno State","Cross River State","Delta State","Ebonyi State","Edo State","Ekiti State","Enugu State","Abuja (FCT)","Gombe State","Imo State","Jigawa State","Kaduna State","Kano State","Katsina State","Kebbi State","Kogi State","Kwara State","Lagos State","Nasarawa State","Niger State","Ogun State","Ondo State","Osun State","Oyo State","Plateau State","Rivers State","Sokoto State","Taraba State","Yobe State","Zamfara State"
+      ];
+
+      const stateSelects = document.querySelectorAll('select[data-populate="states"], #heroStateSelect, #filterStateSelect');
+      const citySelects = document.querySelectorAll('select[data-populate="cities"], #heroCitySelect, #filterCitySelect');
       const areaSelects = document.querySelectorAll('select[data-populate="areas"]');
 
       stateSelects.forEach(stateSelect => {
-        let stateOpts = '<option value="all">All States (Nigeria)</option>';
-        locations.forEach(loc => {
-          stateOpts += `<option value="${loc.state}">${loc.state}</option>`;
+        const isFilter = stateSelect.id.includes('filter') || stateSelect.id.includes('hero') || stateSelect.getAttribute('data-populate') === 'states';
+        const defaultLabel = isFilter ? 'All States (Nigeria)' : 'Select State';
+        const defaultVal = isFilter ? 'all' : '';
+        const curVal = stateSelect.value || defaultVal;
+
+        let stateOpts = `<option value="${defaultVal}">${defaultLabel}</option>`;
+        states.forEach(st => {
+          stateOpts += `<option value="${st}"${curVal === st ? ' selected' : ''}>${st}</option>`;
         });
         stateSelect.innerHTML = stateOpts;
+
+        const updatePairedCities = (stVal) => {
+          const form = stateSelect.closest('form') || document;
+          const matchedCities = form.querySelectorAll('select[data-populate="cities"], #heroCitySelect, #filterCitySelect');
+          const targetCities = matchedCities.length > 0 ? matchedCities : citySelects;
+
+          targetCities.forEach(citySelect => {
+            if (window.populateCitySelect) {
+              window.populateCitySelect(citySelect, stVal, isFilter);
+            } else {
+              if (!stVal || stVal === '') {
+                citySelect.disabled = true;
+                citySelect.innerHTML = '<option value="">Select State first</option>';
+              } else if (stVal === 'all' || stVal.includes('All')) {
+                citySelect.disabled = false;
+                const capitals = window.getAllCapitals ? window.getAllCapitals() : [
+                  "Abakaliki","Abeokuta","Abuja (FCT)","Ado-Ekiti","Akure","Asaba","Awka","Bauchi","Benin City","Birnin Kebbi","Calabar","Damaturu","Dutse","Enugu","Gombe","Gusau","Ibadan","Ikeja","Ilorin","Jalingo","Jos","Kaduna","Kano","Katsina","Lafia","Lokoja","Maiduguri","Makurdi","Minna","Osogbo","Owerri","Port Harcourt","Sokoto","Umuahia","Uyo","Yenagoa","Yola"
+                ];
+                citySelect.innerHTML = '<option value="all">All Cities (Capital Cities)</option>' + capitals.map(c => `<option value="${c}">${c}</option>`).join('');
+              } else {
+                citySelect.disabled = false;
+                const getCities = window.getCitiesForState || (s => (window.STATE_CITIES && window.STATE_CITIES[s]) || ['All Cities']);
+                const cities = getCities(stVal);
+                citySelect.innerHTML = '<option value="all">All Cities</option>' + cities.map(c => `<option value="${c}">${c}</option>`).join('');
+              }
+            }
+          });
+        };
+
+        // Initialize cities on startup
+        updatePairedCities(stateSelect.value);
 
         stateSelect.addEventListener('change', (e) => {
           const selectedState = e.target.value;
           currentFilters.state = selectedState;
           currentFilters.city = 'all';
           currentFilters.area = 'all';
-          
-          citySelects.forEach(citySelect => {
-            let cityOpts = '<option value="all">All Cities</option>';
-            if (selectedState !== 'all') {
-              const matchedState = locations.find(l => l.state === selectedState);
-              if (matchedState && matchedState.cities) {
-                matchedState.cities.forEach(c => {
-                  cityOpts += `<option value="${c.name}">${c.name}</option>`;
-                });
-              }
-            }
-            citySelect.innerHTML = cityOpts;
-          });
+
+          updatePairedCities(selectedState);
 
           areaSelects.forEach(areaSelect => {
             areaSelect.innerHTML = '<option value="all">All Areas / Neighborhoods</option>';
@@ -62,27 +90,8 @@
 
       citySelects.forEach(citySelect => {
         citySelect.addEventListener('change', (e) => {
-          const selectedCity = e.target.value;
-          currentFilters.city = selectedCity;
+          currentFilters.city = e.target.value;
           currentFilters.area = 'all';
-
-          areaSelects.forEach(areaSelect => {
-            let areaOpts = '<option value="all">All Areas / Neighborhoods</option>';
-            if (selectedCity !== 'all') {
-              const stateSelect = citySelect.closest('form')?.querySelector('select[data-populate="states"]');
-              const stateVal = stateSelect ? stateSelect.value : currentFilters.state;
-              const matchedState = locations.find(l => l.state === stateVal);
-              if (matchedState) {
-                const matchedCity = matchedState.cities.find(c => c.name === selectedCity);
-                if (matchedCity && matchedCity.areas) {
-                  matchedCity.areas.forEach(a => {
-                    areaOpts += `<option value="${a}">${a}</option>`;
-                  });
-                }
-              }
-            }
-            areaSelect.innerHTML = areaOpts;
-          });
         });
       });
 

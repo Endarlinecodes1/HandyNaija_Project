@@ -133,27 +133,13 @@
           <!-- Filter Group 2: Location (State & City) -->
           <div class="filter-group">
             <label class="filter-group-label" for="filterStateSelect">State</label>
-            <select class="form-control" id="filterStateSelect" style="margin-bottom: var(--space-2);">
+            <select class="form-control" id="filterStateSelect" style="margin-bottom: var(--space-2); max-height: 250px; overflow-y: auto;">
               <option value="all">All Nigerian States</option>
-              <option value="Anambra">Anambra State</option>
-              <option value="Lagos">Lagos State</option>
-              <option value="Abuja (FCT)">Abuja (FCT)</option>
-              <option value="Rivers">Rivers State</option>
-              <option value="Oyo">Oyo State</option>
-              <option value="Enugu">Enugu State</option>
             </select>
 
             <label class="filter-group-label" for="filterCitySelect">City / Area</label>
-            <select class="form-control" id="filterCitySelect">
+            <select class="form-control" id="filterCitySelect" style="max-height: 250px; overflow-y: auto;">
               <option value="all">All Cities</option>
-              <option value="Awka">Awka</option>
-              <option value="Onitsha">Onitsha</option>
-              <option value="Ikeja">Ikeja</option>
-              <option value="Lekki">Lekki</option>
-              <option value="Yaba">Yaba</option>
-              <option value="Abuja Municipal">Abuja Municipal (Wuse/Maitama)</option>
-              <option value="Port Harcourt">Port Harcourt</option>
-              <option value="Ibadan">Ibadan</option>
             </select>
           </div>
 
@@ -394,6 +380,7 @@
   </footer>
 
   <!-- Mock Data Layer & Search Controller -->
+  <script type="module" src="../js/nigeria-states.js"></script>
   <script src="../js/api.js"></script>
   <script>
     (function () {
@@ -415,6 +402,49 @@
       const resultsContainer = document.getElementById('providersResultsContainer');
       const countNum = document.getElementById('resultsCountNum');
       const tagsBar = document.getElementById('activeFilterTagsBar');
+
+      // Populate State & City filter options dynamically from NIGERIA_STATES & STATE_CITIES
+      function initLocationFilters() {
+        if (!stateSelect) return;
+        const states = window.NIGERIA_STATES || [
+          "Abia State","Adamawa State","Akwa Ibom State","Anambra State","Bauchi State","Bayelsa State","Benue State","Borno State","Cross River State","Delta State","Ebonyi State","Edo State","Ekiti State","Enugu State","Abuja (FCT)","Gombe State","Imo State","Jigawa State","Kaduna State","Kano State","Katsina State","Kebbi State","Kogi State","Kwara State","Lagos State","Nasarawa State","Niger State","Ogun State","Ondo State","Osun State","Oyo State","Plateau State","Rivers State","Sokoto State","Taraba State","Yobe State","Zamfara State"
+        ];
+        stateSelect.innerHTML = '<option value="all">All Nigerian States</option>' + states.map(s => `<option value="${s}">${s}</option>`).join('');
+
+        function updateCities(selectedState) {
+          if (!citySelect) return;
+          if (window.populateCitySelect) {
+            window.populateCitySelect(citySelect, selectedState, true);
+          } else {
+            if (!selectedState || selectedState === '') {
+              citySelect.disabled = true;
+              citySelect.innerHTML = '<option value="">Select State first</option>';
+            } else if (selectedState === 'all' || selectedState === 'All Nigerian States') {
+              citySelect.disabled = false;
+              const capitals = window.getAllCapitals ? window.getAllCapitals() : [
+                "Abakaliki","Abeokuta","Abuja (FCT)","Ado-Ekiti","Akure","Asaba","Awka","Bauchi","Benin City","Birnin Kebbi","Calabar","Damaturu","Dutse","Enugu","Gombe","Gusau","Ibadan","Ikeja","Ilorin","Jalingo","Jos","Kaduna","Kano","Katsina","Lafia","Lokoja","Maiduguri","Makurdi","Minna","Osogbo","Owerri","Port Harcourt","Sokoto","Umuahia","Uyo","Yenagoa","Yola"
+              ];
+              citySelect.innerHTML = '<option value="all">All Cities (Capital Cities)</option>' + capitals.map(c => `<option value="${c}">${c}</option>`).join('');
+            } else {
+              citySelect.disabled = false;
+              const getCities = window.getCitiesForState || (s => (window.STATE_CITIES && window.STATE_CITIES[s]) || ['All Cities']);
+              const cities = getCities(selectedState);
+              citySelect.innerHTML = '<option value="all">All Cities</option>' + cities.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
+          }
+        }
+
+        updateCities(stateSelect.value);
+
+        stateSelect.addEventListener('change', () => {
+          const selectedState = stateSelect.value;
+          updateCities(selectedState);
+          activeFilters.state = selectedState;
+          activeFilters.city = citySelect ? citySelect.value : 'all';
+          applyAllFilters();
+        });
+      }
+      initLocationFilters();
 
       if (queryInput) queryInput.value = initialQuery;
       if (locationInput) locationInput.value = initialLocation;
@@ -628,7 +658,9 @@
 
             // State Filter
             if (activeFilters.state !== 'all') {
-              if (p.state.toLowerCase() !== activeFilters.state.toLowerCase()) return false;
+              const normFilter = activeFilters.state.replace(/\s+State$/i, '').trim().toLowerCase();
+              const normProvState = (p.state || '').replace(/\s+State$/i, '').trim().toLowerCase();
+              if (normProvState !== normFilter && !(p.state || '').toLowerCase().includes(normFilter)) return false;
             }
 
             // City Filter

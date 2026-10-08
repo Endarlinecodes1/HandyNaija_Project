@@ -35,7 +35,11 @@ target_metadata = Base.metadata
 
 def get_url() -> str:
     """Retrieve database URL from settings."""
-    return str(settings.SQLALCHEMY_DATABASE_URI)
+    url = str(settings.SQLALCHEMY_DATABASE_URI)
+    if url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+psycopg2://", 1)
+    return url
+
 
 
 def run_migrations_offline() -> None:

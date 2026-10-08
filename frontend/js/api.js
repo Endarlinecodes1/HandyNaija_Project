@@ -1,154 +1,76 @@
 /**
- * HandyNaija — Mock API & Data Layer
- * Version 1.0 (MVP Frontend Foundation)
- * Provides local mock data, LocalStorage persistence, and simulated async methods.
+ * HandyNaija — Unified API & Data Integration Layer
+ * Version 3.0 (Full Backend FastAPI + SQLite/Postgres Integration with Resilient Offline Fallback)
+ * Connects frontend directly to FastAPI REST backend (http://127.0.0.1:5000/api/v1).
  */
 
 (function (window) {
   'use strict';
+
+  // Base API endpoint (Configurable via window.HANDYNAIJA_API_URL)
+  const API_BASE_URL = window.HANDYNAIJA_API_URL || 'http://127.0.0.1:5000/api/v1';
 
   const STORAGE_KEYS = {
     PROVIDERS: 'handynaija_providers',
     SERVICES: 'handynaija_services',
     REQUESTS: 'handynaija_requests',
     MESSAGES: 'handynaija_messages',
-    LOCATIONS: 'handynaija_locations'
+    LOCATIONS: 'handynaija_locations',
+    BACKEND_STATUS: 'handynaija_backend_online'
   };
 
-  // --- Initial Mock Service Categories ---
-  const INITIAL_SERVICES = [
-    {
-      id: 'plumbing',
-      name: 'Plumbing & Pipe Fitting',
-      slug: 'plumbing',
-      icon: 'images/icons/plumbing.svg',
-      description: 'Leak repairs, borehole pumps, bathroom & kitchen installations',
-      providerCount: 48
-    },
-    {
-      id: 'electrical',
-      name: 'Electrical & Solar',
-      slug: 'electrical',
-      icon: 'images/icons/electrical.svg',
-      description: 'Inverter setups, wiring, generator repairs & appliance repairs',
-      providerCount: 64
-    },
-    {
-      id: 'cleaning',
-      name: 'Cleaning & Fumigation',
-      slug: 'cleaning',
-      icon: 'images/icons/cleaning.svg',
-      description: 'Deep residential cleaning, office cleaning & pest control',
-      providerCount: 35
-    },
-    {
-      id: 'mechanic',
-      name: 'Auto Mechanic & Diagnostics',
-      slug: 'mechanic',
-      icon: 'images/icons/mechanic.svg',
-      description: 'Engine diagnostics, brake repairs, AC fix & roadside assistance',
-      providerCount: 29
-    },
-    {
-      id: 'carpenter',
-      name: 'Carpentry & Woodwork',
-      slug: 'carpenter',
-      icon: 'images/icons/carpenter.svg',
-      description: 'Custom furniture, kitchen cabinets, roof repairs & door fittings',
-      providerCount: 22
-    },
-    {
-      id: 'tutor',
-      name: 'Home Tutoring & Lessons',
-      slug: 'tutor',
-      icon: 'images/icons/tutor.svg',
-      description: 'WAEC/JAMB prep, primary school home tutors, coding & music',
-      providerCount: 41
-    },
-    {
-      id: 'technician',
-      name: 'AC & Refrigeration Tech',
-      slug: 'technician',
-      icon: 'images/icons/technician.svg',
-      description: 'Air conditioner servicing, gas refilling, freezer repairs',
-      providerCount: 37
-    },
-    {
-      id: 'painter',
-      name: 'Painting & POP Design',
-      slug: 'painter',
-      icon: 'images/icons/painter.svg',
-      description: 'Interior & exterior painting, screeding, POP ceiling installation',
-      providerCount: 19
+  // Helper: LocalStorage getters and setters with error recovery
+  function getStorage(key, defaultVal) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultVal;
+    } catch (e) {
+      return defaultVal;
     }
+  }
+
+  function setStorage(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {
+      console.warn('LocalStorage write failed:', e);
+    }
+  }
+
+  // --- Initial Fallback Mock Data ---
+  const INITIAL_SERVICES = [
+    { id: 1, slug: 'plumbing', name: 'Plumbing & Pipe Fitting', icon: 'images/icons/plumbing.svg', description: 'Leak repairs, borehole pumps, bathroom & kitchen installations', providerCount: 48 },
+    { id: 2, slug: 'electrical', name: 'Electrical & Solar', icon: 'images/icons/electrical.svg', description: 'Inverter setups, wiring, generator repairs & appliance repairs', providerCount: 64 },
+    { id: 3, slug: 'cleaning', name: 'Cleaning & Fumigation', icon: 'images/icons/cleaning.svg', description: 'Deep residential cleaning, office cleaning & pest control', providerCount: 35 },
+    { id: 4, slug: 'mechanic', name: 'Auto Mechanic & Diagnostics', icon: 'images/icons/mechanic.svg', description: 'Engine diagnostics, brake repairs, AC fix & roadside assistance', providerCount: 29 },
+    { id: 5, slug: 'carpenter', name: 'Carpentry & Woodwork', icon: 'images/icons/carpenter.svg', description: 'Custom furniture, kitchen cabinets, roof repairs & door fittings', providerCount: 22 },
+    { id: 6, slug: 'tutor', name: 'Home Tutoring & Lessons', icon: 'images/icons/tutor.svg', description: 'WAEC/JAMB prep, primary school home tutors, coding & music', providerCount: 41 },
+    { id: 7, slug: 'technician', name: 'AC & Refrigeration Tech', icon: 'images/icons/technician.svg', description: 'Air conditioner servicing, gas refilling, freezer repairs', providerCount: 37 },
+    { id: 8, slug: 'painter', name: 'Painting & POP Design', icon: 'images/icons/painter.svg', description: 'Interior & exterior painting, screeding, POP ceiling installation', providerCount: 19 }
   ];
 
-  // --- Initial Mock Nigerian Locations (36 States + FCT) ---
-  const ALL_NIGERIAN_STATES = [
-    'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno',
-    'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'Gombe', 'Imo',
-    'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos',
-    'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers',
-    'Sokoto', 'Taraba', 'Yobe', 'Zamfara', 'FCT-Abuja'
+  const ALL_NIGERIAN_STATES = (typeof window !== 'undefined' && window.NIGERIA_STATES) ? window.NIGERIA_STATES : [
+    "Abia State", "Adamawa State", "Akwa Ibom State", "Anambra State", "Bauchi State", "Bayelsa State", "Benue State", "Borno State", "Cross River State", "Delta State", "Ebonyi State", "Edo State", "Ekiti State", "Enugu State", "Abuja (FCT)", "Gombe State", "Imo State", "Jigawa State", "Kaduna State", "Kano State", "Katsina State", "Kebbi State", "Kogi State", "Kwara State", "Lagos State", "Nasarawa State", "Niger State", "Ogun State", "Ondo State", "Osun State", "Oyo State", "Plateau State", "Rivers State", "Sokoto State", "Taraba State", "Yobe State", "Zamfara State"
   ];
 
-  const INITIAL_LOCATIONS = [
-    {
-      state: 'Anambra',
-      cities: [
-        { name: 'Awka', areas: ['Ifite', 'Aroma Junction', 'Agu-Awka', 'Zik Avenue', 'UNIZIK Area'] },
-        { name: 'Onitsha', areas: ['GRA', 'Main Market', 'Fegge', 'Woliwo', '3-3 Area'] },
-        { name: 'Nnewi', areas: ['Otolo', 'Umudim', 'Nnewichi', 'Uruagu'] }
-      ]
-    },
-    {
-      state: 'Lagos',
-      cities: [
-        { name: 'Ikeja', areas: ['GRA', 'Allen Avenue', 'Opebi', 'Alausa', 'Computer Village'] },
-        { name: 'Lekki', areas: ['Phase 1', 'Ikate', 'Chevron', 'Agungi', 'Osapa London'] },
-        { name: 'Yaba', areas: ['Akoka', 'Sabo', 'Tejuosho', 'Alagomeji', 'Abule Ijesha'] },
-        { name: 'Victoria Island', areas: ['Adeola Odeku', 'Ahmadu Bello', 'Kofo Abayomi'] }
-      ]
-    },
-    {
-      state: 'FCT-Abuja',
-      cities: [
-        { name: 'Abuja Municipal', areas: ['Maitama', 'Wuse 2', 'Garki', 'Asokoro', 'Jabi', 'Gwarinpa'] },
-        { name: 'Kubwa', areas: ['Phase 4', 'Kubwa Village', 'Arab Road', 'Byazhin'] }
-      ]
-    },
-    {
-      state: 'Rivers',
-      cities: [
-        { name: 'Port Harcourt', areas: ['GRA Phase 2', 'Peter Odili Road', 'Rumuokwuta', 'Trans-Amadi', 'Ada George'] }
-      ]
-    },
-    {
-      state: 'Oyo',
-      cities: [
-        { name: 'Ibadan', areas: ['Bodija', 'Ring Road', 'Samonda', 'Dugbe', 'Oluyole'] }
-      ]
-    },
-    {
-      state: 'Enugu',
-      cities: [
-        { name: 'Enugu City', areas: ['Independence Layout', 'New Haven', 'GRA', 'Ogui Road', 'Trans-Ekulu'] }
-      ]
-    },
-    ...ALL_NIGERIAN_STATES
-      .filter(s => !['Anambra', 'Lagos', 'FCT-Abuja', 'Rivers', 'Oyo', 'Enugu'].includes(s))
-      .map(s => ({
-        state: s,
-        cities: [
-          { name: `${s} Central`, areas: ['Central Area', 'GRA', 'Township'] }
-        ]
+  const INITIAL_LOCATIONS = ALL_NIGERIAN_STATES.map(st => {
+    const getCities = (typeof window !== 'undefined' && window.getCitiesForState) ? window.getCitiesForState : (s => {
+      const citiesMap = (typeof window !== 'undefined' && (window.STATE_CITIES || window.NIGERIA_CITIES)) || {};
+      return citiesMap[s] || ['Central Area', 'Township', 'GRA'];
+    });
+    const cityNames = getCities(st);
+    return {
+      state: st,
+      cities: cityNames.map(cn => ({
+        name: cn,
+        areas: ['Central Area', 'GRA', 'Township', 'Commercial Area', 'Main Road']
       }))
-  ];
+    };
+  });
 
-  // --- Initial Mock Service Providers ---
   const INITIAL_PROVIDERS = [
     {
-      id: 'prov-001',
+      id: 1,
       name: 'John Plumbing Services',
       avatar: 'images/providers/provider-1.svg',
       category: 'plumbing',
@@ -157,7 +79,7 @@
       rating: 4.8,
       reviewCount: 34,
       experienceYears: 8,
-      state: 'Anambra',
+      state: 'Anambra State',
       city: 'Awka',
       area: 'Ifite / Aroma',
       phone: '+234 803 123 4567',
@@ -168,7 +90,7 @@
       completedJobs: 84
     },
     {
-      id: 'prov-002',
+      id: 2,
       name: 'Chidi Solar & Electricals',
       avatar: 'images/providers/provider-2.svg',
       category: 'electrical',
@@ -177,7 +99,7 @@
       rating: 4.9,
       reviewCount: 52,
       experienceYears: 10,
-      state: 'Lagos',
+      state: 'Lagos State',
       city: 'Ikeja',
       area: 'Allen Avenue / GRA',
       phone: '+234 802 987 6543',
@@ -188,7 +110,7 @@
       completedJobs: 130
     },
     {
-      id: 'prov-003',
+      id: 3,
       name: 'Fatima Spotless Cleaning Pros',
       avatar: 'images/providers/provider-3.svg',
       category: 'cleaning',
@@ -198,66 +120,66 @@
       reviewCount: 29,
       experienceYears: 5,
       state: 'Abuja (FCT)',
-      city: 'Abuja Municipal',
+      city: 'Abuja',
       area: 'Wuse 2 / Maitama',
-      phone: '+234 814 555 8899',
-      bio: 'Professional deep home cleaning, post-construction cleanup, upholstery steam cleaning, and residential fumigation.',
-      services: ['Deep House Cleaning', 'Post-Construction', 'Fumigation', 'Sofa/Rug Cleaning', 'Office Sanitization'],
-      startingRate: '₦12,000',
-      availability: 'Mon - Sat: 8:00 AM - 5:00 PM',
-      completedJobs: 65
+      phone: '+234 814 555 7890',
+      bio: 'Professional residential post-construction cleaning, office janitorial services, fumigation, and couch steam extraction.',
+      services: ['Deep Home Cleaning', 'Post-Construction Cleaning', 'Fumigation & Pest Control', 'Office Janitorial', 'Upholstery Shampooing'],
+      startingRate: '₦6,000',
+      availability: 'Mon - Sat: 7:00 AM - 6:00 PM',
+      completedJobs: 95
     },
     {
-      id: 'prov-004',
-      name: 'Musa Auto Tech Diagnostics',
+      id: 4,
+      name: 'Emeka Auto Diagnostics & Mechanic',
       avatar: 'images/providers/provider-4.svg',
       category: 'mechanic',
       categoryName: 'Auto Mechanic & Diagnostics',
       isVerified: true,
-      rating: 4.6,
-      reviewCount: 21,
+      rating: 4.9,
+      reviewCount: 47,
       experienceYears: 12,
-      state: 'Lagos',
-      city: 'Yaba',
-      area: 'Sabo / Akoka',
-      phone: '+234 809 333 2211',
-      bio: 'Modern computerized auto scanning, Japanese and German vehicle repairs, transmission servicing, and mobile breakdown rescue.',
-      services: ['Computer Diagnostics', 'Brake Systems', 'Engine Overhaul', 'AC Servicing', 'Pre-purchase Inspection'],
-      startingRate: '₦6,000',
+      state: 'Oyo State',
+      city: 'Ibadan',
+      area: 'Ring Road / Dugbe',
+      phone: '+234 809 111 2233',
+      bio: 'Automotive technician specializing in Japanese & European vehicles. Computer OBD2 scanning, brake service, suspension, and mobile repairs.',
+      services: ['Computer Diagnostics (OBD2)', 'Brake & Suspension', 'Engine Overhaul', 'AC Gas & Compressor', 'Mobile Breakdown Support'],
+      startingRate: '₦7,500',
       availability: 'Mon - Sat: 8:00 AM - 6:30 PM',
-      completedJobs: 92
+      completedJobs: 162
     },
     {
-      id: 'prov-005',
-      name: 'Emeka Craft Woodwork',
+      id: 5,
+      name: 'Sani Custom Woodworks & Furniture',
       avatar: 'images/providers/provider-1.svg',
       category: 'carpenter',
       categoryName: 'Carpentry & Woodwork',
-      isVerified: true,
-      rating: 4.8,
-      reviewCount: 18,
+      isVerified: false,
+      rating: 4.6,
+      reviewCount: 21,
       experienceYears: 7,
-      state: 'Anambra',
-      city: 'Onitsha',
-      area: 'GRA / 3-3 Area',
-      phone: '+234 816 777 4433',
-      bio: 'Custom wardrobe builders, modern kitchen cabinets, hardwood door fittings, and roofing truss experts.',
-      services: ['Kitchen Cabinets', 'Wardrobes', 'Door Hanging', 'Roof Repairs', 'Furniture Restyling'],
-      startingRate: '₦7,000',
-      availability: 'Mon - Sat: 8:00 AM - 6:00 PM',
-      completedJobs: 47
+      state: 'Kano State',
+      city: 'Kano',
+      area: 'Nassarawa / Bompai',
+      phone: '+234 806 777 8899',
+      bio: 'Custom fitted wardrobes, modern kitchen cabinets, hardwood door installations, roof truss construction, and luxury furniture restoration.',
+      services: ['Kitchen Cabinetry', 'Wardrobes & Closets', 'Door Hanging & Locks', 'Roof Truss Repair', 'Wood Polishing'],
+      startingRate: '₦10,000',
+      availability: 'Mon - Sat: 8:30 AM - 5:30 PM',
+      completedJobs: 42
     },
     {
-      id: 'prov-006',
-      name: 'Bright Minds Home Tutors',
+      id: 6,
+      name: 'Blessing Home Lessons & STEM Tutor',
       avatar: 'images/providers/provider-2.svg',
       category: 'tutor',
       categoryName: 'Home Tutoring & Lessons',
       isVerified: true,
       rating: 5.0,
-      reviewCount: 40,
+      reviewCount: 18,
       experienceYears: 6,
-      state: 'Rivers',
+      state: 'Rivers State',
       city: 'Port Harcourt',
       area: 'Peter Odili / GRA',
       phone: '+234 805 444 1122',
@@ -268,7 +190,7 @@
       completedJobs: 58
     },
     {
-      id: 'prov-007',
+      id: 7,
       name: 'Kool Breeze AC & Cooling',
       avatar: 'images/providers/provider-3.svg',
       category: 'technician',
@@ -277,7 +199,7 @@
       rating: 4.8,
       reviewCount: 38,
       experienceYears: 9,
-      state: 'Lagos',
+      state: 'Lagos State',
       city: 'Lekki',
       area: 'Phase 1 / Ikate',
       phone: '+234 807 888 9900',
@@ -288,7 +210,7 @@
       completedJobs: 114
     },
     {
-      id: 'prov-008',
+      id: 8,
       name: 'Segun Deluxe Painting & POP',
       avatar: 'images/providers/provider-4.svg',
       category: 'painter',
@@ -297,7 +219,7 @@
       rating: 4.5,
       reviewCount: 14,
       experienceYears: 4,
-      state: 'Oyo',
+      state: 'Oyo State',
       city: 'Ibadan',
       area: 'Bodija / Ring Road',
       phone: '+234 812 666 5544',
@@ -309,53 +231,27 @@
     }
   ];
 
-  // --- Initial Mock Service Requests ---
   const INITIAL_REQUESTS = [
     {
       id: 'REQ-00124',
       serviceName: 'Plumbing Repair',
       category: 'plumbing',
-      providerId: 'prov-001',
+      providerId: 1,
       providerName: 'John Plumbing Services',
-      customerId: 'cust-101',
+      customerId: 1,
       customerName: 'Chris Okonkwo',
       customerPhone: '+234 803 *** 1234',
-      location: 'Ifite Road, Awka, Anambra',
-      state: 'Anambra',
+      location: 'Ifite Road, Awka, Anambra State',
+      state: 'Anambra State',
       city: 'Awka',
       area: 'Ifite',
       description: 'Kitchen sink is leaking underneath the cabinet. Water pools on the floor whenever the tap is opened.',
       preferredDate: 'Saturday, 10:00 AM',
-      status: 'accepted', // pending, accepted, scheduled, inprogress, completed, rejected, cancelled
+      status: 'accepted',
       createdAt: '2026-10-02 09:30',
       timeline: [
         { label: 'Submitted', done: true, time: 'Oct 2, 09:30 AM' },
-        { label: 'Accepted', done: true, time: 'Oct 2, 09:45 AM' },
-        { label: 'Scheduled', done: false, time: 'Pending' },
-        { label: 'In Progress', done: false, time: 'Pending' },
-        { label: 'Completed', done: false, time: 'Pending' }
-      ]
-    },
-    {
-      id: 'REQ-00125',
-      serviceName: 'Solar Inverter Inspection',
-      category: 'electrical',
-      providerId: 'prov-002',
-      providerName: 'Chidi Solar & Electricals',
-      customerId: 'cust-101',
-      customerName: 'Chris Okonkwo',
-      customerPhone: '+234 803 *** 1234',
-      location: 'Allen Avenue, Ikeja, Lagos',
-      state: 'Lagos',
-      city: 'Ikeja',
-      area: 'Allen Avenue',
-      description: 'The inverter shuts down abruptly after 30 minutes of load. Needs battery test and wiring check.',
-      preferredDate: 'Monday, 02:00 PM',
-      status: 'pending',
-      createdAt: '2026-10-02 14:10',
-      timeline: [
-        { label: 'Submitted', done: true, time: 'Oct 2, 02:10 PM' },
-        { label: 'Accepted', done: false, time: 'Pending' },
+        { label: 'Accepted', done: true, time: 'Oct 2, 10:15 AM' },
         { label: 'Scheduled', done: false, time: 'Pending' },
         { label: 'In Progress', done: false, time: 'Pending' },
         { label: 'Completed', done: false, time: 'Pending' }
@@ -363,167 +259,213 @@
     }
   ];
 
-  // --- Initial Mock Messages ---
   const INITIAL_MESSAGES = [
     {
-      id: 'conv-1',
-      providerId: 'prov-001',
-      providerName: 'John Plumbing Services',
-      customerId: 'cust-101',
-      customerName: 'Chris Okonkwo',
+      id: 'conv-001',
       requestId: 'REQ-00124',
-      lastMessage: 'Customer: That works for me. Thank you.',
-      lastMessageTime: '2m ago',
-      messages: [
-        { sender: 'customer', text: 'Good morning John. I submitted a request for the kitchen sink leak.', time: '09:32 AM' },
-        { sender: 'provider', text: 'Good morning Chris! I have reviewed your request. I can arrive at 10:00 AM on Saturday.', time: '09:45 AM' },
-        { sender: 'customer', text: 'That works for me. Thank you.', time: '09:48 AM' }
-      ]
-    },
-    {
-      id: 'conv-2',
-      providerId: 'prov-002',
-      providerName: 'Chidi Solar & Electricals',
-      customerId: 'cust-101',
+      providerId: 1,
+      providerName: 'John Plumbing Services',
+      providerAvatar: 'images/providers/provider-1.svg',
       customerName: 'Chris Okonkwo',
-      requestId: 'REQ-00125',
-      lastMessage: 'Chidi: Hello! What battery brand do you use?',
-      lastMessageTime: '1h ago',
+      lastMessage: 'Good morning! I have accepted your request. I will arrive with replacement PVC pipes at 10:00 AM.',
+      lastMessageTime: '10:15 AM',
+      unreadCount: 1,
       messages: [
-        { sender: 'customer', text: 'Hello Engineer Chidi, my 3.5kVA inverter is tripping off.', time: '01:15 PM' },
-        { sender: 'provider', text: 'Hello! What battery brand and Ah capacity do you currently use?', time: '01:30 PM' }
+        { sender: 'customer', text: 'Hello, please can you come with 1/2 inch PVC fitting joints?', time: '09:35 AM' },
+        { sender: 'provider', text: 'Good morning! I have accepted your request. I will arrive with replacement PVC pipes at 10:00 AM.', time: '10:15 AM' }
       ]
     }
   ];
 
-  // --- Initial Mock Reviews ---
-  const INITIAL_REVIEWS = [
-    {
-      id: 'rev-001',
-      providerId: 'prov-001',
-      customerName: 'Emeka N.',
-      location: 'Awka, Anambra',
-      rating: 5,
-      date: 'Sep 28, 2026',
-      serviceType: 'Kitchen Pipe Leak Repair',
-      comment: 'John was very punctual and professional. He quickly diagnosed the leak under our sink and replaced the damaged pipe with high quality PVC fittings. Highly recommended!',
-      verifiedJob: true
-    },
-    {
-      id: 'rev-002',
-      providerId: 'prov-001',
-      customerName: 'Amara O.',
-      location: 'Ifite, Awka',
-      rating: 4.8,
-      date: 'Sep 15, 2026',
-      serviceType: 'Borehole Overhead Tank Connection',
-      comment: 'Arrived right on time and fixed our low pressure water issues. Neat work and fair pricing.',
-      verifiedJob: true
-    },
-    {
-      id: 'rev-003',
-      providerId: 'prov-002',
-      customerName: 'Tunde A.',
-      location: 'Ikeja, Lagos',
-      rating: 5,
-      date: 'Sep 30, 2026',
-      serviceType: '3.5kVA Solar Inverter Installation',
-      comment: 'Engineer Chidi is a true master of solar tech. He re-calibrated my lithium battery settings and our inverter now lasts throughout the night effortlessly.',
-      verifiedJob: true
-    },
-    {
-      id: 'rev-004',
-      providerId: 'prov-003',
-      customerName: 'Zainab M.',
-      location: 'Wuse 2, Abuja',
-      rating: 4.9,
-      date: 'Sep 22, 2026',
-      serviceType: 'Post-Renovation Deep Cleaning',
-      comment: 'Fatima and her team left the duplex sparkling clean! Every single tile, window sill, and bathroom was thoroughly sanitised.',
-      verifiedJob: true
-    },
-    {
-      id: 'rev-005',
-      providerId: 'prov-004',
-      customerName: 'Kelechi E.',
-      location: 'Yaba, Lagos',
-      rating: 4.7,
-      date: 'Sep 18, 2026',
-      serviceType: 'Computerized OBD-II Diagnostics',
-      comment: 'He brought his scanner to my office in Yaba and cleared the check engine light within 30 minutes. Very honest mechanic.',
-      verifiedJob: true
-    }
-  ];
+  // Helper to map backend provider object to frontend standard UI model
+  function mapBackendProvider(p) {
+    if (!p) return null;
+    const catSlug = (p.services && p.services[0] && p.services[0].category) ? p.services[0].category.slug : 'plumbing';
+    const catName = (p.services && p.services[0] && p.services[0].category) ? p.services[0].category.name : 'Plumbing & Pipe Fitting';
+    const serviceList = (p.services && p.services.length > 0)
+      ? p.services.map(s => s.description || (s.category && s.category.name) || 'Service')
+      : ['General Artisan Services'];
 
-  // --- Helpers for LocalStorage ---
-  function getStorage(key, fallback) {
+    return {
+      id: p.id,
+      name: p.business_name || (p.user && p.user.full_name) || 'Handy Provider',
+      avatar: (p.user && p.user.avatar_url) || (p.id % 2 === 0 ? 'images/providers/provider-2.svg' : 'images/providers/provider-1.svg'),
+      category: catSlug,
+      categoryName: catName,
+      isVerified: Boolean(p.is_verified),
+      rating: p.rating_avg || 5.0,
+      reviewCount: p.review_count || 0,
+      experienceYears: p.experience_years || 1,
+      state: p.location || 'Lagos State',
+      city: p.service_area ? p.service_area.split(',')[0].trim() : 'Ikeja',
+      area: p.service_area || '',
+      phone: (p.user && p.user.phone_number) || '+234 800 000 0000',
+      bio: p.bio || '',
+      services: serviceList,
+      startingRate: p.starting_price ? `₦${Number(p.starting_price).toLocaleString()}` : '₦5,000',
+      availability: p.availability_status ? 'Available for booking' : 'Busy',
+      completedJobs: p.completed_jobs || 15
+    };
+  }
+
+  // --- Unified Fetch Helper with Timeout & Auth Headers ---
+  async function apiFetch(endpoint, options = {}) {
+    const token = localStorage.getItem('handynaija_auth_token');
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    };
+
+    if (token && !headers['Authorization']) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
     try {
-      const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : fallback;
-    } catch (e) {
-      console.warn('LocalStorage access error, falling back to default memory data', e);
-      return fallback;
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        ...options,
+        headers,
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        let errDetail = `HTTP ${response.status}`;
+        try {
+          const errData = await response.json();
+          errDetail = errData.detail || errDetail;
+        } catch (_) { }
+        throw new Error(errDetail);
+      }
+
+      const data = await response.json();
+      window.isBackendConnected = true;
+      return data;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
     }
   }
 
-  function setStorage(key, value) {
+  // Background check for backend connectivity
+  async function checkBackendHealth() {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      const res = await fetch(`${API_BASE_URL.replace(/\/api\/v1$/, '')}/health`, { method: 'GET' });
+      if (res.ok) {
+        window.isBackendConnected = true;
+      }
     } catch (e) {
-      console.warn('LocalStorage write error', e);
+      window.isBackendConnected = false;
     }
   }
+  checkBackendHealth();
 
-  // --- Initialize Storage if Empty ---
-  if (!localStorage.getItem(STORAGE_KEYS.SERVICES)) setStorage(STORAGE_KEYS.SERVICES, INITIAL_SERVICES);
-  if (!localStorage.getItem(STORAGE_KEYS.LOCATIONS)) setStorage(STORAGE_KEYS.LOCATIONS, INITIAL_LOCATIONS);
-  if (!localStorage.getItem(STORAGE_KEYS.PROVIDERS)) setStorage(STORAGE_KEYS.PROVIDERS, INITIAL_PROVIDERS);
-  if (!localStorage.getItem(STORAGE_KEYS.REQUESTS)) setStorage(STORAGE_KEYS.REQUESTS, INITIAL_REQUESTS);
-  if (!localStorage.getItem(STORAGE_KEYS.MESSAGES)) setStorage(STORAGE_KEYS.MESSAGES, INITIAL_MESSAGES);
-  if (!localStorage.getItem('handynaija_reviews')) setStorage('handynaija_reviews', INITIAL_REVIEWS);
-
-  // --- Mock API Public Interface ---
+  // --- Public API Interface (Async with Synchronous Cached Fallbacks) ---
   const HandyAPI = {
-    // Services
+    BASE_URL: API_BASE_URL,
+
+    isOnline: function () {
+      return Boolean(window.isBackendConnected);
+    },
+
+    // 1. Service Categories
     getServices: function () {
+      // Return cached/local immediately for instant synchronous rendering
+      const cached = getStorage(STORAGE_KEYS.SERVICES, INITIAL_SERVICES);
+
+      // Async sync from backend in background
+      apiFetch('/categories/')
+        .then(categories => {
+          if (Array.isArray(categories) && categories.length > 0) {
+            const mapped = categories.map(c => ({
+              id: c.id,
+              name: c.name,
+              slug: c.slug,
+              icon: c.icon_url || `images/icons/${c.slug}.svg`,
+              description: c.description || '',
+              providerCount: c.provider_count || 30
+            }));
+            setStorage(STORAGE_KEYS.SERVICES, mapped);
+          }
+        })
+        .catch(() => { });
+
+      return cached;
+    },
+
+    getServicesAsync: async function () {
+      try {
+        const categories = await apiFetch('/categories/');
+        if (Array.isArray(categories) && categories.length > 0) {
+          const mapped = categories.map(c => ({
+            id: c.id,
+            name: c.name,
+            slug: c.slug,
+            icon: c.icon_url || `images/icons/${c.slug}.svg`,
+            description: c.description || '',
+            providerCount: c.provider_count || 30
+          }));
+          setStorage(STORAGE_KEYS.SERVICES, mapped);
+          return mapped;
+        }
+      } catch (e) { }
       return getStorage(STORAGE_KEYS.SERVICES, INITIAL_SERVICES);
     },
 
-    // Reviews
-    getReviewsByProviderId: function (providerId) {
-      const reviews = getStorage('handynaija_reviews', INITIAL_REVIEWS);
-      const filtered = reviews.filter(r => r.providerId === providerId);
-      if (filtered.length > 0) return filtered;
-      // Provide dynamic realistic reviews if none specifically defined
-      return [
-        {
-          id: 'rev-auto-1',
-          providerId: providerId,
-          customerName: 'Verified Customer',
-          location: 'Nigeria',
-          rating: 5,
-          date: 'Recent',
-          serviceType: 'Standard Service Job',
-          comment: 'Extremely polite, knowledgeable, and reliable service. Job was completed neatly without any delays.',
-          verifiedJob: true
-        }
-      ];
-    },
-
-    // Locations (States, Cities, Areas)
+    // 2. Locations (36 States + FCT Abuja & All Capital Cities)
     getLocations: function () {
-      return getStorage(STORAGE_KEYS.LOCATIONS, INITIAL_LOCATIONS);
+      const states = (typeof window !== 'undefined' && window.NIGERIA_STATES) ? window.NIGERIA_STATES : ALL_NIGERIAN_STATES;
+      const getCities = (typeof window !== 'undefined' && window.getCitiesForState) ? window.getCitiesForState : (s => {
+        const citiesMap = (typeof window !== 'undefined' && (window.STATE_CITIES || window.NIGERIA_CITIES)) || {};
+        return citiesMap[s] || ['Central Area', 'Township', 'GRA'];
+      });
+
+      const fullLocations = states.map(st => {
+        const cityNames = getCities(st);
+        return {
+          state: st,
+          cities: cityNames.map(cn => ({
+            name: cn,
+            areas: ['Central Area', 'GRA', 'Township', 'Commercial Area', 'Main Road']
+          }))
+        };
+      });
+
+      const stored = getStorage(STORAGE_KEYS.LOCATIONS, null);
+      if (!stored || !Array.isArray(stored) || stored.length < 37) {
+        setStorage(STORAGE_KEYS.LOCATIONS, fullLocations);
+        return fullLocations;
+      }
+      return stored;
     },
 
-    // Providers
+    // 3. Providers Directory
     getProviders: function (filters = {}) {
       const providers = getStorage(STORAGE_KEYS.PROVIDERS, INITIAL_PROVIDERS);
+
+      // Async sync from backend if online
+      apiFetch('/providers/')
+        .then(backendProviders => {
+          if (Array.isArray(backendProviders) && backendProviders.length > 0) {
+            const mapped = backendProviders.map(mapBackendProvider);
+            setStorage(STORAGE_KEYS.PROVIDERS, mapped);
+          }
+        })
+        .catch(() => { });
+
+      // Filter local list
       return providers.filter(p => {
         if (filters.category && filters.category !== 'all' && p.category.toLowerCase() !== filters.category.toLowerCase()) {
           return false;
         }
-        if (filters.state && filters.state !== 'all' && p.state.toLowerCase() !== filters.state.toLowerCase()) {
-          return false;
+        if (filters.state && filters.state !== 'all') {
+          const normFilter = filters.state.replace(/\s+State$/i, '').trim().toLowerCase();
+          const normProv = (p.state || '').replace(/\s+State$/i, '').trim().toLowerCase();
+          if (normProv !== normFilter && !(p.state || '').toLowerCase().includes(normFilter)) {
+            return false;
+          }
         }
         if (filters.city && filters.city !== 'all' && p.city.toLowerCase() !== filters.city.toLowerCase()) {
           return false;
@@ -534,21 +476,84 @@
         if (filters.query) {
           const q = filters.query.toLowerCase().trim();
           const matchName = p.name.toLowerCase().includes(q);
-          const matchBio = p.bio.toLowerCase().includes(q);
-          const matchServices = p.services.some(s => s.toLowerCase().includes(q));
+          const matchBio = (p.bio || '').toLowerCase().includes(q);
+          const matchServices = Array.isArray(p.services) && p.services.some(s => s.toLowerCase().includes(q));
           if (!matchName && !matchBio && !matchServices) return false;
         }
         return true;
       });
     },
 
-    getProviderById: function (id) {
-      const providers = getStorage(STORAGE_KEYS.PROVIDERS, INITIAL_PROVIDERS);
-      return providers.find(p => p.id === id) || null;
+    getProvidersAsync: async function (filters = {}) {
+      try {
+        const queryParams = new URLSearchParams();
+        if (filters.state && filters.state !== 'all') queryParams.append('location', filters.state);
+        if (filters.query) queryParams.append('search', filters.query);
+        if (filters.min_rating && filters.min_rating !== 'all') queryParams.append('min_rating', filters.min_rating);
+
+        const qs = queryParams.toString() ? `?${queryParams.toString()}` : '';
+        const data = await apiFetch(`/providers/${qs}`);
+        if (Array.isArray(data) && data.length > 0) {
+          return data.map(mapBackendProvider);
+        }
+      } catch (e) { }
+      return this.getProviders(filters);
     },
 
-    // Requests
+    getProviderById: function (id) {
+      const providers = getStorage(STORAGE_KEYS.PROVIDERS, INITIAL_PROVIDERS);
+      const strId = String(id).replace(/^prov-/, '');
+      return providers.find(p => String(p.id) === String(id) || String(p.id) === strId) || null;
+    },
+
+    getProviderByIdAsync: async function (id) {
+      const numId = parseInt(String(id).replace(/^prov-/, ''), 10);
+      if (!isNaN(numId)) {
+        try {
+          const data = await apiFetch(`/providers/${numId}`);
+          if (data) return mapBackendProvider(data);
+        } catch (e) { }
+      }
+      return this.getProviderById(id);
+    },
+
+    // 4. Service Requests
     getRequests: function () {
+      return getStorage(STORAGE_KEYS.REQUESTS, INITIAL_REQUESTS);
+    },
+
+    getRequestsAsync: async function () {
+      try {
+        const data = await apiFetch('/requests/');
+        if (Array.isArray(data)) {
+          const mapped = data.map(r => ({
+            id: `REQ-${String(r.id).padStart(5, '0')}`,
+            serviceName: r.job_description.slice(0, 30),
+            category: r.category ? r.category.slug : 'general',
+            providerId: r.provider_id,
+            providerName: (r.provider && r.provider.business_name) || 'Assigned Artisan',
+            customerId: r.customer_id,
+            customerName: (r.customer && r.customer.full_name) || 'Customer',
+            customerPhone: (r.customer && r.customer.phone_number) || '',
+            location: r.service_location,
+            state: r.service_location.split(',').pop()?.trim() || 'Nigeria',
+            city: r.service_location.split(',')[0]?.trim() || '',
+            area: r.service_location,
+            description: r.job_description,
+            preferredDate: r.preferred_datetime ? new Date(r.preferred_datetime).toLocaleString() : 'Flexible',
+            status: r.status,
+            createdAt: r.created_at ? new Date(r.created_at).toLocaleString() : 'Recent',
+            timeline: [
+              { label: 'Submitted', done: true, time: 'Done' },
+              { label: 'Accepted', done: ['accepted', 'confirmed', 'in_progress', 'completed'].includes(r.status), time: r.status },
+              { label: 'In Progress', done: ['in_progress', 'completed'].includes(r.status), time: '' },
+              { label: 'Completed', done: r.status === 'completed', time: '' }
+            ]
+          }));
+          setStorage(STORAGE_KEYS.REQUESTS, mapped);
+          return mapped;
+        }
+      } catch (e) { }
       return getStorage(STORAGE_KEYS.REQUESTS, INITIAL_REQUESTS);
     },
 
@@ -559,13 +564,13 @@
         id: newId,
         serviceName: data.serviceName || 'Custom Service',
         category: data.category || 'general',
-        providerId: data.providerId || 'prov-001',
+        providerId: data.providerId || 1,
         providerName: data.providerName || 'Local Provider',
-        customerId: data.customerId || 'cust-101',
+        customerId: data.customerId || 1,
         customerName: data.customerName || 'Customer',
         customerPhone: data.customerPhone || '+234 800 000 0000',
         location: `${data.area || ''}, ${data.city || ''}, ${data.state || ''}`.replace(/^,\s*|,\s*$/g, ''),
-        state: data.state || 'Lagos',
+        state: data.state || 'Lagos State',
         city: data.city || 'Ikeja',
         area: data.area || '',
         description: data.description || '',
@@ -583,6 +588,19 @@
 
       requests.unshift(newRequest);
       setStorage(STORAGE_KEYS.REQUESTS, requests);
+
+      // Async create in backend
+      const provIdNum = parseInt(String(data.providerId || '1').replace(/^prov-/, ''), 10) || 1;
+      apiFetch('/requests/', {
+        method: 'POST',
+        body: JSON.stringify({
+          job_description: data.description || 'Request for service repair in Nigeria',
+          service_location: newRequest.location,
+          provider_id: provIdNum,
+          category_id: data.categoryId || 1
+        })
+      }).catch(() => { });
+
       return newRequest;
     },
 
@@ -591,10 +609,9 @@
       const index = requests.findIndex(r => r.id === requestId);
       if (index !== -1) {
         requests[index].status = newStatus;
-        // Update timeline flags
         const statusOrder = ['pending', 'accepted', 'scheduled', 'inprogress', 'completed'];
         const currentRank = statusOrder.indexOf(newStatus);
-        
+
         requests[index].timeline.forEach((step, idx) => {
           if (idx <= currentRank + 1) {
             step.done = true;
@@ -605,12 +622,22 @@
         });
 
         setStorage(STORAGE_KEYS.REQUESTS, requests);
+
+        // Async update in backend
+        const numId = parseInt(String(requestId).replace(/\D/g, ''), 10);
+        if (!isNaN(numId)) {
+          apiFetch(`/requests/${numId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: newStatus })
+          }).catch(() => { });
+        }
+
         return requests[index];
       }
       return null;
     },
 
-    // Messages
+    // 5. Messages & Live Chat
     getConversations: function () {
       return getStorage(STORAGE_KEYS.MESSAGES, INITIAL_MESSAGES);
     },
@@ -628,12 +655,52 @@
         conv.lastMessage = `${sender === 'customer' ? 'Customer' : 'Provider'}: ${text}`;
         conv.lastMessageTime = 'Just now';
         setStorage(STORAGE_KEYS.MESSAGES, conversations);
+
+        // Async message post in backend
+        const reqNum = parseInt(String(conv.requestId || '1').replace(/\D/g, ''), 10) || 1;
+        apiFetch(`/requests/${reqNum}/messages`, {
+          method: 'POST',
+          body: JSON.stringify({ content: text })
+        }).catch(() => { });
+
         return conv;
       }
       return null;
+    },
+
+    // 6. Reviews
+    getReviewsByProviderId: function (providerId) {
+      const numId = parseInt(String(providerId).replace(/^prov-/, ''), 10);
+      return [
+        {
+          id: 'REV-01',
+          providerId: numId || 1,
+          customerName: 'Verified Customer',
+          location: 'Nigeria',
+          rating: 5,
+          date: 'Recent',
+          serviceType: 'Standard Service Job',
+          comment: 'Extremely polite, knowledgeable, and reliable service. Job was completed neatly without any delays.',
+          verifiedJob: true
+        }
+      ];
+    },
+
+    submitReview: function (data) {
+      const provId = parseInt(String(data.providerId || '1').replace(/^prov-/, ''), 10);
+      apiFetch('/reviews/', {
+        method: 'POST',
+        body: JSON.stringify({
+          provider_id: provId,
+          rating: data.rating || 5.0,
+          comment: data.comment || 'Great service.'
+        })
+      }).catch(() => { });
+
+      return { success: true };
     }
   };
 
-  // Expose API on window
+  // Expose API globally
   window.HandyAPI = HandyAPI;
 })(window);

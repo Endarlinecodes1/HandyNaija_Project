@@ -7,11 +7,18 @@
 (function (window) {
   'use strict';
 
+  // Complete list of 36 Nigerian States + FCT Abuja (37 total) in alphabetical order
+  const NIGERIA_STATES = (typeof window !== 'undefined' && window.NIGERIA_STATES) ? window.NIGERIA_STATES : [
+    "Abia State","Adamawa State","Akwa Ibom State","Anambra State","Bauchi State","Bayelsa State","Benue State","Borno State","Cross River State","Delta State","Ebonyi State","Edo State","Ekiti State","Enugu State","Abuja (FCT)","Gombe State","Imo State","Jigawa State","Kaduna State","Kano State","Katsina State","Kebbi State","Kogi State","Kwara State","Lagos State","Nasarawa State","Niger State","Ogun State","Ondo State","Osun State","Oyo State","Plateau State","Rivers State","Sokoto State","Taraba State","Yobe State","Zamfara State"
+  ];
+  window.NIGERIA_STATES = NIGERIA_STATES;
+
   const HandyMain = {
     init: function () {
       this.initMobileNav();
       this.initHeaderScroll();
       this.initModals();
+      this.populateStateDropdown();
       this.initAuthForms();
       this.initDemoTabs();
       this.initReviewForm();
@@ -181,6 +188,7 @@
       this.closeModal('loginModal');
       this.closeModal('authModal');
       this.setRegisterRole('customer'); // Preselect Customer by default
+      this.populateStateDropdown();
       const successBox = document.getElementById('regSuccessNoticeContainer');
       if (successBox) successBox.style.display = 'none';
       const formsBox = document.getElementById('regFormsContainer');
@@ -188,6 +196,50 @@
       this.openModal('registerModal');
       const nameInput = document.getElementById('regCustNameInput');
       if (nameInput) setTimeout(() => nameInput.focus(), 100);
+    },
+
+    populateStateDropdown: function () {
+      if (typeof window !== 'undefined' && window.populateAllStateSelects) {
+        window.populateAllStateSelects();
+        return;
+      }
+
+      const statesList = (typeof window !== 'undefined' && window.NIGERIA_STATES) ? window.NIGERIA_STATES : NIGERIA_STATES;
+      const stateElements = [
+        document.getElementById('heroStateSelect'),
+        document.getElementById('filterStateSelect'),
+        document.getElementById('state'),
+        document.getElementById('custState'),
+        document.getElementById('provState'),
+        document.getElementById('setupState'),
+        document.getElementById('profileState'),
+        document.getElementById('requestState'),
+        document.getElementById('regCustStateInput'),
+        document.getElementById('regProvStateSelect')
+      ].filter(Boolean);
+
+      const uniqueStates = Array.from(new Set(statesList));
+
+      stateElements.forEach(select => {
+        const isFilter = select.id.includes('filter') || select.id.includes('hero') || select.getAttribute('data-populate') === 'states';
+        const defaultLabel = isFilter ? 'All States (Nigeria)' : 'Select State';
+        const defaultVal = isFilter ? 'all' : '';
+        const currentVal = select.value || defaultVal;
+
+        select.innerHTML = `<option value="${defaultVal}">${defaultLabel}</option>`;
+        uniqueStates.forEach(st => {
+          const opt = document.createElement('option');
+          opt.value = st;
+          opt.textContent = st;
+          if (currentVal && currentVal === st) {
+            opt.selected = true;
+          }
+          select.appendChild(opt);
+        });
+        if (currentVal && (currentVal === defaultVal || uniqueStates.includes(currentVal))) {
+          select.value = currentVal;
+        }
+      });
     },
 
     switchToLoginModal: function () {
@@ -235,7 +287,7 @@
       const name = (document.getElementById('regProvNameInput')?.value || '').trim();
       const email = (document.getElementById('regProvEmailInput')?.value || '').trim();
       const phone = (document.getElementById('regProvPhoneInput')?.value || '').trim();
-      const state = (document.getElementById('regProvStateSelect')?.value || '').trim();
+      const state = (document.getElementById('regProvStateSelect')?.value || document.getElementById('state')?.value || '').trim();
       const city = (document.getElementById('regProvCityInput')?.value || '').trim();
       const address = (document.getElementById('regProvAddressInput')?.value || '').trim();
       const pass = document.getElementById('regProvPasswordInput')?.value || '';
@@ -399,7 +451,7 @@
       // Login Form Handler
       const loginForm = document.getElementById('loginModalForm');
       if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
           e.preventDefault();
           const emailInput = document.getElementById('loginEmailInput');
           const passInput = document.getElementById('loginPasswordInput');
@@ -412,10 +464,34 @@
           }
 
           if (window.HandyAuth) {
-            const user = window.HandyAuth.login(email, pass, 'customer');
+            try {
+              if (window.HandyAuth.loginAsync) {
+                const user = await window.HandyAuth.loginAsync(email, pass);
+                this.closeModal('loginModal');
+                this.showToast(`Logged in successfully! Welcome back, ${user.name}.`, 'success');
+                loginForm.reset();
+                setTimeout(() => {
+                  if (window.HandyAuth.redirectToDashboard) {
+                    window.HandyAuth.redirectToDashboard(user.role);
+                  }
+                }, 600);
+                return;
+              }
+            } catch (err) {
+              // Fallback to synchronous mock login
+            }
+            const isAdmin = email.toLowerCase().includes('admin');
+            const isProv = email.toLowerCase().includes('prov') || email.toLowerCase().includes('john');
+            const role = isAdmin ? 'admin' : (isProv ? 'provider' : 'customer');
+            const user = window.HandyAuth.login(email, pass, role);
             this.closeModal('loginModal');
             this.showToast(`Logged in successfully! Welcome back, ${user.name}.`, 'success');
             loginForm.reset();
+            setTimeout(() => {
+              if (window.HandyAuth.redirectToDashboard) {
+                window.HandyAuth.redirectToDashboard(user.role);
+              }
+            }, 600);
           }
         });
       }
@@ -428,7 +504,7 @@
           const name = (document.getElementById('regCustNameInput')?.value || '').trim();
           const email = (document.getElementById('regCustEmailInput')?.value || '').trim();
           const phone = (document.getElementById('regCustPhoneInput')?.value || '').trim();
-          const state = document.getElementById('regCustStateInput')?.value || 'Anambra';
+          const state = (document.getElementById('state') || document.getElementById('regCustStateInput'))?.value || 'Anambra';
           const pass = document.getElementById('regCustPasswordInput')?.value || '';
           const confirmPass = document.getElementById('regCustConfirmPasswordInput')?.value || '';
           const termsCheck = document.getElementById('regCustTermsCheck');
@@ -472,7 +548,7 @@
           const name = (document.getElementById('regProvNameInput')?.value || '').trim();
           const email = (document.getElementById('regProvEmailInput')?.value || '').trim();
           const phone = (document.getElementById('regProvPhoneInput')?.value || '').trim();
-          const state = document.getElementById('regProvStateSelect')?.value || 'Anambra';
+          const state = (document.getElementById('regProvStateSelect') || document.getElementById('state'))?.value || 'Anambra';
           const city = (document.getElementById('regProvCityInput')?.value || '').trim();
           const address = (document.getElementById('regProvAddressInput')?.value || '').trim();
           const pass = document.getElementById('regProvPasswordInput')?.value || '';

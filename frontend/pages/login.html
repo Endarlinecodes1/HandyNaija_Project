@@ -145,6 +145,7 @@
         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
           <button type="button" class="btn btn-secondary btn-sm" id="fillCustomerPresetBtn">👤 Customer (Chris)</button>
           <button type="button" class="btn btn-secondary btn-sm" id="fillProviderPresetBtn">🔧 Artisan (John)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="fillAdminPresetBtn">👑 Admin (Admin Ops)</button>
         </div>
       </div>
 
@@ -232,6 +233,7 @@
       // Quick Demo Presets
       const customerPreset = document.getElementById('fillCustomerPresetBtn');
       const providerPreset = document.getElementById('fillProviderPresetBtn');
+      const adminPreset = document.getElementById('fillAdminPresetBtn');
 
       if (customerPreset) {
         customerPreset.addEventListener('click', () => {
@@ -245,6 +247,14 @@
         providerPreset.addEventListener('click', () => {
           identifierInput.value = '08031234567';
           passwordInput.value = 'ArtisanPass2026!';
+          clearErrors();
+        });
+      }
+
+      if (adminPreset) {
+        adminPreset.addEventListener('click', () => {
+          identifierInput.value = 'admin@handynaija.ng';
+          passwordInput.value = 'AdminSecret123!';
           clearErrors();
         });
       }
@@ -294,7 +304,7 @@
 
       // Submit handler
       if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
           e.preventDefault();
 
           if (!validateForm()) {
@@ -302,26 +312,76 @@
             return;
           }
 
-          // Disable button during simulated auth
           submitBtn.disabled = true;
           submitBtn.innerHTML = `<span>⏳ Signing in...</span>`;
 
-          setTimeout(() => {
-            if (successBanner) successBanner.style.display = 'block';
-            showToast('Welcome back! Login successful.', 'success');
+          const email = identifierInput.value.trim();
+          const pass = passwordInput.value;
 
-            // Detect role from identifier
-            const isProvider = identifierInput.value.includes('08031234567') || identifierInput.value.includes('john');
-            const targetRole = isProvider ? 'provider' : 'customer';
+          try {
+            if (window.HandyAuth && window.HandyAuth.loginAsync) {
+              const user = await window.HandyAuth.loginAsync(email, pass);
+              if (successBanner) successBanner.style.display = 'block';
+              showToast(`Welcome back, ${user.name || 'User'}! Login successful.`, 'success');
 
-            if (window.HandyAuth) {
-              window.HandyAuth.switchRole(targetRole);
+              setTimeout(() => {
+                const userRole = (user && (user.role || (user.user && user.user.role))) 
+                  || localStorage.getItem('role') 
+                  || (function() {
+                    try {
+                      const u = JSON.parse(localStorage.getItem('handynaija_auth_user') || localStorage.getItem('user') || '{}');
+                      return u && u.role;
+                    } catch (e) { return null; }
+                  })()
+                  || (email.toLowerCase().includes('admin') ? 'admin' : (email.toLowerCase().includes('prov') ? 'provider' : 'customer'));
+
+                if (userRole === 'admin') {
+                  window.location.href = window.location.pathname.includes('/pages/') ? 'admin-dashboard.html' : 'pages/admin-dashboard.html';
+                } else if (userRole === 'provider') {
+                  window.location.href = window.location.pathname.includes('/pages/') ? 'provider-dashboard.html' : 'pages/provider-dashboard.html';
+                } else {
+                  window.location.href = window.location.pathname.includes('/pages/') ? 'customer-dashboard.html' : 'pages/customer-dashboard.html';
+                }
+              }, 800);
+            } else {
+              throw new Error('Auth module not initialized.');
+            }
+          } catch (err) {
+            // Check for explicit invalid credentials from backend
+            if (err.message && err.message.toLowerCase().includes('incorrect email or password')) {
+              showToast(err.message, 'danger');
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = 'Log In';
+              return;
             }
 
-            setTimeout(() => {
-              window.location.href = isProvider ? 'provider-dashboard.html' : 'dashboard.html';
-            }, 1200);
-          }, 600);
+            // Fallback for demo prototype credentials if backend error / offline
+            if (window.HandyAuth) {
+              const isAdmin = email.toLowerCase().includes('admin');
+              const isProv = email.toLowerCase().includes('prov') || email.toLowerCase().includes('john');
+              const role = isAdmin ? 'admin' : (isProv ? 'provider' : 'customer');
+              const user = window.HandyAuth.login(email, pass, role);
+              if (successBanner) successBanner.style.display = 'block';
+              showToast(`Welcome back, ${user.name || 'User'}!`, 'success');
+              setTimeout(() => {
+                const userRole = (user && (user.role || (user.user && user.user.role))) 
+                  || localStorage.getItem('role') 
+                  || role;
+
+                if (userRole === 'admin') {
+                  window.location.href = window.location.pathname.includes('/pages/') ? 'admin-dashboard.html' : 'pages/admin-dashboard.html';
+                } else if (userRole === 'provider') {
+                  window.location.href = window.location.pathname.includes('/pages/') ? 'provider-dashboard.html' : 'pages/provider-dashboard.html';
+                } else {
+                  window.location.href = window.location.pathname.includes('/pages/') ? 'customer-dashboard.html' : 'pages/customer-dashboard.html';
+                }
+              }, 800);
+            } else {
+              showToast(err.message || 'Login failed. Please verify credentials.', 'danger');
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = 'Log In';
+            }
+          }
         });
       }
 

@@ -252,11 +252,18 @@
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container"></div>
 
-  <!-- Mock Data Layer & Provider Dashboard Script -->
+  <!-- API & Auth Layer & Provider Dashboard Script -->
   <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
   <script>
     (function () {
       'use strict';
+
+      const user = window.HandyAuth ? window.HandyAuth.getUser() : null;
+      if (user && user.name) {
+        const welcomeEl = document.querySelector('.dashboard-welcome-banner h1');
+        if (welcomeEl) welcomeEl.textContent = `Good day, ${user.name.split(' ')[0]}! 👋`;
+      }
 
       let requests = window.HandyAPI ? window.HandyAPI.getRequests() : [];
       let pendingRequestIdToAccept = null;

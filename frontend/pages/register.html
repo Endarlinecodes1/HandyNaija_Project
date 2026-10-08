@@ -173,13 +173,8 @@
           
           <div class="form-group">
             <label class="form-label" for="custState">State *</label>
-            <select class="form-control" id="custState" required>
-              <option value="Anambra">Anambra State</option>
-              <option value="Lagos">Lagos State</option>
-              <option value="Abuja (FCT)">Abuja (FCT)</option>
-              <option value="Rivers">Rivers State</option>
-              <option value="Oyo">Oyo State</option>
-              <option value="Enugu">Enugu State</option>
+            <select class="form-control" id="custState" required style="max-height: 250px; overflow-y: auto;">
+              <option value="">Select State</option>
             </select>
           </div>
 
@@ -340,14 +335,8 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-4);">
               <div class="form-group">
                 <label class="form-label" for="provState">State *</label>
-                <select class="form-control" id="provState" required>
-                  <option value="Anambra" selected>Anambra State</option>
-                  <option value="Lagos">Lagos State</option>
-                  <option value="Abuja (FCT)">Abuja (FCT)</option>
-                  <option value="Rivers">Rivers State</option>
-                  <option value="Oyo">Oyo State</option>
-                  <option value="Enugu">Enugu State</option>
-                  <option value="Kano">Kano State</option>
+                <select class="form-control" id="provState" required style="max-height: 250px; overflow-y: auto;">
+                  <option value="">Select State</option>
                 </select>
               </div>
 
@@ -574,10 +563,24 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- Scripts -->
+  <script type="module" src="../js/nigeria-states.js"></script>
   <script src="../js/auth.js"></script>
   <script>
     (function () {
       'use strict';
+
+      // Populate State dropdowns dynamically from NIGERIA_STATES
+      const custStateSelect = document.getElementById('custState');
+      const provStateSelect = document.getElementById('provState');
+      const states = window.NIGERIA_STATES || [
+        "Abia State","Adamawa State","Akwa Ibom State","Anambra State","Bauchi State","Bayelsa State","Benue State","Borno State","Cross River State","Delta State","Ebonyi State","Edo State","Ekiti State","Enugu State","Abuja (FCT)","Gombe State","Imo State","Jigawa State","Kaduna State","Kano State","Katsina State","Kebbi State","Kogi State","Kwara State","Lagos State","Nasarawa State","Niger State","Ogun State","Ondo State","Osun State","Oyo State","Plateau State","Rivers State","Sokoto State","Taraba State","Yobe State","Zamfara State"
+      ];
+      if (custStateSelect) {
+        custStateSelect.innerHTML = '<option value="">Select State</option>' + states.map(s => `<option value="${s}"${s === 'Anambra State' ? ' selected' : ''}>${s}</option>`).join('');
+      }
+      if (provStateSelect) {
+        provStateSelect.innerHTML = '<option value="">Select State</option>' + states.map(s => `<option value="${s}"${s === 'Anambra State' ? ' selected' : ''}>${s}</option>`).join('');
+      }
 
       // 1. Role Choice Tabs Toggle
       const roleCustTab = document.getElementById('roleChoiceCustomer');

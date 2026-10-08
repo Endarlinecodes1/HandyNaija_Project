@@ -51,7 +51,8 @@
         <div class="provider-avatar" style="width: 32px; height: 32px; border: 1px solid #475569;">
           <img src="../images/providers/provider-2.svg" alt="Admin Avatar">
         </div>
-        <span style="font-size: var(--font-size-caption); color: #E2E8F0; font-weight: 700;">Admin User</span>
+        <span id="adminDisplayName" style="font-size: var(--font-size-caption); color: #E2E8F0; font-weight: 700;">Admin User</span>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="if(window.HandyAuth){HandyAuth.logout();}else{location.href='login.html';}" style="color: #94A3B8; padding: 2px 8px; font-size: 0.75rem; margin-left: 4px;" title="Logout">Log Out</button>
       </div>
     </div>
   </header>
@@ -231,6 +232,15 @@
   <script>
     (function () {
       'use strict';
+
+      // Sync Admin User Profile
+      if (window.HandyAuth) {
+        const user = window.HandyAuth.getUser();
+        if (user && user.name) {
+          const nameEl = document.getElementById('adminDisplayName');
+          if (nameEl) nameEl.textContent = user.name;
+        }
+      }
 
       let baseMockUsers = [
         { 
