@@ -46,7 +46,9 @@
     { id: 5, slug: 'carpenter', name: 'Carpentry & Woodwork', icon: 'images/icons/carpenter.svg', description: 'Custom furniture, kitchen cabinets, roof repairs & door fittings', providerCount: 22 },
     { id: 6, slug: 'tutor', name: 'Home Tutoring & Lessons', icon: 'images/icons/tutor.svg', description: 'WAEC/JAMB prep, primary school home tutors, coding & music', providerCount: 41 },
     { id: 7, slug: 'technician', name: 'AC & Refrigeration Tech', icon: 'images/icons/technician.svg', description: 'Air conditioner servicing, gas refilling, freezer repairs', providerCount: 37 },
-    { id: 8, slug: 'painter', name: 'Painting & POP Design', icon: 'images/icons/painter.svg', description: 'Interior & exterior painting, screeding, POP ceiling installation', providerCount: 19 }
+    { id: 8, slug: 'painter', name: 'Painting & POP Design', icon: 'images/icons/painter.svg', description: 'Interior & exterior painting, screeding, POP ceiling installation', providerCount: 19 },
+    { id: 9, slug: 'tailor', name: 'Tailoring & Fashion Design', icon: 'images/icons/tailor.svg', description: 'Bespoke native attires, senator styles, agbada, suits & alterations', providerCount: 52 },
+    { id: 10, slug: 'generator', name: 'Generator & Power Tech', icon: 'images/icons/electrical.svg', description: 'Lister, Mikano & portable generator repairs, servicing & ATS setup', providerCount: 31 }
   ];
 
   const ALL_NIGERIAN_STATES = (typeof window !== 'undefined' && window.NIGERIA_STATES) ? window.NIGERIA_STATES : [
@@ -228,6 +230,46 @@
       startingRate: '₦6,500',
       availability: 'Mon - Sat: 8:00 AM - 5:30 PM',
       completedJobs: 33
+    },
+    {
+      id: 9,
+      name: 'Amaka Bespoke Tailoring & Fashion',
+      avatar: 'images/providers/provider-3.svg',
+      category: 'tailor',
+      categoryName: 'Tailoring & Fashion Design',
+      isVerified: true,
+      rating: 4.9,
+      reviewCount: 43,
+      experienceYears: 9,
+      state: 'Anambra State',
+      city: 'Awka',
+      area: 'Zik Avenue / Eke Awka',
+      phone: '+234 803 888 2211',
+      bio: 'Master bespoke tailor and fashion designer. Specializes in Nigerian senator styles, agbada, corporate suits, alterations, and modern native fashion.',
+      services: ['Senator Styles', 'Agbada & Native Wear', 'Suits & Corporate Wear', 'Clothing Alterations', 'Traditional Attire', 'Bespoke Fitting'],
+      startingRate: '₦7,000',
+      availability: 'Mon - Sat: 8:00 AM - 6:30 PM',
+      completedJobs: 128
+    },
+    {
+      id: 10,
+      name: 'Alhaji Musa Generator Tech & Overhaul',
+      avatar: 'images/providers/provider-4.svg',
+      category: 'generator',
+      categoryName: 'Generator & Power Tech',
+      isVerified: true,
+      rating: 4.8,
+      reviewCount: 39,
+      experienceYears: 11,
+      state: 'Lagos State',
+      city: 'Ikeja',
+      area: 'Ogba / Ojodu / Ikeja',
+      phone: '+234 802 333 4455',
+      bio: 'Specialist in diesel generator servicing, petrol generator carburetor fixes, automatic transfer switch (ATS) wiring, and preventative maintenance across Lagos.',
+      services: ['Generator Servicing', 'Carburetor & Valve Tuning', 'ATS Setup', 'Alternator Rewinding', 'Emergency Breakdown Fix'],
+      startingRate: '₦6,000',
+      availability: 'Mon - Sun: 7:00 AM - 7:00 PM',
+      completedJobs: 145
     }
   ];
 
@@ -443,7 +485,29 @@
 
     // 3. Providers Directory
     getProviders: function (filters = {}) {
-      const providers = getStorage(STORAGE_KEYS.PROVIDERS, INITIAL_PROVIDERS);
+      const TRADE_ALIASES = {
+        plumbing: ['plumb', 'plumber', 'pipe', 'leak', 'borehole', 'water', 'tap', 'sink', 'toilet', 'drain', 'fittings', 'pumping'],
+        electrical: ['elect', 'electrician', 'solar', 'inverter', 'wire', 'wiring', 'light', 'panel', 'breaker', 'power', 'conduit', 'fault'],
+        cleaning: ['clean', 'cleaner', 'wash', 'fumigation', 'pest', 'janitor', 'janitorial', 'sanitize', 'sofa', 'rug', 'upholstery'],
+        mechanic: ['mechanic', 'auto', 'car', 'motor', 'vehicle', 'engine', 'brake', 'suspension', 'transmission', 'diagnostics', 'oil', 'obd2'],
+        carpenter: ['carpent', 'carpenter', 'wood', 'furniture', 'cabinet', 'wardrobe', 'door', 'roof', 'timber', 'joinery', 'woodwork'],
+        tutor: ['tutor', 'teacher', 'lesson', 'teach', 'math', 'maths', 'english', 'waec', 'jamb', 'exam', 'science', 'stem', 'physics', 'chemistry'],
+        technician: ['technician', 'ac', 'air condition', 'air conditioner', 'fridge', 'refrigerator', 'cooling', 'chiller', 'compressor'],
+        painter: ['paint', 'painter', 'pop', 'screed', 'screeding', 'wall', 'epoxy', 'finish'],
+        tailor: ['tailor', 'fashion', 'sew', 'sewing', 'cloth', 'agbada', 'senator', 'dress', 'native', 'suit', 'designer', 'attire', 'alteration'],
+        generator: ['gen', 'generator', 'mikano', 'lister', 'diesel', 'carburetor', 'ats', 'plant', 'power']
+      };
+
+      let providers = getStorage(STORAGE_KEYS.PROVIDERS, INITIAL_PROVIDERS);
+      if (!Array.isArray(providers) || providers.length < INITIAL_PROVIDERS.length) {
+        const existingIds = new Set((providers || []).map(p => String(p.id)));
+        INITIAL_PROVIDERS.forEach(ip => {
+          if (!existingIds.has(String(ip.id))) {
+            providers.push(ip);
+          }
+        });
+        setStorage(STORAGE_KEYS.PROVIDERS, providers);
+      }
 
       // Async sync from backend if online
       apiFetch('/providers/')
@@ -455,31 +519,92 @@
         })
         .catch(() => { });
 
+      const norm = str => (str || '').toLowerCase().replace(/\s+state$/i, '').replace(/\(fct\)/i, '').trim();
+
       // Filter local list
       return providers.filter(p => {
-        if (filters.category && filters.category !== 'all' && p.category.toLowerCase() !== filters.category.toLowerCase()) {
-          return false;
-        }
-        if (filters.state && filters.state !== 'all') {
-          const normFilter = filters.state.replace(/\s+State$/i, '').trim().toLowerCase();
-          const normProv = (p.state || '').replace(/\s+State$/i, '').trim().toLowerCase();
-          if (normProv !== normFilter && !(p.state || '').toLowerCase().includes(normFilter)) {
+        // 1. Category Filter
+        if (filters.category && filters.category !== 'all') {
+          const fc = norm(filters.category);
+          const pc = norm(p.category);
+          const pcn = norm(p.categoryName);
+          if (pc !== fc && !pc.includes(fc) && !fc.includes(pc) && !pcn.includes(fc)) {
             return false;
           }
         }
-        if (filters.city && filters.city !== 'all' && p.city.toLowerCase() !== filters.city.toLowerCase()) {
+
+        // 2. State Filter
+        if (filters.state && filters.state !== 'all') {
+          const fs = norm(filters.state);
+          const ps = norm(p.state);
+          if (ps !== fs && !ps.includes(fs) && !fs.includes(ps)) {
+            return false;
+          }
+        }
+
+        // 3. City Filter
+        if (filters.city && filters.city !== 'all' && !filters.city.toLowerCase().includes('all')) {
+          const fct = norm(filters.city);
+          const pct = norm(p.city);
+          if (pct !== fct && !pct.includes(fct) && !fct.includes(pct)) {
+            return false;
+          }
+        }
+
+        // 4. Area Filter
+        if (filters.area && filters.area !== 'all' && !filters.area.toLowerCase().includes('all')) {
+          const fa = norm(filters.area);
+          const pa = norm(p.area);
+          if (!pa.includes(fa) && !fa.includes(pa)) {
+            return false;
+          }
+        }
+
+        // 5. Min Rating Filter
+        if (filters.min_rating && filters.min_rating !== 'all') {
+          const minR = parseFloat(filters.min_rating);
+          if (!isNaN(minR) && (p.rating || 0) < minR) {
+            return false;
+          }
+        }
+
+        // 6. Verified Only Filter
+        if (filters.verifiedOnly && !p.isVerified) {
           return false;
         }
-        if (filters.area && filters.area !== 'all' && !p.area.toLowerCase().includes(filters.area.toLowerCase())) {
-          return false;
+
+        // 7. Keyword Query Filter (intelligent multi-token search)
+        if (filters.query && filters.query.trim()) {
+          const rawQuery = filters.query.toLowerCase().trim();
+          const stopWords = new Set(['in', 'at', 'near', 'for', 'a', 'the', 'and', 'services', 'service', 'expert', 'pro', 'professional', 'need', 'find', 'looking']);
+          let tokens = rawQuery.split(/[\s,+/]+/).filter(t => t.length > 1 && !stopWords.has(t));
+
+          if (tokens.length === 0) {
+            tokens = [rawQuery];
+          }
+
+          const searchableText = [
+            p.name,
+            p.bio,
+            p.category,
+            p.categoryName,
+            p.state,
+            p.city,
+            p.area,
+            ...(p.services || [])
+          ].filter(Boolean).join(' ').toLowerCase();
+
+          const aliases = TRADE_ALIASES[p.category] || [];
+
+          const matchesAllTokens = tokens.every(token => {
+            if (searchableText.includes(token)) return true;
+            if (aliases.some(alias => alias.includes(token) || token.includes(alias))) return true;
+            return false;
+          });
+
+          if (!matchesAllTokens) return false;
         }
-        if (filters.query) {
-          const q = filters.query.toLowerCase().trim();
-          const matchName = p.name.toLowerCase().includes(q);
-          const matchBio = (p.bio || '').toLowerCase().includes(q);
-          const matchServices = Array.isArray(p.services) && p.services.some(s => s.toLowerCase().includes(q));
-          if (!matchName && !matchBio && !matchServices) return false;
-        }
+
         return true;
       });
     },

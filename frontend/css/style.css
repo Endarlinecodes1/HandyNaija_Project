@@ -831,6 +831,179 @@ button, input, select, textarea {
   color: #64748B;
 }
 
+/* ==========================================================================
+   HOMEPAGE CTA BANNER SECTION (Find a Provider & Join as a Provider)
+   ========================================================================== */
+.cta-section {
+  position: relative;
+  overflow: hidden;
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}
+
+.cta-banner-wrapper {
+  background: linear-gradient(135deg, #0d7a5f 0%, #084c3b 55%, #053327 100%);
+  border-radius: var(--radius-2xl, 24px);
+  padding: var(--space-12) var(--space-8);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 45px -12px rgba(13, 122, 95, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.cta-banner-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(245, 158, 11, 0) 70%);
+  pointer-events: none;
+}
+
+.cta-banner-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -35%;
+  left: -10%;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.2) 0%, rgba(2, 132, 199, 0) 70%);
+  pointer-events: none;
+}
+
+.cta-content-grid {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: var(--space-4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.cta-title {
+  color: #FFFFFF;
+  font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
+}
+
+.cta-desc {
+  color: #E2E8F0;
+  font-size: clamp(0.98rem, 1.6vw, 1.125rem);
+  line-height: 1.65;
+  max-width: 680px;
+  margin: 0 auto var(--space-8) auto;
+}
+
+.cta-btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.cta-btn-primary {
+  background-color: #FFFFFF;
+  color: #0d7a5f;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  border: 2px solid #FFFFFF;
+  cursor: pointer;
+}
+
+.cta-btn-primary:hover {
+  background-color: #F8FAFC;
+  color: #07503d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.cta-btn-secondary {
+  background-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cta-btn-secondary:hover {
+  background-color: #FFFFFF;
+  color: #0d7a5f;
+  border-color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.cta-features-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: var(--font-size-sm);
+  color: #CBD5E1;
+}
+
+.cta-feature-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cta-feature-item span {
+  color: #F59E0B;
+  font-weight: 800;
+}
+
 /* Screen-reader only utility */
 .sr-only {
   position: absolute;

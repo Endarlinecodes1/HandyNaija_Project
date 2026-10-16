@@ -104,41 +104,101 @@
 
     initSearchForms: function () {
       const searchForms = document.querySelectorAll('.provider-search-form, #heroSearchForm');
-      searchForms.forEach(form => {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const queryInput = form.querySelector('[name="searchQuery"]');
-          const serviceSelect = form.querySelector('[name="serviceCategory"]');
-          const stateSelect = form.querySelector('[name="state"]');
-          const citySelect = form.querySelector('[name="city"]');
-          const areaSelect = form.querySelector('[name="area"]');
 
-          currentFilters.query = queryInput ? queryInput.value.trim() : '';
-          currentFilters.category = serviceSelect ? serviceSelect.value : 'all';
-          currentFilters.state = stateSelect ? stateSelect.value : 'all';
-          currentFilters.city = citySelect ? citySelect.value : 'all';
-          currentFilters.area = areaSelect ? areaSelect.value : 'all';
+      const executeSearch = (form) => {
+        const queryInput = form.querySelector('[name="searchQuery"], #heroSearchQuery');
+        const serviceSelect = form.querySelector('[name="serviceCategory"], #heroServiceCategory');
+        const stateSelect = form.querySelector('[name="state"], #heroStateSelect');
+        const citySelect = form.querySelector('[name="city"], #heroCitySelect');
+        const areaSelect = form.querySelector('[name="area"]');
+
+        currentFilters.query = queryInput ? queryInput.value.trim() : '';
+        currentFilters.category = serviceSelect ? serviceSelect.value : 'all';
+        currentFilters.state = stateSelect ? stateSelect.value : 'all';
+        currentFilters.city = citySelect ? citySelect.value : 'all';
+        currentFilters.area = areaSelect ? areaSelect.value : 'all';
+
+        // Provide button feedback if available
+        const submitBtn = form.querySelector('button[type="submit"], #heroQuickSearchBtn');
+        let originalContent = '';
+        if (submitBtn) {
+          originalContent = submitBtn.innerHTML;
+          submitBtn.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 6px; animation: spin 0.8s linear infinite;">
+              <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+              <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
+            </svg>
+            <span>Finding Pros...</span>
+          `;
+          submitBtn.disabled = true;
+        }
+
+        setTimeout(() => {
+          if (submitBtn) {
+            submitBtn.innerHTML = originalContent;
+            submitBtn.disabled = false;
+          }
 
           this.renderProvidersList();
 
           // Smooth scroll to providers section
           const target = document.getElementById('providersSection');
           if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+        }, 150);
+      };
+
+      searchForms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          executeSearch(form);
         });
+
+        // Direct click listener on submit buttons as a fail-safe
+        const btn = form.querySelector('button[type="submit"], #heroQuickSearchBtn');
+        if (btn) {
+          btn.addEventListener('click', (e) => {
+            if (btn.getAttribute('type') !== 'submit') {
+              e.preventDefault();
+              executeSearch(form);
+            }
+          });
+        }
       });
     },
 
     filterByCategory: function (categorySlug) {
       currentFilters.category = categorySlug;
-      const serviceSelects = document.querySelectorAll('select[data-populate="services"]');
+      const serviceSelects = document.querySelectorAll('select[data-populate="services"], #heroServiceCategory');
       serviceSelects.forEach(sel => sel.value = categorySlug);
       this.renderProvidersList();
       const target = document.getElementById('providersSection');
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
+    },
+
+    clearFilter: function (filterName) {
+      if (filterName === 'query') {
+        currentFilters.query = '';
+        const qInput = document.getElementById('heroSearchQuery');
+        if (qInput) qInput.value = '';
+      } else if (filterName === 'category') {
+        currentFilters.category = 'all';
+        const cSelect = document.getElementById('heroServiceCategory');
+        if (cSelect) cSelect.value = 'all';
+      } else if (filterName === 'state') {
+        currentFilters.state = 'all';
+        currentFilters.city = 'all';
+        const sSelect = document.getElementById('heroStateSelect');
+        if (sSelect) sSelect.value = 'all';
+      } else if (filterName === 'city') {
+        currentFilters.city = 'all';
+        const ctSelect = document.getElementById('heroCitySelect');
+        if (ctSelect) ctSelect.value = 'all';
+      }
+      this.renderProvidersList();
     },
 
     renderProvidersList: function (containerSelector = '#providersGrid') {
@@ -147,23 +207,75 @@
 
       const providers = window.HandyAPI ? window.HandyAPI.getProviders(currentFilters) : [];
       const filterTag = document.getElementById('activeFilterDisplay');
+      const filterBar = document.getElementById('providersFilterBar');
+      const activeChipsContainer = document.getElementById('providersActiveChips');
+      const fullResultsLink = document.getElementById('providersFullResultsLink');
+
+      const isFiltered = (currentFilters.query !== '') ||
+        (currentFilters.category !== 'all') ||
+        (currentFilters.state !== 'all') ||
+        (currentFilters.city !== 'all' && !currentFilters.city.toLowerCase().includes('all')) ||
+        (currentFilters.area !== 'all' && !currentFilters.area.toLowerCase().includes('all'));
+
+      // Update Active Filter Display Text
       if (filterTag) {
-        let activeLabel = 'Showing all verified providers';
-        if (currentFilters.category !== 'all') activeLabel += ` for "${currentFilters.category}"`;
-        if (currentFilters.state !== 'all') activeLabel += ` in ${currentFilters.state}`;
-        if (currentFilters.city !== 'all') activeLabel += `, ${currentFilters.city}`;
-        if (currentFilters.area !== 'all') activeLabel += ` (${currentFilters.area})`;
-        filterTag.textContent = activeLabel;
+        if (!isFiltered) {
+          filterTag.textContent = `Showing all ${providers.length} verified providers across Nigeria`;
+        } else {
+          let parts = [];
+          if (currentFilters.query) parts.push(`"${currentFilters.query}"`);
+          if (currentFilters.category !== 'all') parts.push(currentFilters.category);
+          if (currentFilters.state !== 'all') parts.push(currentFilters.state);
+          if (currentFilters.city !== 'all' && !currentFilters.city.toLowerCase().includes('all')) parts.push(currentFilters.city);
+          filterTag.textContent = `Found ${providers.length} verified provider${providers.length === 1 ? '' : 's'} for ${parts.join(' in ')}`;
+        }
+      }
+
+      // Update Filter Bar and Chips
+      if (filterBar) {
+        if (isFiltered) {
+          filterBar.style.display = 'flex';
+          if (activeChipsContainer) {
+            let chipsHtml = '';
+            if (currentFilters.query) {
+              chipsHtml += `<span class="service-chip service-chip-selected" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">🔍 "${currentFilters.query}" <button type="button" class="chip-remove-btn" onclick="HandyProviders.clearFilter('query')" aria-label="Remove search term">&times;</button></span>`;
+            }
+            if (currentFilters.category !== 'all') {
+              chipsHtml += `<span class="service-chip service-chip-selected" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">🏷️ ${currentFilters.category} <button type="button" class="chip-remove-btn" onclick="HandyProviders.clearFilter('category')" aria-label="Remove category">&times;</button></span>`;
+            }
+            if (currentFilters.state !== 'all') {
+              chipsHtml += `<span class="service-chip service-chip-selected" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">📍 ${currentFilters.state} <button type="button" class="chip-remove-btn" onclick="HandyProviders.clearFilter('state')" aria-label="Remove state">&times;</button></span>`;
+            }
+            if (currentFilters.city !== 'all' && !currentFilters.city.toLowerCase().includes('all')) {
+              chipsHtml += `<span class="service-chip service-chip-selected" style="background: var(--color-primary-light); color: var(--color-primary); font-weight: 600;">🏙️ ${currentFilters.city} <button type="button" class="chip-remove-btn" onclick="HandyProviders.clearFilter('city')" aria-label="Remove city">&times;</button></span>`;
+            }
+            activeChipsContainer.innerHTML = chipsHtml;
+          }
+          if (fullResultsLink) {
+            const qs = new URLSearchParams({
+              searchQuery: currentFilters.query || '',
+              category: currentFilters.category || 'all',
+              state: currentFilters.state || 'all',
+              city: currentFilters.city || 'all'
+            }).toString();
+            fullResultsLink.href = `pages/search-results.html?${qs}`;
+          }
+        } else {
+          filterBar.style.display = 'none';
+        }
       }
 
       if (!providers || providers.length === 0) {
         container.innerHTML = `
-          <div class="empty-state" style="grid-column: 1 / -1;">
-            <div class="empty-state-icon">🔍</div>
-            <h3 class="empty-state-title">No Service Providers Found</h3>
-            <p class="empty-state-text">We couldn't find any professionals matching your selected criteria. Try selecting another service category or broadening your location.</p>
-            <div class="empty-state-actions">
-              <button class="btn btn-outline btn-sm" onclick="HandyProviders.resetFilters()">Reset All Filters</button>
+          <div class="empty-state" style="grid-column: 1 / -1; padding: var(--space-8); text-align: center; background: var(--color-surface); border: 1px dashed var(--color-border); border-radius: var(--radius-lg);">
+            <div style="font-size: 3rem; margin-bottom: var(--space-3);">🔍</div>
+            <h3 class="empty-state-title" style="margin-bottom: var(--space-2); font-size: var(--font-size-h3);">No Service Providers Found</h3>
+            <p class="empty-state-text" style="max-width: 520px; margin: 0 auto var(--space-5); color: var(--color-text-secondary); line-height: 1.6;">
+              We couldn't find any verified professionals matching your search. Try removing specific keywords, broadening your location, or browsing by trade.
+            </p>
+            <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary" onclick="HandyProviders.resetFilters()">Show All Verified Providers</button>
+              <a href="pages/search-results.html" class="btn btn-outline">Open Advanced Search Page</a>
             </div>
           </div>
         `;
@@ -200,7 +312,7 @@
 
           <div class="provider-footer">
             <button type="button" class="btn btn-secondary btn-sm" onclick="HandyProviders.showProfileModal('${p.id}')">View Profile</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="HandyRequests.openRequestModal('${p.id}')">Request Service</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="if(window.HandyRequests){HandyRequests.openRequestModal('${p.id}');}else if(window.HandyMain){HandyMain.openLoginModal();} return false;">Request Service</button>
           </div>
         </article>
       `).join('');
@@ -208,11 +320,13 @@
 
     resetFilters: function () {
       currentFilters = { category: 'all', state: 'all', city: 'all', area: 'all', query: '' };
-      const searchInputs = document.querySelectorAll('.provider-search-form input, .provider-search-form select');
+      const searchInputs = document.querySelectorAll('#heroSearchForm input, #heroSearchForm select, .provider-search-form input, .provider-search-form select');
       searchInputs.forEach(input => {
         if (input.tagName === 'SELECT') input.value = 'all';
         else input.value = '';
       });
+      const qInput = document.getElementById('heroSearchQuery');
+      if (qInput) qInput.value = '';
       this.renderProvidersList();
     },
 
@@ -282,9 +396,10 @@
 
       const requestBtn = document.getElementById('providerModalRequestBtn');
       if (requestBtn) {
-        requestBtn.onclick = () => {
-          if (window.HandyMain) window.HandyMain.closeModal('providerDetailsModal');
-          if (window.HandyRequests) window.HandyRequests.openRequestModal(provider.id);
+        requestBtn.onclick = (e) => {
+          if (e) e.preventDefault();
+          const inPagesDir = window.location.pathname.includes('/pages/');
+          window.location.href = inPagesDir ? 'login.html' : 'pages/login.html';
         };
       }
 

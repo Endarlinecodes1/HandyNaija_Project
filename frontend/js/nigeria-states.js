@@ -3,7 +3,7 @@
  * Complete list of 36 Nigerian States + FCT Abuja (37 Total) in alphabetical order
  */
 
-export const NIGERIA_STATES = [
+const NIGERIA_STATES = [
   "Abia State",
   "Adamawa State",
   "Akwa Ibom State",
@@ -44,7 +44,7 @@ export const NIGERIA_STATES = [
 ];
 
 // All 36 State Capitals + FCT Abuja (37 total) in alphabetical order
-export const NIGERIA_CAPITALS = [
+const NIGERIA_CAPITALS = [
   "Abakaliki",
   "Abeokuta",
   "Abuja (FCT)",
@@ -84,7 +84,7 @@ export const NIGERIA_CAPITALS = [
   "Yola"
 ];
 
-export const STATE_CITIES = {
+const STATE_CITIES = {
   "Abia State": ["Umuahia", "Aba", "Ohafia"],
   "Adamawa State": ["Yola", "Jimeta", "Mubi"],
   "Akwa Ibom State": ["Uyo", "Ikot Ekpene", "Eket"],
@@ -125,14 +125,14 @@ export const STATE_CITIES = {
 };
 
 // Backwards compatibility alias
-export const NIGERIA_CITIES = STATE_CITIES;
+const NIGERIA_CITIES = STATE_CITIES;
 
 /**
  * Normalizes state name for matching and lookup
  * @param {string} stateName
  * @returns {string}
  */
-export function normalizeStateName(stateName) {
+function normalizeStateName(stateName) {
   if (!stateName) return '';
   return stateName.replace(/\s+State$/i, '').trim().toLowerCase();
 }
@@ -141,7 +141,7 @@ export function normalizeStateName(stateName) {
  * Returns all state capitals / primary cities across Nigeria (all 37) in alphabetical order
  * @returns {string[]}
  */
-export function getAllCapitals() {
+function getAllCapitals() {
   return [...NIGERIA_CAPITALS];
 }
 
@@ -150,7 +150,7 @@ export function getAllCapitals() {
  * @param {string} stateName
  * @returns {string[]}
  */
-export function getCitiesForState(stateName) {
+function getCitiesForState(stateName) {
   if (!stateName || stateName === 'all' || stateName === 'All States' || stateName === 'All Nigerian States') {
     return getAllCapitals();
   }
@@ -174,7 +174,7 @@ export function getCitiesForState(stateName) {
  * @param {string} defaultOptionLabel - e.g. "All Nigerian States" or "Select State"
  * @param {string} selectedValue
  */
-export function populateStateSelect(selectOrId, defaultOptionLabel = 'All Nigerian States', selectedValue = '') {
+function populateStateSelect(selectOrId, defaultOptionLabel = 'All Nigerian States', selectedValue = '') {
   const select = typeof selectOrId === 'string' ? document.getElementById(selectOrId) : selectOrId;
   if (!select) return;
 
@@ -210,7 +210,7 @@ export function populateStateSelect(selectOrId, defaultOptionLabel = 'All Nigeri
  * @param {boolean} isFilterMode - If true, adds 'All Cities' (value 'all'). If false, adds 'Select City' (value '')
  * @param {string} selectedCity
  */
-export function populateCitySelect(citySelectOrId, stateValue = 'all', isFilterMode = true, selectedCity = '') {
+function populateCitySelect(citySelectOrId, stateValue = 'all', isFilterMode = true, selectedCity = '') {
   const citySelect = typeof citySelectOrId === 'string' ? document.getElementById(citySelectOrId) : citySelectOrId;
   if (!citySelect) return;
 
@@ -252,7 +252,7 @@ export function populateCitySelect(citySelectOrId, stateValue = 'all', isFilterM
  * @param {HTMLSelectElement|string} citySelectOrId
  * @param {boolean} isFilterMode
  */
-export function bindStateAndCitySelects(stateSelectOrId, citySelectOrId, isFilterMode = true) {
+function bindStateAndCitySelects(stateSelectOrId, citySelectOrId, isFilterMode = true) {
   const stateSelect = typeof stateSelectOrId === 'string' ? document.getElementById(stateSelectOrId) : stateSelectOrId;
   const citySelect = typeof citySelectOrId === 'string' ? document.getElementById(citySelectOrId) : citySelectOrId;
 
@@ -270,7 +270,7 @@ export function bindStateAndCitySelects(stateSelectOrId, citySelectOrId, isFilte
 /**
  * Automatically populates all known state and city selects in the DOM
  */
-export function populateAllStateSelects() {
+function populateAllStateSelects() {
   const stateSelectors = [
     '#heroStateSelect',
     '#filterStateSelect',
@@ -336,9 +336,27 @@ if (typeof window !== 'undefined') {
   window.bindStateAndCitySelects = bindStateAndCitySelects;
   window.populateAllStateSelects = populateAllStateSelects;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', populateAllStateSelects);
-  } else {
-    populateAllStateSelects();
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', populateAllStateSelects);
+    } else {
+      populateAllStateSelects();
+    }
   }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    NIGERIA_STATES,
+    NIGERIA_CAPITALS,
+    STATE_CITIES,
+    NIGERIA_CITIES,
+    normalizeStateName,
+    getAllCapitals,
+    getCitiesForState,
+    populateStateSelect,
+    populateCitySelect,
+    bindStateAndCitySelects,
+    populateAllStateSelects
+  };
 }

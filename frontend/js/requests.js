@@ -17,6 +17,12 @@
     },
 
     openRequestModal: function (providerId = null) {
+      if (!window.HandyAuth || !window.HandyAuth.isLoggedIn()) {
+        const inPagesDir = window.location.pathname.includes('/pages/');
+        window.location.href = inPagesDir ? 'login.html' : 'pages/login.html';
+        return;
+      }
+
       selectedProviderForRequest = providerId;
       const provider = providerId && window.HandyAPI ? window.HandyAPI.getProviderById(providerId) : null;
       

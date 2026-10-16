@@ -63,6 +63,7 @@
             role="radio" 
             aria-checked="true" 
             tabindex="0"
+            onclick="if(window.selectRole) window.selectRole('customer')"
           >
             <div class="role-choice-icon">🏠</div>
             <div class="role-choice-title">I need a service</div>
@@ -76,6 +77,7 @@
             role="radio" 
             aria-checked="false" 
             tabindex="0"
+            onclick="if(window.selectRole) window.selectRole('provider')"
           >
             <div class="role-choice-icon">🛠️</div>
             <div class="role-choice-title">I provide services</div>
@@ -243,6 +245,13 @@
             <span>You must accept the terms of service to create an account.</span>
           </div>
         </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="custSubmitBtn" style="margin-top: var(--space-2);">
+          Create Customer Account
+        </button>
+
+      </form>
 
       <!-- =====================================================================
            FORM 2: SERVICE PROVIDER / ARTISAN REGISTRATION (2-STEP WIZARD)
@@ -563,7 +572,7 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <!-- Scripts -->
-  <script type="module" src="../js/nigeria-states.js"></script>
+  <script src="../js/nigeria-states.js"></script>
   <script src="../js/auth.js"></script>
   <script>
     (function () {
@@ -593,25 +602,64 @@
 
       function selectRole(role) {
         if (role === 'customer') {
-          roleCustTab.classList.add('selected');
-          roleCustTab.setAttribute('aria-checked', 'true');
-          roleProvTab.classList.remove('selected');
-          roleProvTab.setAttribute('aria-checked', 'false');
-          custForm.style.display = 'block';
-          provWrap.style.display = 'none';
+          if (roleCustTab) {
+            roleCustTab.classList.add('selected');
+            roleCustTab.setAttribute('aria-checked', 'true');
+          }
+          if (roleProvTab) {
+            roleProvTab.classList.remove('selected');
+            roleProvTab.setAttribute('aria-checked', 'false');
+          }
+          if (custForm) custForm.style.display = 'block';
+          if (provWrap) provWrap.style.display = 'none';
         } else {
-          roleProvTab.classList.add('selected');
-          roleProvTab.setAttribute('aria-checked', 'true');
-          roleCustTab.classList.remove('selected');
-          roleCustTab.setAttribute('aria-checked', 'false');
-          custForm.style.display = 'none';
-          provWrap.style.display = 'block';
+          if (roleProvTab) {
+            roleProvTab.classList.add('selected');
+            roleProvTab.setAttribute('aria-checked', 'true');
+          }
+          if (roleCustTab) {
+            roleCustTab.classList.remove('selected');
+            roleCustTab.setAttribute('aria-checked', 'false');
+          }
+          if (custForm) custForm.style.display = 'none';
+          if (provWrap) {
+            provWrap.style.display = 'block';
+            const s1 = document.getElementById('pageProvStep1Content');
+            const s2 = document.getElementById('pageProvStep2Content');
+            if (s1 && (!s2 || s2.style.display === 'none')) {
+              s1.style.display = 'block';
+            }
+          }
         }
         if (successBanner) successBanner.style.display = 'none';
       }
 
-      roleCustTab.addEventListener('click', () => selectRole('customer'));
-      roleProvTab.addEventListener('click', () => selectRole('provider'));
+      window.selectRole = selectRole;
+
+      if (roleCustTab) {
+        roleCustTab.addEventListener('click', () => selectRole('customer'));
+        roleCustTab.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectRole('customer');
+          }
+        });
+      }
+      if (roleProvTab) {
+        roleProvTab.addEventListener('click', () => selectRole('provider'));
+        roleProvTab.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectRole('provider');
+          }
+        });
+      }
+
+      // Check URL parameters to pre-select provider if requested
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('role') === 'provider') {
+        selectRole('provider');
+      }
 
       // 2. Password Visibility Toggles
       document.querySelectorAll('.password-toggle-btn').forEach(btn => {

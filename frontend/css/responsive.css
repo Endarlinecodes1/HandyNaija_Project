@@ -371,6 +371,22 @@
     flex-direction: column;
     text-align: center;
   }
+
+  /* CTA banner responsive */
+  .cta-banner-wrapper {
+    padding: var(--space-8) var(--space-5);
+  }
+
+  .cta-btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cta-btn-primary,
+  .cta-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* --------------------------------------------------------------------------

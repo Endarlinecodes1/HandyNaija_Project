@@ -139,16 +139,6 @@
 
       </form>
 
-      <!-- Quick Demo Login Presets -->
-      <div style="background: var(--color-surface-muted); padding: var(--space-3); border-radius: var(--radius-md); margin-top: var(--space-6); border: 1px solid var(--color-border); font-size: var(--font-size-caption);">
-        <div style="font-weight: 700; color: var(--color-text-secondary); margin-bottom: var(--space-2);">Quick Prototype Fill:</div>
-        <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary btn-sm" id="fillCustomerPresetBtn">👤 Customer (Chris)</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="fillProviderPresetBtn">🔧 Artisan (John)</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="fillAdminPresetBtn">👑 Admin (Admin Ops)</button>
-        </div>
-      </div>
-
       <!-- Auth Footer Link -->
       <div class="auth-footer">
         New to HandyNaija? <a href="register.html">Create a free account</a>
@@ -227,35 +217,6 @@
           togglePasswordBtn.textContent = isPassword ? '🙈' : '👁️';
           togglePasswordBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password as plain text');
           togglePasswordBtn.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
-        });
-      }
-
-      // Quick Demo Presets
-      const customerPreset = document.getElementById('fillCustomerPresetBtn');
-      const providerPreset = document.getElementById('fillProviderPresetBtn');
-      const adminPreset = document.getElementById('fillAdminPresetBtn');
-
-      if (customerPreset) {
-        customerPreset.addEventListener('click', () => {
-          identifierInput.value = 'chris.okonkwo@example.com';
-          passwordInput.value = 'Password123!';
-          clearErrors();
-        });
-      }
-
-      if (providerPreset) {
-        providerPreset.addEventListener('click', () => {
-          identifierInput.value = '08031234567';
-          passwordInput.value = 'ArtisanPass2026!';
-          clearErrors();
-        });
-      }
-
-      if (adminPreset) {
-        adminPreset.addEventListener('click', () => {
-          identifierInput.value = 'admin@handynaija.ng';
-          passwordInput.value = 'AdminSecret123!';
-          clearErrors();
         });
       }
 
